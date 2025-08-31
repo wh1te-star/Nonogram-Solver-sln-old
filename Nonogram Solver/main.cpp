@@ -9,6 +9,7 @@
 #include <optional>
 #include <coroutine>
 #include <cstdio>
+#include <utility>
 
 enum CellState {
     EMPTY,
@@ -62,29 +63,45 @@ struct generator {
         generator get_return_object() { return generator{std::coroutine_handle<promise_type>::from_promise(*this)}; }
         void return_void() {}
     };
+
+    generator(std::coroutine_handle<promise_type> handle) : handle_(handle) {}
+    
+    // Move constructor
+    generator(generator&& other) noexcept : handle_(std::exchange(other.handle_, nullptr)) {}
+    
+    // Move assignment operator
+    generator& operator=(generator&& other) noexcept {
+        if (this != &other) {
+            if (handle_) {
+                handle_.destroy();
+            }
+            handle_ = std::exchange(other.handle_, nullptr);
+        }
+        return *this;
+    }
+    
+    // Disable copy
+    generator(const generator&) = delete;
+    generator& operator=(const generator&) = delete;
+    
+    ~generator() {
+        if (handle_) {
+            handle_.destroy();
+        }
+    }
     
     bool next() {
         if (!handle_ || handle_.done()) {
             return false;
         }
         handle_.resume();
-        // Coroutine completed after resume, so clean up its frame.
-        if (handle_.done()) {
-            handle_.destroy();
-            handle_ = nullptr; // Avoid a dangling pointer
-        }
         return !handle_.done();
     }
     
-    T value() {
+    T value() const {
         return handle_.promise().value_;
     }
 
-    generator(std::coroutine_handle<promise_type> handle) : handle_(handle) {}
-    ~generator() { 
-        // Destructor no longer destroys the handle. 
-        // It's handled in `next()` when the coroutine completes.
-    }
 private:
     std::coroutine_handle<promise_type> handle_ = nullptr;
 };
