@@ -22,9 +22,8 @@ void render_nonogram_table() {
     const int tableColumnCellCount = tableColumnHeaderCount + tableColumnCount;
     ImVec2 container_size = ImGui::GetContentRegionAvail();
     
-    // セルのサイズを動的に計算し、整数に丸める
     float min_container_dim = ImMin(container_size.x / tableColumnCellCount, container_size.y / tableRowCellCount);
-    float cell_size = round(min_container_dim); // ここでセルのサイズを整数に丸める
+    float cell_size = round(min_container_dim);
 
     float table_width = cell_size * tableColumnCellCount;
     float table_height = cell_size * tableRowCellCount;
@@ -40,7 +39,6 @@ void render_nonogram_table() {
     if (ImGui::BeginTable("NonogramGrid", tableColumnCellCount, ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_NoBordersInBody)) {
 
         for (int i = 0; i < tableColumnCellCount; ++i) {
-            // カラムの幅を固定された整数値のセルサイズに設定
             ImGui::TableSetupColumn("##", ImGuiTableColumnFlags_WidthFixed, cell_size);
         }
 
@@ -51,42 +49,32 @@ void render_nonogram_table() {
                 
                 ImVec2 button_size = ImVec2(cell_size, cell_size);
                 
+                // Color logic for different grid sections
                 if(r < tableRowHeaderCount && c < tableColumnHeaderCount) {
-                    // Top-left corner (header intersection)
                     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.5f, 0.5f, 0.5f, 1.0f));
-                    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.4f, 0.4f, 0.4f, 1.0f));
-                    ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.3f, 0.3f, 0.3f, 1.0f));
                 } else if (r < tableRowHeaderCount) {
-                    // Row headers
                     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.6f, 0.9f, 1.0f));
-                    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.5f, 0.5f, 0.8f, 1.0f));
-                    ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.4f, 0.4f, 0.7f, 1.0f));
                 } else if (c < tableColumnHeaderCount) {
-                    // Column headers
                     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.9f, 0.6f, 0.6f, 1.0f));
-                    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.8f, 0.5f, 0.5f, 1.0f));
-                    ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.7f, 0.4f, 0.4f, 1.0f));
-				}
-                else {
-					if ((r + c) % 2 == 0) {
-						// Gray for even positions
-						ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.8f, 0.8f, 1.0f));
-						ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.7f, 0.7f, 0.7f, 1.0f));
-						ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.6f, 0.6f, 0.6f, 1.0f));
-					} else {
-						// White for odd positions
-						ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
-						ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.9f, 0.9f, 0.9f, 1.0f));
-						ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.8f, 0.8f, 0.8f, 1.0f));
-					}
+                } else {
+                    if ((r + c) % 2 == 0) {
+                        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.8f, 0.8f, 1.0f));
+                    } else {
+                        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
+                    }
                 }
-                
+                ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.4f, 0.4f, 0.4f, 1.0f));
+                ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.3f, 0.3f, 0.3f, 1.0f));
+
                 ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.0f);
 
                 char label[32];
                 if (r < tableRowHeaderCount || c < tableColumnHeaderCount) {
-                    sprintf_s(label, "H##%d,%d", r, c);
+                    // Calculate and display the number in header cells
+                    int number_value = ((r + c) * 10) % 1000;
+                    sprintf_s(label, "%d##%d,%d", number_value, r, c);
                 } else {
+                    // Game cells remain blank with their unique ID
                     sprintf_s(label, " ##%d,%d", r, c);
                 }
 
@@ -95,23 +83,21 @@ void render_nonogram_table() {
                 ImGui::PopStyleVar();
                 ImGui::PopStyleColor(3);
 
+                // Manual border drawing
                 ImDrawList* draw_list = ImGui::GetWindowDrawList();
                 ImVec2 p_min = ImGui::GetItemRectMin();
                 ImVec2 p_max = ImGui::GetItemRectMax();
 
-                // 線の座標はImGuiが計算したピクセル単位の座標なので、そのまま使う
-                // もしくは ImGui::GetCursorScreenPos() を使って計算することも可能
-                
-                // 垂直の罫線 (右辺)
-                float columnThickness = 3.0f;
-				if (c == tableColumnHeaderCount - 1) columnThickness = 9.0f;
-				if (c >= tableColumnHeaderCount && (c - tableColumnHeaderCount) % 5 == 4) columnThickness = 6.0f;
+                // Vertical borders (right side of cell)
+                float columnThickness = 1.0f;
+                if (c == tableColumnHeaderCount - 1) columnThickness = 6.0f;
+                if (c >= tableColumnHeaderCount && (c - tableColumnHeaderCount) % 5 == 4) columnThickness = 3.0f;
                 draw_list->AddLine(ImVec2(p_max.x, p_min.y), ImVec2(p_max.x, p_max.y), IM_COL32(0, 0, 0, 255), columnThickness);
                 
-                // 水平の罫線 (下辺)
-                float rowThickness = 3.0f;
-				if (r == tableRowHeaderCount - 1) rowThickness = 9.0f;
-				if (r >= tableRowHeaderCount && (r - tableRowHeaderCount) % 5 == 4) rowThickness = 6.0f;
+                // Horizontal borders (bottom side of cell)
+                float rowThickness = 1.0f;
+                if (r == tableRowHeaderCount - 1) rowThickness = 6.0f;
+                if (r >= tableRowHeaderCount && (r - tableRowHeaderCount) % 5 == 4) rowThickness = 3.0f;
                 draw_list->AddLine(ImVec2(p_min.x, p_max.y), ImVec2(p_max.x, p_max.y), IM_COL32(0, 0, 0, 255), rowThickness);
             }
         }
