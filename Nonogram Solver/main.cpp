@@ -38,32 +38,35 @@ void render_nonogram_table() {
     // ImGuiTableFlags_Borders を使用して全ての罫線を描画
     if (ImGui::BeginTable("NonogramGrid", tableColumnCellCount, ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_BordersInner | ImGuiTableFlags_Borders | ImGuiTableFlags_NoHostExtendX) | ImGuiTableFlags_NoHostExtendY) {
 
-        // カラムの幅を固定で設定
+
+        // カラムの幅を自動調整に任せる
         for (int i = 0; i < tableColumnCellCount; ++i) {
-            ImGui::TableSetupColumn("##", ImGuiTableColumnFlags_WidthFixed, cell_size);
+            ImGui::TableSetupColumn("##");
         }
 
         // 単一のループで全てのセルを描画
         for (int r = 0; r < tableRowCellCount; ++r) {
-            ImGui::TableNextRow(); // ここで高さを指定しない
+            ImGui::TableNextRow(ImGuiTableRowFlags_None, cell_size);
             for (int c = 0; c < tableColumnCellCount; ++c) {
                 ImGui::TableSetColumnIndex(c);
                 
                 ImVec2 button_size = ImVec2(cell_size, cell_size);
                 
+                // ボタンのスタイルを設定
+                ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
+                ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
+                ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
+                ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.0f); // 枠線の太さを設定
+
                 // ヘッダー部分とゲーム盤部分で表示内容を分ける
                 if (r < tableRowHeaderCount || c < tableColumnHeaderCount) {
-                    // ヘッダー部分
-                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
-                    // 実際にはここに数字を描画するロジックが入る
                     ImGui::Button("H", button_size); 
-                    ImGui::PopStyleColor();
                 } else {
-                    // ゲーム盤部分
-                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
                     ImGui::Button(" ", button_size);
-                    ImGui::PopStyleColor();
                 }
+
+                ImGui::PopStyleVar();
+                ImGui::PopStyleColor(3);
             }
         }
         ImGui::EndTable();
