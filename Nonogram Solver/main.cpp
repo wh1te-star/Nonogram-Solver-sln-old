@@ -10,8 +10,8 @@
 #include <coroutine>
 #include <cstdio>
 #include <utility>
-#include <cstdlib> // For rand()
-#include <ctime>   // For time()
+#include <cstdlib>
+#include <ctime>
 
 enum CellState {
     EMPTY,
@@ -51,6 +51,7 @@ void glfw_error_callback(int error, const char* description) {
     fprintf(stderr, "Glfw Error %d: %s\n", error, description);
 }
 
+// non-void generator
 template<typename T>
 struct generator {
     struct promise_type {
@@ -68,10 +69,8 @@ struct generator {
 
     generator(std::coroutine_handle<promise_type> handle) : handle_(handle) {}
     
-    // Move constructor
     generator(generator&& other) noexcept : handle_(std::exchange(other.handle_, nullptr)) {}
     
-    // Move assignment operator
     generator& operator=(generator&& other) noexcept {
         if (this != &other) {
             if (handle_) {
@@ -82,7 +81,6 @@ struct generator {
         return *this;
     }
     
-    // Disable copy
     generator(const generator&) = delete;
     generator& operator=(const generator&) = delete;
     
@@ -108,13 +106,53 @@ private:
     std::coroutine_handle<promise_type> handle_ = nullptr;
 };
 
-struct NonogramStep {
-    int row;
-    int col;
-    CellState state;
+// void generator specialization
+template<>
+struct generator<void> {
+    struct promise_type {
+        std::suspend_always initial_suspend() { return {}; }
+        std::suspend_always final_suspend() noexcept { return {}; }
+        void unhandled_exception() { throw; }
+        generator get_return_object() { return generator{std::coroutine_handle<promise_type>::from_promise(*this)}; }
+        void return_void() {}
+    };
+
+    generator(std::coroutine_handle<promise_type> handle) : handle_(handle) {}
+    
+    generator(generator&& other) noexcept : handle_(std::exchange(other.handle_, nullptr)) {}
+    
+    generator& operator=(generator&& other) noexcept {
+        if (this != &other) {
+            if (handle_) {
+                handle_.destroy();
+            }
+            handle_ = std::exchange(other.handle_, nullptr);
+        }
+        return *this;
+    }
+    
+    generator(const generator&) = delete;
+    generator& operator=(const generator&) = delete;
+    
+    ~generator() {
+        if (handle_) {
+            handle_.destroy();
+        }
+    }
+    
+    bool next() {
+        if (!handle_ || handle_.done()) {
+            return false;
+        }
+        handle_.resume();
+        return !handle_.done();
+    }
+    
+private:
+    std::coroutine_handle<promise_type> handle_ = nullptr;
 };
 
-generator<NonogramStep> nonogram_solver() {
+generator<void> nonogram_solver() {
     while (true) {
         int r = rand() % tableRowCount;
         int c = rand() % tableColumnCount;
@@ -122,11 +160,11 @@ generator<NonogramStep> nonogram_solver() {
         
         nonogramGrid[r][c] = static_cast<CellState>(op);
         
-        co_yield NonogramStep{r, c, nonogramGrid[r][c]};
+        co_await std::suspend_always{};
     }
 }
 
-std::optional<generator<NonogramStep>> solve() {
+std::optional<generator<void>> solve() {
     return nonogram_solver();
 }
 
@@ -207,19 +245,16 @@ void render_nonogram_table() {
                     } else {
                         ImGui::PushFont(fontSize10);
                     }
-
                     int number_value = ((r + c) * 10) % 1000;
                     sprintf_s(label, "%d##%d,%d", number_value, r, c);
                 } else {
                     sprintf_s(label, " ##%d,%d", r, c);
                 }
-
                 ImGui::Button(label, button_size);
                 
                 if (r < tableRowHeaderCount || c < tableColumnHeaderCount) {
                     ImGui::PopFont();
                 }
-                
                 ImGui::PopStyleVar();
                 ImGui::PopStyleColor(3);
 
@@ -293,21 +328,14 @@ int main() {
     double last_update_time = glfwGetTime();
     const double update_interval = 0.1;
 
-    std::optional<generator<NonogramStep>> solver_gen;
+    std::optional<generator<void>> solver_gen;
 
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
 
         double current_time = glfwGetTime();
         if (solver_gen.has_value() && current_time - last_update_time >= update_interval) {
-            if (solver_gen->next()) {
-                NonogramStep step = solver_gen->value();
-                // The nonogram_solver function already updates the grid state,
-                // so this line is redundant but harmless.
-                // nonogramGrid[step.row][step.col] = step.state; 
-            } else {
-                solver_gen.reset();
-            }
+            solver_gen->next();
             last_update_time = current_time;
         }
 
@@ -354,14 +382,12 @@ int main() {
         ImGui::Text("Control Buttons");
         ImGui::Spacing();
         if(ImGui::Button("Solve", ImVec2(-1, 0))) {
-            // Start the coroutine only if it's not already running
             if (!solver_gen.has_value()) {
                 solver_gen.emplace(nonogram_solver());
             }
         }
         ImGui::Spacing();
         if (ImGui::Button("Stop", ImVec2(-1, 0))) {
-            // Stop the coroutine by resetting the optional
             solver_gen.reset();
         }
         ImGui::End();
