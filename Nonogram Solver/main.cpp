@@ -8,14 +8,32 @@
 #include <string>
 
 // グリッドのサイズ
-int tableRowHeaderCount = 8;
-int tableRowCount = 17;
-int tableColumnHeaderCount = 6;
-int tableColumnCount = 21;
+int tableRowHeaderCount = 5;
+int tableRowCount = 10;
+int tableColumnHeaderCount = 5;
+int tableColumnCount = 15;
+
+// グローバルにフォントを保持するポインタ
+ImFont* fontSize10 = nullptr;
+ImFont* fontSize20 = nullptr;
+ImFont* fontSize30 = nullptr;
+ImFont* fontSize40 = nullptr;
+ImFont* fontSize50 = nullptr;
+ImFont* fontSize60 = nullptr;
+
+// 数字と記号のグリフ（文字）範囲を指定
+const ImWchar glyph_ranges_numbers[] = {
+    0x0030, 0x0039, // 0-9
+    0x0020, 0x0020, // Space
+    0x002D, 0x002D, // Minus
+    0,
+};
 
 void glfw_error_callback(int error, const char* description) {
     fprintf(stderr, "Glfw Error %d: %s\n", error, description);
 }
+
+// ... (render_nonogram_table function is unchanged)
 
 void render_nonogram_table() {
     const int tableRowCellCount = tableRowHeaderCount + tableRowCount;
@@ -70,31 +88,45 @@ void render_nonogram_table() {
 
                 char label[32];
                 if (r < tableRowHeaderCount || c < tableColumnHeaderCount) {
-                    // Calculate and display the number in header cells
+                    if(cell_size >= 80.0f) {
+                        ImGui::PushFont(fontSize40);
+						printf("cell_size is %3.8f, using fontSize40\n", cell_size);
+                    } else if(cell_size >= 50.0f) {
+						ImGui::PushFont(fontSize30);
+						printf("cell_size is %3.8f, using fontSize30\n", cell_size);
+                    } else if(cell_size >= 30.0f) {
+                        ImGui::PushFont(fontSize20);
+						printf("cell_size is %3.8f, using fontSize20\n", cell_size);
+                    } else {
+                        ImGui::PushFont(fontSize10);
+						printf("cell_size is %3.8f, using fontSize10\n", cell_size);
+					}
+
                     int number_value = ((r + c) * 10) % 1000;
                     sprintf_s(label, "%d##%d,%d", number_value, r, c);
                 } else {
-                    // Game cells remain blank with their unique ID
                     sprintf_s(label, " ##%d,%d", r, c);
                 }
 
                 ImGui::Button(label, button_size);
                 
+                if (r < tableRowHeaderCount || c < tableColumnHeaderCount) {
+                    // Pop the font only if it was pushed
+                    ImGui::PopFont();
+                }
+                
                 ImGui::PopStyleVar();
                 ImGui::PopStyleColor(3);
 
-                // Manual border drawing
                 ImDrawList* draw_list = ImGui::GetWindowDrawList();
                 ImVec2 p_min = ImGui::GetItemRectMin();
                 ImVec2 p_max = ImGui::GetItemRectMax();
 
-                // Vertical borders (right side of cell)
                 float columnThickness = 1.0f;
                 if (c == tableColumnHeaderCount - 1) columnThickness = 6.0f;
                 if (c >= tableColumnHeaderCount && (c - tableColumnHeaderCount) % 5 == 4) columnThickness = 3.0f;
                 draw_list->AddLine(ImVec2(p_max.x, p_min.y), ImVec2(p_max.x, p_max.y), IM_COL32(0, 0, 0, 255), columnThickness);
                 
-                // Horizontal borders (bottom side of cell)
                 float rowThickness = 1.0f;
                 if (r == tableRowHeaderCount - 1) rowThickness = 6.0f;
                 if (r >= tableRowHeaderCount && (r - tableRowHeaderCount) % 5 == 4) rowThickness = 3.0f;
@@ -125,7 +157,22 @@ int main() {
     ImGuiIO& io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable; 
+    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;    
+    
+
+	ImFontConfig font_cfg;
+	font_cfg.OversampleH = 1;
+	font_cfg.OversampleV = 1;
+	font_cfg.PixelSnapH = true;
+
+	fontSize10 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 10.0f, &font_cfg, glyph_ranges_numbers);
+	fontSize20 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 20.0f, &font_cfg, glyph_ranges_numbers);
+	fontSize30 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 30.0f, &font_cfg, glyph_ranges_numbers);
+	fontSize40 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 40.0f, &font_cfg, glyph_ranges_numbers);
+	fontSize50 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 50.0f, &font_cfg, glyph_ranges_numbers);
+
+    // REMOVE THIS LINE:
+    // io.Fonts->Build();
 
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
@@ -140,10 +187,10 @@ int main() {
         ImGui::NewFrame();
         
         ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar |
-                                        ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
-                                        ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus |
-                                        ImGuiWindowFlags_NoNavFocus;
-                                        
+                                         ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
+                                         ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus |
+                                         ImGuiWindowFlags_NoNavFocus;
+                                         
         const ImGuiViewport* viewport = ImGui::GetMainViewport();
         ImGui::SetNextWindowPos(viewport->WorkPos);
         ImGui::SetNextWindowSize(viewport->WorkSize);
@@ -186,7 +233,7 @@ int main() {
         ImGui::End();
 
         ImGui::Render();
-        ImGui::EndFrame(); 
+        ImGui::EndFrame();    
         
         if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
             GLFWwindow* backup_current_context = glfwGetCurrentContext();
