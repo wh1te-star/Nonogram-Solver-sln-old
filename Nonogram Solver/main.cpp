@@ -6,7 +6,9 @@
 #include "imgui_internal.h"
 #include <vector>
 #include <string>
+#include <optional>
 #include <coroutine>
+#include <cstdio>
 
 enum CellState {
     EMPTY,
@@ -14,15 +16,13 @@ enum CellState {
     MARKED
 };
 
-std::vector<std::vector<CellState> > nonogramGrid;
+std::vector<std::vector<CellState>> nonogramGrid;
 
-// グリッドのサイズ
 int tableRowHeaderCount = 5;
 int tableRowCount = 10;
 int tableColumnHeaderCount = 5;
 int tableColumnCount = 15;
 
-// グローバルにフォントを保持するポインタ
 ImFont* fontSize10 = nullptr;
 ImFont* fontSize15 = nullptr;
 ImFont* fontSize20 = nullptr;
@@ -37,7 +37,6 @@ ImFont* fontSize60 = nullptr;
 ImFont* fontSize65 = nullptr;
 ImFont* fontSize70 = nullptr;
 
-// 数字と記号のグリフ（文字）範囲を指定
 const ImWchar glyph_ranges_numbers[] = {
     0x0030, 0x0039, // 0-9
     0x0020, 0x0020, // Space
@@ -49,18 +48,65 @@ void glfw_error_callback(int error, const char* description) {
     fprintf(stderr, "Glfw Error %d: %s\n", error, description);
 }
 
-// A simple solver function that changes one cell's state
-void solve_step() {
-    // This is a placeholder for your actual solver logic.
-    // It finds the first EMPTY cell and changes its state.
+template<typename T>
+struct generator {
+    struct promise_type {
+        T value_;
+        std::suspend_always yield_value(T value) {
+            value_ = std::move(value);
+            return {};
+        }
+        std::suspend_always initial_suspend() { return {}; }
+        std::suspend_always final_suspend() noexcept { return {}; }
+        void unhandled_exception() { throw; }
+        generator get_return_object() { return generator{std::coroutine_handle<promise_type>::from_promise(*this)}; }
+        void return_void() {}
+    };
+    
+    bool next() {
+        if (!handle_ || handle_.done()) {
+            return false;
+        }
+        handle_.resume();
+        // Coroutine completed after resume, so clean up its frame.
+        if (handle_.done()) {
+            handle_.destroy();
+            handle_ = nullptr; // Avoid a dangling pointer
+        }
+        return !handle_.done();
+    }
+    
+    T value() {
+        return handle_.promise().value_;
+    }
+
+    generator(std::coroutine_handle<promise_type> handle) : handle_(handle) {}
+    ~generator() { 
+        // Destructor no longer destroys the handle. 
+        // It's handled in `next()` when the coroutine completes.
+    }
+private:
+    std::coroutine_handle<promise_type> handle_ = nullptr;
+};
+
+struct NonogramStep {
+    int row;
+    int col;
+    CellState state;
+};
+
+generator<NonogramStep> nonogram_solver() {
     for (int r = 0; r < tableRowCount; ++r) {
         for (int c = 0; c < tableColumnCount; ++c) {
             if (nonogramGrid[r][c] == EMPTY) {
-                nonogramGrid[r][c] = FILLED;
-                return; // Change one cell per step
+                co_yield NonogramStep{r, c, FILLED};
             }
         }
     }
+}
+
+std::optional<generator<NonogramStep>> solve() {
+    return nonogram_solver();
 }
 
 void render_nonogram_table() {
@@ -95,20 +141,18 @@ void render_nonogram_table() {
                 
                 ImVec2 button_size = ImVec2(cell_size, cell_size);
                 
-                // Color logic for different grid sections
                 if(r < tableRowHeaderCount && c < tableColumnHeaderCount) {
-                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.5f, 0.5f, 0.5f, 1.0f)); // Header intersection
+                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.5f, 0.5f, 0.5f, 1.0f));
                 } else if (r < tableRowHeaderCount) {
-                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.6f, 0.9f, 1.0f)); // Column headers
+                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.6f, 0.9f, 1.0f));
                 } else if (c < tableColumnHeaderCount) {
-                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.9f, 0.6f, 0.6f, 1.0f)); // Row headers
+                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.9f, 0.6f, 0.6f, 1.0f));
                 } else {
-                    // Correctly map CellState to colors
                     if(nonogramGrid[r - tableRowHeaderCount][c - tableColumnHeaderCount] == FILLED) {
                         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.2f, 0.2f, 1.0f));
                     } else if(nonogramGrid[r - tableRowHeaderCount][c - tableColumnHeaderCount] == MARKED) {
                         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
-                    } else { // EMPTY
+                    } else {
                         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.9f, 0.9f, 0.9f, 1.0f));
                     }
                 }
@@ -199,45 +243,47 @@ int main() {
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
     io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;    
     
+    ImFontConfig font_cfg;
+    font_cfg.OversampleH = 1;
+    font_cfg.OversampleV = 1;
+    font_cfg.PixelSnapH = true;
 
-	ImFontConfig font_cfg;
-	font_cfg.OversampleH = 1;
-	font_cfg.OversampleV = 1;
-	font_cfg.PixelSnapH = true;
-
-	fontSize10 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 10.0f, &font_cfg, glyph_ranges_numbers);
-	fontSize15 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 15.0f, &font_cfg, glyph_ranges_numbers);
-	fontSize20 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 20.0f, &font_cfg, glyph_ranges_numbers);
-	fontSize25 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 25.0f, &font_cfg, glyph_ranges_numbers);
-	fontSize30 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 30.0f, &font_cfg, glyph_ranges_numbers);
-	fontSize35 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 35.0f, &font_cfg, glyph_ranges_numbers);
-	fontSize40 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 40.0f, &font_cfg, glyph_ranges_numbers);
-	fontSize45 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 45.0f, &font_cfg, glyph_ranges_numbers);
-	fontSize50 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 50.0f, &font_cfg, glyph_ranges_numbers);
-	fontSize55 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 55.0f, &font_cfg, glyph_ranges_numbers);
-	fontSize60 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 60.0f, &font_cfg, glyph_ranges_numbers);
-	fontSize65 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 65.0f, &font_cfg, glyph_ranges_numbers);
-	fontSize70 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 70.0f, &font_cfg, glyph_ranges_numbers);
-
-    // REMOVE THIS LINE:
-    // io.Fonts->Build();
+    fontSize10 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 10.0f, &font_cfg, glyph_ranges_numbers);
+    fontSize15 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 15.0f, &font_cfg, glyph_ranges_numbers);
+    fontSize20 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 20.0f, &font_cfg, glyph_ranges_numbers);
+    fontSize25 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 25.0f, &font_cfg, glyph_ranges_numbers);
+    fontSize30 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 30.0f, &font_cfg, glyph_ranges_numbers);
+    fontSize35 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 35.0f, &font_cfg, glyph_ranges_numbers);
+    fontSize40 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 40.0f, &font_cfg, glyph_ranges_numbers);
+    fontSize45 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 45.0f, &font_cfg, glyph_ranges_numbers);
+    fontSize50 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 50.0f, &font_cfg, glyph_ranges_numbers);
+    fontSize55 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 55.0f, &font_cfg, glyph_ranges_numbers);
+    fontSize60 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 60.0f, &font_cfg, glyph_ranges_numbers);
+    fontSize65 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 65.0f, &font_cfg, glyph_ranges_numbers);
+    fontSize70 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 70.0f, &font_cfg, glyph_ranges_numbers);
 
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
 
-	nonogramGrid.resize(tableRowCount, std::vector<CellState>(tableColumnCount, EMPTY));
+    nonogramGrid.resize(tableRowCount, std::vector<CellState>(tableColumnCount, EMPTY));
 
     bool first_time = true;
     double last_update_time = glfwGetTime();
-    const double update_interval = 0.1; // Update every 0.1 seconds
+    const double update_interval = 0.1;
+
+    std::optional<generator<NonogramStep>> solver_gen;
 
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
 
-        // Timer logic to update the grid state
         double current_time = glfwGetTime();
-        if (current_time - last_update_time >= update_interval) {
-            solve_step();
+        if (solver_gen.has_value() && current_time - last_update_time >= update_interval) {
+            if (solver_gen->next()) {
+                NonogramStep step = solver_gen->value();
+                nonogramGrid[step.row][step.col] = step.state;
+            } else {
+                solver_gen.reset();
+            }
             last_update_time = current_time;
         }
 
@@ -283,7 +329,9 @@ int main() {
         ImGui::Begin("Control Panel", NULL, ImGuiWindowFlags_None);
         ImGui::Text("Control Buttons");
         ImGui::Spacing();
-        ImGui::Button("Solve", ImVec2(-1, 0));
+        if(ImGui::Button("Solve", ImVec2(-1, 0))) {
+            solver_gen.emplace(nonogram_solver());
+        }
         ImGui::Button("Reset", ImVec2(-1, 0));
         ImGui::End();
 
