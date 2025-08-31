@@ -10,6 +10,8 @@
 #include <coroutine>
 #include <cstdio>
 #include <utility>
+#include <cstdlib> // For rand()
+#include <ctime>   // For time()
 
 enum CellState {
     EMPTY,
@@ -113,12 +115,14 @@ struct NonogramStep {
 };
 
 generator<NonogramStep> nonogram_solver() {
-    for (int r = 0; r < tableRowCount; ++r) {
-        for (int c = 0; c < tableColumnCount; ++c) {
-            if (nonogramGrid[r][c] == EMPTY) {
-                co_yield NonogramStep{r, c, FILLED};
-            }
-        }
+    while (true) {
+        int r = rand() % tableRowCount;
+        int c = rand() % tableColumnCount;
+        int op = rand() % 3;
+        
+        nonogramGrid[r][c] = static_cast<CellState>(op);
+        
+        co_yield NonogramStep{r, c, nonogramGrid[r][c]};
     }
 }
 
@@ -283,6 +287,7 @@ int main() {
     ImGui_ImplOpenGL3_Init("#version 330");
 
     nonogramGrid.resize(tableRowCount, std::vector<CellState>(tableColumnCount, EMPTY));
+    srand(static_cast<unsigned int>(time(0)));
 
     bool first_time = true;
     double last_update_time = glfwGetTime();
@@ -297,7 +302,9 @@ int main() {
         if (solver_gen.has_value() && current_time - last_update_time >= update_interval) {
             if (solver_gen->next()) {
                 NonogramStep step = solver_gen->value();
-                nonogramGrid[step.row][step.col] = step.state;
+                // The nonogram_solver function already updates the grid state,
+                // so this line is redundant but harmless.
+                // nonogramGrid[step.row][step.col] = step.state; 
             } else {
                 solver_gen.reset();
             }
@@ -347,9 +354,16 @@ int main() {
         ImGui::Text("Control Buttons");
         ImGui::Spacing();
         if(ImGui::Button("Solve", ImVec2(-1, 0))) {
-            solver_gen.emplace(nonogram_solver());
+            // Start the coroutine only if it's not already running
+            if (!solver_gen.has_value()) {
+                solver_gen.emplace(nonogram_solver());
+            }
         }
-        ImGui::Button("Reset", ImVec2(-1, 0));
+        ImGui::Spacing();
+        if (ImGui::Button("Stop", ImVec2(-1, 0))) {
+            // Stop the coroutine by resetting the optional
+            solver_gen.reset();
+        }
         ImGui::End();
 
         ImGui::Begin("Nonogram Board", NULL, ImGuiWindowFlags_None);
