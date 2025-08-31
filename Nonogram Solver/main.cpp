@@ -8,20 +8,24 @@
 #include <string>
 
 // グリッドのサイズ
-const int GRID_FULL_SIZE = 15;
-const int HEADER_SIZE = 5;
+int tableRowHeaderCount = 5;
+int tableRowCount = 10;
+int tableColumnHeaderCount = 5;
+int tableColumnCount = 15;
 
 void glfw_error_callback(int error, const char* description) {
     fprintf(stderr, "Glfw Error %d: %s\n", error, description);
 }
 
 void render_nonogram_table() {
+	const int tableRowCellCount = tableRowHeaderCount + tableRowCount;
+	const int tableColumnCellCount = tableColumnHeaderCount + tableColumnCount;
     ImVec2 container_size = ImGui::GetContentRegionAvail();
-    float min_container_dim = ImMin(container_size.x, container_size.y);
-    float cell_size = (min_container_dim / GRID_FULL_SIZE);
+    float min_container_dim = ImMin(container_size.x / tableColumnCellCount, container_size.y / tableRowCellCount);
+    float cell_size = (min_container_dim);
 
-    float table_width = cell_size * GRID_FULL_SIZE;
-    float table_height = cell_size * GRID_FULL_SIZE;
+    float table_width = cell_size * tableColumnCellCount;
+    float table_height = cell_size * tableRowCellCount;
 
     float cursor_x = (container_size.x - table_width) * 0.5f;
     float cursor_y = (container_size.y - table_height) * 0.5f;
@@ -31,66 +35,37 @@ void render_nonogram_table() {
 
     ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2(0, 0));
 
-    // ImGuiTableFlags_BordersInnerV と BordersInnerH を使用
-    if (ImGui::BeginTable("NonogramGrid", GRID_FULL_SIZE, ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_Borders | ImGuiTableFlags_BordersInnerV | ImGuiTableFlags_BordersInnerH | ImGuiTableFlags_NoHostExtendX)) {
+    // ImGuiTableFlags_Borders を使用して全ての罫線を描画
+    if (ImGui::BeginTable("NonogramGrid", tableColumnCellCount, ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_BordersInner | ImGuiTableFlags_Borders | ImGuiTableFlags_NoHostExtendX) | ImGuiTableFlags_NoHostExtendY) {
 
         // カラムの幅を固定で設定
-        for (int i = 0; i < GRID_FULL_SIZE; ++i) {
+        for (int i = 0; i < tableColumnCellCount; ++i) {
             ImGui::TableSetupColumn("##", ImGuiTableColumnFlags_WidthFixed, cell_size);
         }
 
-        // ここがポイント: ヘッダー部分を ImGui に描画させる
-        for (int r = 0; r < HEADER_SIZE; ++r) {
-            ImGui::TableNextRow(ImGuiTableRowFlags_None, cell_size);
-            for (int c = 0; c < GRID_FULL_SIZE; ++c) {
+        // 単一のループで全てのセルを描画
+        for (int r = 0; r < tableRowCellCount; ++r) {
+            ImGui::TableNextRow(); // ここで高さを指定しない
+            for (int c = 0; c < tableColumnCellCount; ++c) {
                 ImGui::TableSetColumnIndex(c);
-
+                
                 ImVec2 button_size = ImVec2(cell_size, cell_size);
-
-                if (r < HEADER_SIZE && c < HEADER_SIZE) {
+                
+                // ヘッダー部分とゲーム盤部分で表示内容を分ける
+                if (r < tableRowHeaderCount || c < tableColumnHeaderCount) {
+                    // ヘッダー部分
+                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
+                    // 実際にはここに数字を描画するロジックが入る
+                    ImGui::Button("H", button_size); 
+                    ImGui::PopStyleColor();
+                } else {
+                    // ゲーム盤部分
                     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
                     ImGui::Button(" ", button_size);
                     ImGui::PopStyleColor();
-                } else if (r < HEADER_SIZE) {
-                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
-                    std::string label = std::to_string(c - HEADER_SIZE + 1);
-                    ImGui::Button(label.c_str(), button_size);
-                    ImGui::PopStyleColor();
-                } else {
-                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
-                    std::string label = std::to_string(r - HEADER_SIZE + 1);
-                    ImGui::Button(label.c_str(), button_size);
-                    ImGui::PopStyleColor();
                 }
             }
         }
-
-        // ここからがゲームプレイエリアの描画
-        for (int r = HEADER_SIZE; r < GRID_FULL_SIZE; ++r) {
-            ImGui::TableNextRow(ImGuiTableRowFlags_None, cell_size);
-            for (int c = 0; c < GRID_FULL_SIZE; ++c) {
-                ImGui::TableSetColumnIndex(c);
-
-                ImVec2 button_size = ImVec2(cell_size, cell_size);
-
-                if (c < HEADER_SIZE) {
-                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
-                    std::string label = std::to_string(r - HEADER_SIZE + 1);
-                    ImGui::Button(label.c_str(), button_size);
-                    ImGui::PopStyleColor();
-                } else {
-                    ImVec4 button_color = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
-                    const char* text_label = "";
-                    if ((r - HEADER_SIZE + c - HEADER_SIZE) % 3 == 0) button_color = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
-                    else if ((r - HEADER_SIZE + c - HEADER_SIZE) % 3 == 1) { button_color = ImVec4(0.8f, 0.8f, 0.8f, 1.0f); text_label = "X"; }
-                    ImGui::PushStyleColor(ImGuiCol_Button, button_color);
-                    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.0f, 0.0f, 0.0f, 1.0f));
-                    ImGui::Button(text_label, button_size);
-                    ImGui::PopStyleColor(2);
-                }
-            }
-        }
-
         ImGui::EndTable();
     }
     ImGui::PopStyleVar();
@@ -115,86 +90,84 @@ int main() {
     ImGuiIO& io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable; // このフラグは有効に保ちます
+    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable; 
 
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
 
     bool first_time = true;
 
-	while (!glfwWindowShouldClose(window)) {
-		glfwPollEvents();
+    while (!glfwWindowShouldClose(window)) {
+        glfwPollEvents();
 
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui_ImplGlfw_NewFrame();
-		ImGui::NewFrame();
-		
-		// 👇 新しい変更点
-		ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar |
-										ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
-										ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus |
-										ImGuiWindowFlags_NoNavFocus;
-										
-		const ImGuiViewport* viewport = ImGui::GetMainViewport();
-		ImGui::SetNextWindowPos(viewport->WorkPos);
-		ImGui::SetNextWindowSize(viewport->WorkSize);
-		ImGui::SetNextWindowViewport(viewport->ID);
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+        
+        ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar |
+                                        ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
+                                        ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus |
+                                        ImGuiWindowFlags_NoNavFocus;
+                                        
+        const ImGuiViewport* viewport = ImGui::GetMainViewport();
+        ImGui::SetNextWindowPos(viewport->WorkPos);
+        ImGui::SetNextWindowSize(viewport->WorkSize);
+        ImGui::SetNextWindowViewport(viewport->ID);
 
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
-		ImGui::Begin("DockSpace", nullptr, window_flags);
-		ImGui::PopStyleVar(3);
-		
-		ImGuiID dockspace_id = ImGui::GetID("MainDockspace");
-		ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode);
-		
-		if (first_time) {
-			first_time = false;
-			ImGui::DockBuilderRemoveNode(dockspace_id);
-			ImGui::DockBuilderAddNode(dockspace_id, ImGuiDockNodeFlags_DockSpace);
-			ImGui::DockBuilderSetNodeSize(dockspace_id, viewport->WorkSize);
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+        ImGui::Begin("DockSpace", nullptr, window_flags);
+        ImGui::PopStyleVar(3);
+        
+        ImGuiID dockspace_id = ImGui::GetID("MainDockspace");
+        ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode);
+        
+        if (first_time) {
+            first_time = false;
+            ImGui::DockBuilderRemoveNode(dockspace_id);
+            ImGui::DockBuilderAddNode(dockspace_id, ImGuiDockNodeFlags_DockSpace);
+            ImGui::DockBuilderSetNodeSize(dockspace_id, viewport->WorkSize);
 
-			ImGuiID left_id, right_id;
-			ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left, 0.2f, &left_id, &right_id);
+            ImGuiID left_id, right_id;
+            ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left, 0.2f, &left_id, &right_id);
 
-			ImGui::DockBuilderDockWindow("Control Panel", left_id);
-			ImGui::DockBuilderDockWindow("Nonogram Board", right_id);
-			ImGui::DockBuilderFinish(dockspace_id);
-		}
-		
-		ImGui::End(); // 'DockSpace' ウィンドウを終了する
+            ImGui::DockBuilderDockWindow("Control Panel", left_id);
+            ImGui::DockBuilderDockWindow("Nonogram Board", right_id);
+            ImGui::DockBuilderFinish(dockspace_id);
+        }
+        
+        ImGui::End();
 
-		// 各UIコンポーネントを独立したウィンドウとして描画
-		ImGui::Begin("Control Panel", NULL, ImGuiWindowFlags_None);
-		ImGui::Text("Control Buttons");
-		ImGui::Spacing();
-		ImGui::Button("Solve", ImVec2(-1, 0));
-		ImGui::Button("Reset", ImVec2(-1, 0));
-		ImGui::End();
+        ImGui::Begin("Control Panel", NULL, ImGuiWindowFlags_None);
+        ImGui::Text("Control Buttons");
+        ImGui::Spacing();
+        ImGui::Button("Solve", ImVec2(-1, 0));
+        ImGui::Button("Reset", ImVec2(-1, 0));
+        ImGui::End();
 
-		ImGui::Begin("Nonogram Board", NULL, ImGuiWindowFlags_None);
-		render_nonogram_table();
-		ImGui::End();
+        ImGui::Begin("Nonogram Board", NULL, ImGuiWindowFlags_None);
+        render_nonogram_table();
+        ImGui::End();
 
-		ImGui::Render();
-		ImGui::EndFrame(); // レンダリング後にフレームを終了
-		
-		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-			GLFWwindow* backup_current_context = glfwGetCurrentContext();
-			ImGui::UpdatePlatformWindows();
-			ImGui::RenderPlatformWindowsDefault();
-			glfwMakeContextCurrent(backup_current_context);
-		}
-		
-		int display_w, display_h;
-		glfwGetFramebufferSize(window, &display_w, &display_h);
-		glViewport(0, 0, display_w, display_h);
-		glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
-		glClear(GL_COLOR_BUFFER_BIT);
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-		glfwSwapBuffers(window);
-	}
+        ImGui::Render();
+        ImGui::EndFrame(); 
+        
+        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+            GLFWwindow* backup_current_context = glfwGetCurrentContext();
+            ImGui::UpdatePlatformWindows();
+            ImGui::RenderPlatformWindowsDefault();
+            glfwMakeContextCurrent(backup_current_context);
+        }
+        
+        int display_w, display_h;
+        glfwGetFramebufferSize(window, &display_w, &display_h);
+        glViewport(0, 0, display_w, display_h);
+        glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        glfwSwapBuffers(window);
+    }
 
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
