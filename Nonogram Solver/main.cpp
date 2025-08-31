@@ -6,6 +6,15 @@
 #include "imgui_internal.h"
 #include <vector>
 #include <string>
+#include <coroutine>
+
+enum CellState {
+    EMPTY,
+    FILLED,
+    MARKED
+};
+
+std::vector<std::vector<CellState> > nonogramGrid;
 
 // グリッドのサイズ
 int tableRowHeaderCount = 5;
@@ -40,18 +49,30 @@ void glfw_error_callback(int error, const char* description) {
     fprintf(stderr, "Glfw Error %d: %s\n", error, description);
 }
 
-// ... (render_nonogram_table function is unchanged)
+// A simple solver function that changes one cell's state
+void solve_step() {
+    // This is a placeholder for your actual solver logic.
+    // It finds the first EMPTY cell and changes its state.
+    for (int r = 0; r < tableRowCount; ++r) {
+        for (int c = 0; c < tableColumnCount; ++c) {
+            if (nonogramGrid[r][c] == EMPTY) {
+                nonogramGrid[r][c] = FILLED;
+                return; // Change one cell per step
+            }
+        }
+    }
+}
 
 void render_nonogram_table() {
-    const int tableRowCellCount = tableRowHeaderCount + tableRowCount;
-    const int tableColumnCellCount = tableColumnHeaderCount + tableColumnCount;
+    const int tableRowTotalCount = tableRowHeaderCount + tableRowCount;
+    const int tableColumnTotalCount = tableColumnHeaderCount + tableColumnCount;
     ImVec2 container_size = ImGui::GetContentRegionAvail();
     
-    float min_container_dim = ImMin(container_size.x / tableColumnCellCount, container_size.y / tableRowCellCount);
+    float min_container_dim = ImMin(container_size.x / tableColumnTotalCount, container_size.y / tableRowTotalCount);
     float cell_size = round(min_container_dim);
 
-    float table_width = cell_size * tableColumnCellCount;
-    float table_height = cell_size * tableRowCellCount;
+    float table_width = cell_size * tableColumnTotalCount;
+    float table_height = cell_size * tableRowTotalCount;
 
     float cursor_x = (container_size.x - table_width) * 0.5f;
     float cursor_y = (container_size.y - table_height) * 0.5f;
@@ -61,31 +82,34 @@ void render_nonogram_table() {
 
     ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2(0, 0));
 
-    if (ImGui::BeginTable("NonogramGrid", tableColumnCellCount, ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_NoBordersInBody)) {
+    if (ImGui::BeginTable("NonogramGrid", tableColumnTotalCount, ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_NoBordersInBody)) {
 
-        for (int i = 0; i < tableColumnCellCount; ++i) {
+        for (int i = 0; i < tableColumnTotalCount; ++i) {
             ImGui::TableSetupColumn("##", ImGuiTableColumnFlags_WidthFixed, cell_size);
         }
 
-        for (int r = 0; r < tableRowCellCount; ++r) {
+        for (int r = 0; r < tableRowTotalCount; ++r) {
             ImGui::TableNextRow(ImGuiTableRowFlags_None, cell_size);
-            for (int c = 0; c < tableColumnCellCount; ++c) {
+            for (int c = 0; c < tableColumnTotalCount; ++c) {
                 ImGui::TableSetColumnIndex(c);
                 
                 ImVec2 button_size = ImVec2(cell_size, cell_size);
                 
                 // Color logic for different grid sections
                 if(r < tableRowHeaderCount && c < tableColumnHeaderCount) {
-                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.5f, 0.5f, 0.5f, 1.0f));
+                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.5f, 0.5f, 0.5f, 1.0f)); // Header intersection
                 } else if (r < tableRowHeaderCount) {
-                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.6f, 0.9f, 1.0f));
+                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.6f, 0.9f, 1.0f)); // Column headers
                 } else if (c < tableColumnHeaderCount) {
-                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.9f, 0.6f, 0.6f, 1.0f));
+                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.9f, 0.6f, 0.6f, 1.0f)); // Row headers
                 } else {
-                    if ((r + c) % 2 == 0) {
-                        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.8f, 0.8f, 0.8f, 1.0f));
-                    } else {
+                    // Correctly map CellState to colors
+                    if(nonogramGrid[r - tableRowHeaderCount][c - tableColumnHeaderCount] == FILLED) {
+                        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.2f, 0.2f, 1.0f));
+                    } else if(nonogramGrid[r - tableRowHeaderCount][c - tableColumnHeaderCount] == MARKED) {
                         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
+                    } else { // EMPTY
+                        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.9f, 0.9f, 0.9f, 1.0f));
                     }
                 }
                 ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.4f, 0.4f, 0.4f, 1.0f));
@@ -97,38 +121,27 @@ void render_nonogram_table() {
                 if (r < tableRowHeaderCount || c < tableColumnHeaderCount) {
                     if (cell_size >= 120.0f) {
                         ImGui::PushFont(fontSize60);
-                        printf("cell_size is %3.8f, using fontSize60\n", cell_size);
                     } else if (cell_size >= 110.0f) {
                         ImGui::PushFont(fontSize55);
-                        printf("cell_size is %3.8f, using fontSize55\n", cell_size);
                     } else if (cell_size >= 100.0f) {
                         ImGui::PushFont(fontSize50);
-                        printf("cell_size is %3.8f, using fontSize50\n", cell_size);
                     } else if (cell_size >= 90.0f) {
                         ImGui::PushFont(fontSize45);
-						printf("cell_size is %3.8f, using fontSize45\n", cell_size);
                     } else if (cell_size >= 80.0f) {
                         ImGui::PushFont(fontSize40);
-						printf("cell_size is %3.8f, using fontSize40\n", cell_size);
                     } else if(cell_size >= 70.0f) {
-						ImGui::PushFont(fontSize35);
-						printf("cell_size is %3.8f, using fontSize35\n", cell_size);
+                        ImGui::PushFont(fontSize35);
                     } else if(cell_size >= 60.0f) {
-						ImGui::PushFont(fontSize30);
-						printf("cell_size is %3.8f, using fontSize30\n", cell_size);
+                        ImGui::PushFont(fontSize30);
                     } else if(cell_size >= 50.0f) {
                         ImGui::PushFont(fontSize25);
-						printf("cell_size is %3.8f, using fontSize25\n", cell_size);
                     } else if(cell_size >= 40.0f) {
                         ImGui::PushFont(fontSize20);
-						printf("cell_size is %3.8f, using fontSize20\n", cell_size);
                     } else if(cell_size >= 20.0f) {
                         ImGui::PushFont(fontSize15);
-						printf("cell_size is %3.8f, using fontSize15\n", cell_size);
                     } else {
                         ImGui::PushFont(fontSize10);
-						printf("cell_size is %3.8f, using fontSize10\n", cell_size);
-					}
+                    }
 
                     int number_value = ((r + c) * 10) % 1000;
                     sprintf_s(label, "%d##%d,%d", number_value, r, c);
@@ -139,7 +152,6 @@ void render_nonogram_table() {
                 ImGui::Button(label, button_size);
                 
                 if (r < tableRowHeaderCount || c < tableColumnHeaderCount) {
-                    // Pop the font only if it was pushed
                     ImGui::PopFont();
                 }
                 
@@ -213,10 +225,21 @@ int main() {
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
 
+	nonogramGrid.resize(tableRowCount, std::vector<CellState>(tableColumnCount, EMPTY));
+
     bool first_time = true;
+    double last_update_time = glfwGetTime();
+    const double update_interval = 0.1; // Update every 0.1 seconds
 
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
+
+        // Timer logic to update the grid state
+        double current_time = glfwGetTime();
+        if (current_time - last_update_time >= update_interval) {
+            solve_step();
+            last_update_time = current_time;
+        }
 
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
