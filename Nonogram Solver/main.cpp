@@ -1,4 +1,4 @@
-#include <glad/glad.h>
+ï»¿#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
@@ -7,7 +7,7 @@
 #include <vector>
 #include <string>
 
-// ƒOƒŠƒbƒh‚ÌƒTƒCƒY
+// ã‚°ãƒªãƒƒãƒ‰ã®ã‚µã‚¤ã‚º
 const int GRID_FULL_SIZE = 15;
 const int HEADER_SIZE = 5;
 
@@ -28,25 +28,25 @@ void render_nonogram_table() {
 
     if (cursor_x > 0) ImGui::SetCursorPosX(cursor_x);
     if (cursor_y > 0) ImGui::SetCursorPosY(cursor_y);
-    
+
     ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2(0, 0));
-    
-    // ImGuiTableFlags_BordersInnerV ‚Æ BordersInnerH ‚ğg—p
+
+    // ImGuiTableFlags_BordersInnerV ã¨ BordersInnerH ã‚’ä½¿ç”¨
     if (ImGui::BeginTable("NonogramGrid", GRID_FULL_SIZE, ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_Borders | ImGuiTableFlags_BordersInnerV | ImGuiTableFlags_BordersInnerH | ImGuiTableFlags_NoHostExtendX)) {
-        
-        // ƒJƒ‰ƒ€‚Ì•‚ğŒÅ’è‚Åİ’è
+
+        // ã‚«ãƒ©ãƒ ã®å¹…ã‚’å›ºå®šã§è¨­å®š
         for (int i = 0; i < GRID_FULL_SIZE; ++i) {
             ImGui::TableSetupColumn("##", ImGuiTableColumnFlags_WidthFixed, cell_size);
         }
 
-        // ‚±‚±‚ªƒ|ƒCƒ“ƒg: ƒwƒbƒ_[•”•ª‚ğ ImGui ‚É•`‰æ‚³‚¹‚é
+        // ã“ã“ãŒãƒã‚¤ãƒ³ãƒˆ: ãƒ˜ãƒƒãƒ€ãƒ¼éƒ¨åˆ†ã‚’ ImGui ã«æç”»ã•ã›ã‚‹
         for (int r = 0; r < HEADER_SIZE; ++r) {
             ImGui::TableNextRow(ImGuiTableRowFlags_None, cell_size);
             for (int c = 0; c < GRID_FULL_SIZE; ++c) {
                 ImGui::TableSetColumnIndex(c);
-                
+
                 ImVec2 button_size = ImVec2(cell_size, cell_size);
-                
+
                 if (r < HEADER_SIZE && c < HEADER_SIZE) {
                     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
                     ImGui::Button(" ", button_size);
@@ -65,14 +65,14 @@ void render_nonogram_table() {
             }
         }
 
-        // ‚±‚±‚©‚ç‚ªƒQ[ƒ€ƒvƒŒƒCƒGƒŠƒA‚Ì•`‰æ
+        // ã“ã“ã‹ã‚‰ãŒã‚²ãƒ¼ãƒ ãƒ—ãƒ¬ã‚¤ã‚¨ãƒªã‚¢ã®æç”»
         for (int r = HEADER_SIZE; r < GRID_FULL_SIZE; ++r) {
             ImGui::TableNextRow(ImGuiTableRowFlags_None, cell_size);
             for (int c = 0; c < GRID_FULL_SIZE; ++c) {
                 ImGui::TableSetColumnIndex(c);
-                
+
                 ImVec2 button_size = ImVec2(cell_size, cell_size);
-                
+
                 if (c < HEADER_SIZE) {
                     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
                     std::string label = std::to_string(r - HEADER_SIZE + 1);
@@ -114,62 +114,87 @@ int main() {
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable; // š ƒhƒbƒLƒ“ƒO‚ğ—LŒø‰»
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable; // ã“ã®ãƒ•ãƒ©ã‚°ã¯æœ‰åŠ¹ã«ä¿ã¡ã¾ã™
 
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
 
-    static bool first_time = true;
+    bool first_time = true;
 
-    while (!glfwWindowShouldClose(window)) {
-        glfwPollEvents();
+	while (!glfwWindowShouldClose(window)) {
+		glfwPollEvents();
 
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+		
+		// ğŸ‘‡ æ–°ã—ã„å¤‰æ›´ç‚¹
+		ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar |
+										ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
+										ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus |
+										ImGuiWindowFlags_NoNavFocus;
+										
+		const ImGuiViewport* viewport = ImGui::GetMainViewport();
+		ImGui::SetNextWindowPos(viewport->WorkPos);
+		ImGui::SetNextWindowSize(viewport->WorkSize);
+		ImGui::SetNextWindowViewport(viewport->ID);
 
-        // 1. ƒƒCƒ“‚ÌƒhƒbƒNƒm[ƒh‚ğ’è‹`
-        ImGuiID dockspace_id = ImGui::GetID("MainDockspace");
-        ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode);
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+		ImGui::Begin("DockSpace", nullptr, window_flags);
+		ImGui::PopStyleVar(3);
+		
+		ImGuiID dockspace_id = ImGui::GetID("MainDockspace");
+		ImGui::DockSpace(dockspace_id, ImVec2(0.0f, 0.0f), ImGuiDockNodeFlags_PassthruCentralNode);
+		
+		if (first_time) {
+			first_time = false;
+			ImGui::DockBuilderRemoveNode(dockspace_id);
+			ImGui::DockBuilderAddNode(dockspace_id, ImGuiDockNodeFlags_DockSpace);
+			ImGui::DockBuilderSetNodeSize(dockspace_id, viewport->WorkSize);
 
-        // 2. ‰‰ñ‹N“®‚ÉƒŒƒCƒAƒEƒg‚ğ\’z
-        if (first_time) {
-            first_time = false;
-            ImGui::DockBuilderRemoveNode(dockspace_id);
-            ImGui::DockBuilderAddNode(dockspace_id, ImGuiDockNodeFlags_DockSpace);
-            ImGui::DockBuilderSetNodeSize(dockspace_id, ImVec2(1280, 720));
+			ImGuiID left_id, right_id;
+			ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left, 0.2f, &left_id, &right_id);
 
-            ImGuiID left_id, right_id;
-            // ¶‰E‚É•ªŠ„ (¶‘¤‚É20%‚ÌƒXƒy[ƒX‚ğŠ„‚è“–‚Ä‚é)
-            ImGui::DockBuilderSplitNode(dockspace_id, ImGuiDir_Left, 0.2f, &left_id, &right_id);
+			ImGui::DockBuilderDockWindow("Control Panel", left_id);
+			ImGui::DockBuilderDockWindow("Nonogram Board", right_id);
+			ImGui::DockBuilderFinish(dockspace_id);
+		}
+		
+		ImGui::End(); // 'DockSpace' ã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã‚’çµ‚äº†ã™ã‚‹
 
-            // Šeƒm[ƒh‚ÉƒEƒBƒ“ƒhƒE‚ğƒhƒbƒLƒ“ƒO
-            ImGui::DockBuilderDockWindow("Control Panel", left_id);
-            ImGui::DockBuilderDockWindow("Nonogram Board", right_id);
-            ImGui::DockBuilderFinish(dockspace_id);
-        }
+		// å„UIã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’ç‹¬ç«‹ã—ãŸã‚¦ã‚£ãƒ³ãƒ‰ã‚¦ã¨ã—ã¦æç”»
+		ImGui::Begin("Control Panel", NULL, ImGuiWindowFlags_None);
+		ImGui::Text("Control Buttons");
+		ImGui::Spacing();
+		ImGui::Button("Solve", ImVec2(-1, 0));
+		ImGui::Button("Reset", ImVec2(-1, 0));
+		ImGui::End();
 
-        // 3. ŠeUIƒRƒ“ƒ|[ƒlƒ“ƒg‚ğ“Æ—§‚µ‚½ƒEƒBƒ“ƒhƒE‚Æ‚µ‚Ä•`‰æ
-        ImGui::Begin("Control Panel", NULL, ImGuiWindowFlags_None);
-        ImGui::Text("Control Buttons");
-        ImGui::Spacing();
-        ImGui::Button("Solve", ImVec2(-1, 0));
-        ImGui::Button("Reset", ImVec2(-1, 0));
-        ImGui::End();
+		ImGui::Begin("Nonogram Board", NULL, ImGuiWindowFlags_None);
+		render_nonogram_table();
+		ImGui::End();
 
-        ImGui::Begin("Nonogram Board", NULL, ImGuiWindowFlags_None);
-        render_nonogram_table(); // •\‚ğ•`‰æ‚·‚éŠÖ”
-        ImGui::End();
-
-        ImGui::Render();
-        int display_w, display_h;
-        glfwGetFramebufferSize(window, &display_w, &display_h);
-        glViewport(0, 0, display_w, display_h);
-        glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
-        glClear(GL_COLOR_BUFFER_BIT);
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-        glfwSwapBuffers(window);
-    }
+		ImGui::Render();
+		ImGui::EndFrame(); // ãƒ¬ãƒ³ãƒ€ãƒªãƒ³ã‚°å¾Œã«ãƒ•ãƒ¬ãƒ¼ãƒ ã‚’çµ‚äº†
+		
+		if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+			GLFWwindow* backup_current_context = glfwGetCurrentContext();
+			ImGui::UpdatePlatformWindows();
+			ImGui::RenderPlatformWindowsDefault();
+			glfwMakeContextCurrent(backup_current_context);
+		}
+		
+		int display_w, display_h;
+		glfwGetFramebufferSize(window, &display_w, &display_h);
+		glViewport(0, 0, display_w, display_h);
+		glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
+		glClear(GL_COLOR_BUFFER_BIT);
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+		glfwSwapBuffers(window);
+	}
 
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
