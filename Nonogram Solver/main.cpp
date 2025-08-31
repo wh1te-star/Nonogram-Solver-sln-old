@@ -8,21 +8,23 @@
 #include <string>
 
 // グリッドのサイズ
-int tableRowHeaderCount = 5;
-int tableRowCount = 10;
-int tableColumnHeaderCount = 5;
-int tableColumnCount = 15;
+int tableRowHeaderCount = 8;
+int tableRowCount = 17;
+int tableColumnHeaderCount = 6;
+int tableColumnCount = 21;
 
 void glfw_error_callback(int error, const char* description) {
     fprintf(stderr, "Glfw Error %d: %s\n", error, description);
 }
 
 void render_nonogram_table() {
-	const int tableRowCellCount = tableRowHeaderCount + tableRowCount;
-	const int tableColumnCellCount = tableColumnHeaderCount + tableColumnCount;
+    const int tableRowCellCount = tableRowHeaderCount + tableRowCount;
+    const int tableColumnCellCount = tableColumnHeaderCount + tableColumnCount;
     ImVec2 container_size = ImGui::GetContentRegionAvail();
+    
+    // セルのサイズを動的に計算し、整数に丸める
     float min_container_dim = ImMin(container_size.x / tableColumnCellCount, container_size.y / tableRowCellCount);
-    float cell_size = (min_container_dim);
+    float cell_size = round(min_container_dim); // ここでセルのサイズを整数に丸める
 
     float table_width = cell_size * tableColumnCellCount;
     float table_height = cell_size * tableRowCellCount;
@@ -35,16 +37,13 @@ void render_nonogram_table() {
 
     ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2(0, 0));
 
-    // ImGuiTableFlags_Borders を使用して全ての罫線を描画
-    if (ImGui::BeginTable("NonogramGrid", tableColumnCellCount, ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_BordersInner | ImGuiTableFlags_Borders | ImGuiTableFlags_NoHostExtendX) | ImGuiTableFlags_NoHostExtendY) {
+    if (ImGui::BeginTable("NonogramGrid", tableColumnCellCount, ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_NoBordersInBody)) {
 
-
-        // カラムの幅を自動調整に任せる
         for (int i = 0; i < tableColumnCellCount; ++i) {
-            ImGui::TableSetupColumn("##");
+            // カラムの幅を固定された整数値のセルサイズに設定
+            ImGui::TableSetupColumn("##", ImGuiTableColumnFlags_WidthFixed, cell_size);
         }
 
-        // 単一のループで全てのセルを描画
         for (int r = 0; r < tableRowCellCount; ++r) {
             ImGui::TableNextRow(ImGuiTableRowFlags_None, cell_size);
             for (int c = 0; c < tableColumnCellCount; ++c) {
@@ -52,21 +51,42 @@ void render_nonogram_table() {
                 
                 ImVec2 button_size = ImVec2(cell_size, cell_size);
                 
-                // ボタンのスタイルを設定
                 ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
                 ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
                 ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
-                ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.0f); // 枠線の太さを設定
+                
+                ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.0f);
 
-                // ヘッダー部分とゲーム盤部分で表示内容を分ける
+                char label[32];
                 if (r < tableRowHeaderCount || c < tableColumnHeaderCount) {
-                    ImGui::Button("H", button_size); 
+                    sprintf_s(label, "H##%d,%d", r, c);
                 } else {
-                    ImGui::Button(" ", button_size);
+                    sprintf_s(label, " ##%d,%d", r, c);
                 }
 
+                ImGui::Button(label, button_size);
+                
                 ImGui::PopStyleVar();
                 ImGui::PopStyleColor(3);
+
+                ImDrawList* draw_list = ImGui::GetWindowDrawList();
+                ImVec2 p_min = ImGui::GetItemRectMin();
+                ImVec2 p_max = ImGui::GetItemRectMax();
+
+                // 線の座標はImGuiが計算したピクセル単位の座標なので、そのまま使う
+                // もしくは ImGui::GetCursorScreenPos() を使って計算することも可能
+                
+                // 垂直の罫線 (右辺)
+                float columnThickness = 3.0f;
+				if (c == tableColumnHeaderCount - 1) columnThickness = 9.0f;
+				if (c >= tableColumnHeaderCount && (c - tableColumnHeaderCount) % 5 == 4) columnThickness = 6.0f;
+                draw_list->AddLine(ImVec2(p_max.x, p_min.y), ImVec2(p_max.x, p_max.y), IM_COL32(0, 0, 0, 255), columnThickness);
+                
+                // 水平の罫線 (下辺)
+                float rowThickness = 3.0f;
+				if (r == tableRowHeaderCount - 1) rowThickness = 9.0f;
+				if (r >= tableRowHeaderCount && (r - tableRowHeaderCount) % 5 == 4) rowThickness = 6.0f;
+                draw_list->AddLine(ImVec2(p_min.x, p_max.y), ImVec2(p_max.x, p_max.y), IM_COL32(0, 0, 0, 255), rowThickness);
             }
         }
         ImGui::EndTable();
