@@ -16,39 +16,84 @@ void glfw_error_callback(int error, const char* description) {
 }
 
 void render_nonogram_table() {
-    // コンテナ（ここではドックされたウィンドウ）の利用可能領域を取得
     ImVec2 container_size = ImGui::GetContentRegionAvail();
+    float min_container_dim = ImMin(container_size.x, container_size.y);
+    float cell_size = (min_container_dim / GRID_FULL_SIZE);
 
-    // 縦横の短い方に合わせてマスのサイズを計算
-    float min_size = ImMin(container_size.x, container_size.y);
-    float cell_size = (min_size / GRID_FULL_SIZE) - 2.0f; // パディングを考慮
+    float table_width = cell_size * GRID_FULL_SIZE;
+    float table_height = cell_size * GRID_FULL_SIZE;
 
-    if (ImGui::BeginTable("NonogramGrid", GRID_FULL_SIZE, ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_Borders)) {
+    float cursor_x = (container_size.x - table_width) * 0.5f;
+    float cursor_y = (container_size.y - table_height) * 0.5f;
+
+    if (cursor_x > 0) ImGui::SetCursorPosX(cursor_x);
+    if (cursor_y > 0) ImGui::SetCursorPosY(cursor_y);
+    
+    ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2(0, 0));
+    
+    // ImGuiTableFlags_BordersInnerV と BordersInnerH を使用
+    if (ImGui::BeginTable("NonogramGrid", GRID_FULL_SIZE, ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_Borders | ImGuiTableFlags_BordersInnerV | ImGuiTableFlags_BordersInnerH | ImGuiTableFlags_NoHostExtendX)) {
+        
+        // カラムの幅を固定で設定
         for (int i = 0; i < GRID_FULL_SIZE; ++i) {
             ImGui::TableSetupColumn("##", ImGuiTableColumnFlags_WidthFixed, cell_size);
         }
-        for (int r = 0; r < GRID_FULL_SIZE; ++r) {
-            ImGui::TableNextRow();
+
+        // ここがポイント: ヘッダー部分を ImGui に描画させる
+        for (int r = 0; r < HEADER_SIZE; ++r) {
+            ImGui::TableNextRow(ImGuiTableRowFlags_None, cell_size);
             for (int c = 0; c < GRID_FULL_SIZE; ++c) {
                 ImGui::TableSetColumnIndex(c);
-                if (r < HEADER_SIZE || c < HEADER_SIZE) {
-                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.9f, 0.9f, 0.9f, 1.0f));
-                    ImGui::Button(" ", ImVec2(cell_size, cell_size));
+                
+                ImVec2 button_size = ImVec2(cell_size, cell_size);
+                
+                if (r < HEADER_SIZE && c < HEADER_SIZE) {
+                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
+                    ImGui::Button(" ", button_size);
                     ImGui::PopStyleColor();
-                }
-                else {
-                    ImVec4 button_color = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
-                    const char* text_label = "";
-                    if ((r + c) % 3 == 0) button_color = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
-                    else if ((r + c) % 3 == 1) { button_color = ImVec4(0.8f, 0.8f, 0.8f, 1.0f); text_label = "X"; }
-                    ImGui::PushStyleColor(ImGuiCol_Button, button_color);
-                    ImGui::Button(text_label, ImVec2(cell_size, cell_size));
+                } else if (r < HEADER_SIZE) {
+                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
+                    std::string label = std::to_string(c - HEADER_SIZE + 1);
+                    ImGui::Button(label.c_str(), button_size);
+                    ImGui::PopStyleColor();
+                } else {
+                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
+                    std::string label = std::to_string(r - HEADER_SIZE + 1);
+                    ImGui::Button(label.c_str(), button_size);
                     ImGui::PopStyleColor();
                 }
             }
         }
+
+        // ここからがゲームプレイエリアの描画
+        for (int r = HEADER_SIZE; r < GRID_FULL_SIZE; ++r) {
+            ImGui::TableNextRow(ImGuiTableRowFlags_None, cell_size);
+            for (int c = 0; c < GRID_FULL_SIZE; ++c) {
+                ImGui::TableSetColumnIndex(c);
+                
+                ImVec2 button_size = ImVec2(cell_size, cell_size);
+                
+                if (c < HEADER_SIZE) {
+                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
+                    std::string label = std::to_string(r - HEADER_SIZE + 1);
+                    ImGui::Button(label.c_str(), button_size);
+                    ImGui::PopStyleColor();
+                } else {
+                    ImVec4 button_color = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
+                    const char* text_label = "";
+                    if ((r - HEADER_SIZE + c - HEADER_SIZE) % 3 == 0) button_color = ImVec4(0.0f, 0.0f, 0.0f, 1.0f);
+                    else if ((r - HEADER_SIZE + c - HEADER_SIZE) % 3 == 1) { button_color = ImVec4(0.8f, 0.8f, 0.8f, 1.0f); text_label = "X"; }
+                    ImGui::PushStyleColor(ImGuiCol_Button, button_color);
+                    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.0f, 0.0f, 0.0f, 1.0f));
+                    ImGui::Button(text_label, button_size);
+                    ImGui::PopStyleColor(2);
+                }
+            }
+        }
+
         ImGui::EndTable();
     }
+    ImGui::PopStyleVar();
 }
 
 int main() {
