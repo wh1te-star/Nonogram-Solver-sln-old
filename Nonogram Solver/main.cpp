@@ -51,6 +51,120 @@ void glfw_error_callback(int error, const char* description) {
     fprintf(stderr, "Glfw Error %d: %s\n", error, description);
 }
 
+void findPlacementsInternal(
+    int totalLength,
+    const std::vector<int>& hintNumbers,
+    const std::vector<CellState>& cellStates,
+    int hintIndex,
+    int currentPos,
+    std::vector<int>& currentPlacement,
+    std::vector<std::vector<int>>& solutions
+) {
+    if (hintIndex == hintNumbers.size()) {
+        std::vector<int> finalPlacement = currentPlacement;
+        finalPlacement.resize(totalLength, 0);
+
+        bool isValid = true;
+        for (int i = 0; i < totalLength; ++i) {
+            if (cellStates[i] == CellState::EMPTY && finalPlacement[i] == 1) {
+                isValid = false;
+                break;
+            }
+            if (cellStates[i] == CellState::FILLED && finalPlacement[i] == 0) {
+                isValid = false;
+                break;
+            }
+        }
+        
+        if (isValid) {
+            solutions.push_back(finalPlacement);
+        }
+        return;
+    }
+
+    int remainingHintsSize = std::accumulate(hintNumbers.begin() + hintIndex, hintNumbers.end(), 0);
+    int remainingSpace = (int)hintNumbers.size() - hintIndex - 1;
+    
+    // 現在の位置から最後まで、ヒントを配置できる最大の場所を計算
+    for (int i = currentPos; i <= totalLength - (remainingHintsSize + remainingSpace); ++i) {
+        
+        // 1. ブロックの前に連続したFILLEDセルがないかチェック
+        if (i > currentPos && cellStates[i-1] == CellState::FILLED) {
+            continue;
+        }
+
+        // 2. ブロック内にEMPTYセルがないかチェック
+        bool hasConflict = false;
+        for (int j = 0; j < hintNumbers[hintIndex]; ++j) {
+            if (cellStates[i + j] == CellState::EMPTY) {
+                hasConflict = true;
+                break;
+            }
+        }
+        if (hasConflict) {
+            continue;
+        }
+
+        if (hintIndex < hintNumbers.size() - 1 && cellStates[i + hintNumbers[hintIndex]] == CellState::FILLED) {
+            continue;
+        }
+
+        // 配置の生成
+        std::vector<int> nextPlacement = currentPlacement;
+        // ブロックの前の空白を追加
+        nextPlacement.insert(nextPlacement.end(), i - currentPos, 0);
+        // ブロックを追加
+        nextPlacement.insert(nextPlacement.end(), hintNumbers[hintIndex], 1);
+        // ブロックの後の空白を追加（最後のヒントでない場合）
+        if (hintIndex < hintNumbers.size() - 1) {
+            nextPlacement.push_back(0);
+        }
+        
+        // 次の再帰呼び出し
+        findPlacementsInternal(
+            totalLength, 
+            hintNumbers, 
+            cellStates, 
+            hintIndex + 1, 
+            i + hintNumbers[hintIndex] + 1, 
+            nextPlacement, 
+            solutions
+        );
+    }
+}
+
+// ユーザー向けの公開関数
+std::vector<std::vector<int>> findPlacements(
+    int length, 
+    std::vector<int>& hintNumbers, 
+    std::vector<CellState> cellStates
+) {
+    std::vector<std::vector<int>> solutions;
+    std::vector<int> currentPlacement;
+    findPlacementsInternal(length, hintNumbers, cellStates, 0, 0, currentPlacement, solutions);
+    return solutions;
+}
+
+// ユーティリティ関数（テスト用）
+std::vector<CellState> toCellStateVector(const std::string& s) {
+    std::vector<CellState> result;
+    for (char c : s) {
+        if (c == '?') result.push_back(CellState::UNKNOWN);
+        else if (c == '0') result.push_back(CellState::EMPTY);
+        else if (c == '1') result.push_back(CellState::FILLED);
+    }
+    return result;
+}
+
+void printSolutions(const std::vector<std::vector<int>>& solutions) {
+    for (const auto& solution : solutions) {
+        for (int cell : solution) {
+            std::cout << cell;
+        }
+        std::cout << std::endl;
+    }
+}
+
 // non-void generator
 template<typename T>
 struct generator {
