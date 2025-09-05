@@ -12,11 +12,13 @@
 #include <utility>
 #include <cstdlib>
 #include <ctime>
+#include <iostream>
+#include <numeric>
 
 enum CellState {
+    UNKNOWN,
     EMPTY,
     FILLED,
-    MARKED
 };
 
 std::vector<std::vector<CellState>> nonogramGrid;
@@ -60,6 +62,11 @@ void findPlacementsInternal(
     std::vector<int>& currentPlacement,
     std::vector<std::vector<int>>& solutions
 ) {
+    for (int x = 0; x < 10; x++) {
+		nonogramGrid[rand() % tableRowCount][rand() % tableColumnCount] = FILLED;
+    }
+
+    /*
     if (hintIndex == hintNumbers.size()) {
         std::vector<int> finalPlacement = currentPlacement;
         finalPlacement.resize(totalLength, 0);
@@ -131,6 +138,7 @@ void findPlacementsInternal(
             solutions
         );
     }
+    */
 }
 
 // ユーザー向けの公開関数
@@ -149,7 +157,7 @@ std::vector<std::vector<int>> findPlacements(
 std::vector<CellState> toCellStateVector(const std::string& s) {
     std::vector<CellState> result;
     for (char c : s) {
-        if (c == '?') result.push_back(CellState::UNKNOWN);
+        if (c == '?') result.push_back(CellState::EMPTY);
         else if (c == '0') result.push_back(CellState::EMPTY);
         else if (c == '1') result.push_back(CellState::FILLED);
     }
@@ -267,15 +275,8 @@ private:
 };
 
 generator<void> nonogram_solver() {
-    while (true) {
-        int r = rand() % tableRowCount;
-        int c = rand() % tableColumnCount;
-        int op = rand() % 3;
-        
-        nonogramGrid[r][c] = static_cast<CellState>(op);
-        
-        co_await std::suspend_always{};
-    }
+    std::vector<int> hints = { 1, 2, 3 };
+	findPlacements(10, hints, toCellStateVector("?????"));
 }
 
 std::optional<generator<void>> solve() {
@@ -323,7 +324,7 @@ void render_nonogram_table() {
                 } else {
                     if(nonogramGrid[r - tableRowHeaderCount][c - tableColumnHeaderCount] == FILLED) {
                         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.2f, 0.2f, 1.0f));
-                    } else if(nonogramGrid[r - tableRowHeaderCount][c - tableColumnHeaderCount] == MARKED) {
+                    } else if(nonogramGrid[r - tableRowHeaderCount][c - tableColumnHeaderCount] == EMPTY) {
                         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
                     } else {
                         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.9f, 0.9f, 0.9f, 1.0f));
