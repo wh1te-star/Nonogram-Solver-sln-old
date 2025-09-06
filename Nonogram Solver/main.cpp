@@ -85,6 +85,17 @@ void glfw_error_callback(int error, const char* description) {
     fprintf(stderr, "Glfw Error %d: %s\n", error, description);
 }
 
+std::vector<CellState> extractColumn(const std::vector<std::vector<CellState>>& vec2d, size_t columnIndex) {
+    std::vector<CellState> result;
+    if (vec2d.empty() || columnIndex >= vec2d[0].size()) {
+        return result;
+    }
+    for (const auto& row : vec2d) {
+        result.push_back(row[columnIndex]);
+    }
+    return result;
+}
+
 std::vector<std::vector<int>> parseHints(const std::string& hintString) {
     std::vector<std::vector<int>> hintMatrix;
     std::stringstream ss(hintString);
@@ -139,6 +150,23 @@ void initializeHints() {
 	}
 }
 
+bool canPlace(CellState placeState, CellState determinedState) {
+    if (determinedState == UNKNOWN) {
+        return true;
+    }
+    
+    if (placeState == WHITE) {
+        return determinedState == WHITE;
+    }
+    
+    if (placeState == BLACK) {
+        return determinedState == BLACK;
+    }
+    
+    assert(false);
+    return false;
+}
+
 struct SearchState {
     int current_pos;
     int hint_index;
@@ -148,7 +176,7 @@ struct SearchState {
 std::vector<std::vector<CellState>> findPlacements(
     int totalLength,
     const std::vector<int>& hintNumbers,
-    const std::vector<CellState>& cellStates
+    const std::vector<CellState>& determinedStates
 ) {
     std::vector<std::vector<CellState>> solutions;
     std::stack<SearchState> stk;
@@ -158,39 +186,82 @@ std::vector<std::vector<CellState>> findPlacements(
         SearchState current = stk.top();
         stk.pop();
 
+        // Base Case: All hints have been placed
         if (current.hint_index == hintNumbers.size()) {
-            std::vector<CellState> finalPlacement = current.current_placement;
-            while (finalPlacement.size() < totalLength) {
-                finalPlacement.push_back(WHITE);
+            bool allRemainingAreWhite = true;
+            for (size_t i = current.current_pos; i < totalLength; ++i) {
+                if (determinedStates[i] == BLACK) {
+                    allRemainingAreWhite = false;
+                    break;
+                }
             }
+            if (!allRemainingAreWhite) {
+                continue;
+            }
+            
+            std::vector<CellState> finalPlacement = current.current_placement;
+            finalPlacement.resize(totalLength, WHITE);
             solutions.push_back(finalPlacement);
             continue;
         }
 
         int currentHintNumber = hintNumbers[current.hint_index];
+        int remainingHintsLength = 0;
+        for (size_t i = current.hint_index; i < hintNumbers.size(); ++i) {
+            remainingHintsLength += hintNumbers[i];
+        }
+        if (hintNumbers.size() > current.hint_index) {
+            remainingHintsLength += (hintNumbers.size() - current.hint_index - 1);
+        }
 
-        for (int placePosition = current.current_pos; placePosition <= totalLength - currentHintNumber; placePosition++) {
-            // isPlacementValid logic goes here
-            SearchState nextState = current;
+        // Iterate through all possible starting positions for the current hint
+        for (int placePosition = current.current_pos; placePosition <= totalLength - remainingHintsLength; ++placePosition) {
             
-            for (int i = 0; i < (placePosition - current.current_pos); ++i) {
+            // Check for conflicts in the leading whitespace
+            bool canProceed = true;
+            for (int i = current.current_pos; i < placePosition; ++i) {
+                if (!canPlace(WHITE, determinedStates[i])) {
+                    canProceed = false;
+                    break;
+                }
+            }
+            if (!canProceed) continue;
+
+            // Check for conflicts within the hint block (BLACK cells)
+            for (int i = 0; i < currentHintNumber; ++i) {
+                if (!canPlace(BLACK, determinedStates[placePosition + i])) {
+                    canProceed = false;
+                    break;
+                }
+            }
+            if (!canProceed) continue;
+
+            // Check for conflicts with the mandatory whitespace separator
+            if (current.hint_index < hintNumbers.size() - 1 && 
+                !canPlace(WHITE, determinedStates[placePosition + currentHintNumber])) {
+                continue;
+            }
+
+            // If valid, create and push the next state
+            SearchState nextState;
+            nextState.hint_index = current.hint_index + 1;
+            
+            // Build the new placement from the current one
+            nextState.current_placement = current.current_placement;
+            for (int i = current.current_pos; i < placePosition; ++i) {
                 nextState.current_placement.push_back(WHITE);
             }
-            
             for (int i = 0; i < currentHintNumber; ++i) {
                 nextState.current_placement.push_back(BLACK);
             }
-            
-            if (nextState.current_placement.size() < totalLength) {
+            if (nextState.current_placement.size() < totalLength && nextState.hint_index < hintNumbers.size()) {
                 nextState.current_placement.push_back(WHITE);
             }
 
-            nextState.current_pos = placePosition + currentHintNumber + 1;
-            nextState.hint_index++;
+            nextState.current_pos = nextState.current_placement.size();
             stk.push(nextState);
         }
     }
-
     std::reverse(solutions.begin(), solutions.end());
     return solutions;
 }
@@ -216,6 +287,15 @@ std::vector<CellState> determineCellStates(
         }
     }
     return result;
+}
+
+bool isSolved(std::vector<CellState> states) {
+	for (const auto& cell : states) {
+		if (cell == UNKNOWN) {
+			return false;
+		}
+    }
+    return true;
 }
 
 void render_nonogram_table() {
@@ -342,15 +422,27 @@ void render_nonogram_table() {
     ImGui::PopStyleVar();
 }
 
+void gotoColumnProcess() {
+    processingColumn = 0;
+	processingRow = -1;
+	solution_index = -1;
+}
+
+void gotoRowProcess() {
+    processingRow = 0;
+    processingColumn = -1;
+    solution_index = -1;
+}
+
 void frameUpdate() {
     if (processingRow == nonogramGrid.size()) {
-        processingRow = -1;
+		gotoColumnProcess();
     } else if (processingRow != -1) {
         if (solution_index == -1) {
-            all_solutions = findPlacements(
-                nonogramGrid[0].size(),
-                rowHintNumbers[processingRow],
-                nonogramGrid[processingRow]
+			all_solutions = findPlacements(
+				nonogramGrid[0].size(),
+				rowHintNumbers[processingRow],
+				nonogramGrid[processingRow]
 			);
 			solution_index = 0;
         }
@@ -368,7 +460,33 @@ void frameUpdate() {
 			}
 			solution_index++;
 		}
-	}
+    }
+    else if (processingColumn == nonogramGrid[0].size()) {
+		gotoRowProcess();
+    } else if (processingColumn != -1) {
+        if (solution_index == -1) {
+			all_solutions = findPlacements(
+				nonogramGrid.size(),
+				columnHintNumbers[processingColumn],
+				extractColumn(nonogramGrid, processingColumn)
+			);
+			solution_index = 0;
+        }
+        else if (solution_index == all_solutions.size()) {
+			std::vector<CellState> determinedStates = determineCellStates(all_solutions);
+            for (int i = 0; i < nonogramGrid.size(); i++) {
+				nonogramGrid[i][processingColumn] = determinedStates[i];
+            }
+
+            processingColumn++;
+			solution_index = -1;
+        } else {
+            for (int i = 0; i < nonogramGrid.size();i++) {
+				nonogramGrid[i][processingColumn] = all_solutions[solution_index][i];
+			}
+			solution_index++;
+		}
+    }
 }
 
 int main() {
@@ -481,6 +599,7 @@ int main() {
         if (ImGui::Button("Stop", ImVec2(-1, 0))) {
 			processingColumn = -1;
 			processingRow = -1;
+			solution_index = -1;
         }
         ImGui::End();
 
