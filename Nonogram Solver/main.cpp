@@ -5,6 +5,7 @@
 #include "imgui_impl_opengl3.h"
 #include "imgui_internal.h"
 #include <vector>
+#include <stack>
 #include <string>
 #include <optional>
 #include <coroutine>
@@ -17,8 +18,8 @@
 
 enum CellState {
     UNKNOWN,
-    EMPTY,
-    FILLED,
+    WHITE,
+    BLACK,
 };
 
 std::vector<std::vector<CellState>> nonogramGrid;
@@ -53,127 +54,18 @@ void glfw_error_callback(int error, const char* description) {
     fprintf(stderr, "Glfw Error %d: %s\n", error, description);
 }
 
-void findPlacementsInternal(
+struct SearchState {
+    int current_pos;
+    int hint_index;
+    std::vector<CellState> current_placement;
+};
+
+void findPlacements(
     int totalLength,
     const std::vector<int>& hintNumbers,
-    const std::vector<CellState>& cellStates,
-    int hintIndex,
-    int currentPos,
-    std::vector<int>& currentPlacement,
-    std::vector<std::vector<int>>& solutions
-) {
-    for (int x = 0; x < 10; x++) {
-		nonogramGrid[rand() % tableRowCount][rand() % tableColumnCount] = FILLED;
-    }
+    const std::vector<CellState>& cellStates
+) {}
 
-    /*
-    if (hintIndex == hintNumbers.size()) {
-        std::vector<int> finalPlacement = currentPlacement;
-        finalPlacement.resize(totalLength, 0);
-
-        bool isValid = true;
-        for (int i = 0; i < totalLength; ++i) {
-            if (cellStates[i] == CellState::EMPTY && finalPlacement[i] == 1) {
-                isValid = false;
-                break;
-            }
-            if (cellStates[i] == CellState::FILLED && finalPlacement[i] == 0) {
-                isValid = false;
-                break;
-            }
-        }
-        
-        if (isValid) {
-            solutions.push_back(finalPlacement);
-        }
-        return;
-    }
-
-    int remainingHintsSize = std::accumulate(hintNumbers.begin() + hintIndex, hintNumbers.end(), 0);
-    int remainingSpace = (int)hintNumbers.size() - hintIndex - 1;
-    
-    // 現在の位置から最後まで、ヒントを配置できる最大の場所を計算
-    for (int i = currentPos; i <= totalLength - (remainingHintsSize + remainingSpace); ++i) {
-        
-        // 1. ブロックの前に連続したFILLEDセルがないかチェック
-        if (i > currentPos && cellStates[i-1] == CellState::FILLED) {
-            continue;
-        }
-
-        // 2. ブロック内にEMPTYセルがないかチェック
-        bool hasConflict = false;
-        for (int j = 0; j < hintNumbers[hintIndex]; ++j) {
-            if (cellStates[i + j] == CellState::EMPTY) {
-                hasConflict = true;
-                break;
-            }
-        }
-        if (hasConflict) {
-            continue;
-        }
-
-        if (hintIndex < hintNumbers.size() - 1 && cellStates[i + hintNumbers[hintIndex]] == CellState::FILLED) {
-            continue;
-        }
-
-        // 配置の生成
-        std::vector<int> nextPlacement = currentPlacement;
-        // ブロックの前の空白を追加
-        nextPlacement.insert(nextPlacement.end(), i - currentPos, 0);
-        // ブロックを追加
-        nextPlacement.insert(nextPlacement.end(), hintNumbers[hintIndex], 1);
-        // ブロックの後の空白を追加（最後のヒントでない場合）
-        if (hintIndex < hintNumbers.size() - 1) {
-            nextPlacement.push_back(0);
-        }
-        
-        // 次の再帰呼び出し
-        findPlacementsInternal(
-            totalLength, 
-            hintNumbers, 
-            cellStates, 
-            hintIndex + 1, 
-            i + hintNumbers[hintIndex] + 1, 
-            nextPlacement, 
-            solutions
-        );
-    }
-    */
-}
-
-// ユーザー向けの公開関数
-std::vector<std::vector<int>> findPlacements(
-    int length, 
-    std::vector<int>& hintNumbers, 
-    std::vector<CellState> cellStates
-) {
-    std::vector<std::vector<int>> solutions;
-    std::vector<int> currentPlacement;
-    findPlacementsInternal(length, hintNumbers, cellStates, 0, 0, currentPlacement, solutions);
-    return solutions;
-}
-
-// ユーティリティ関数（テスト用）
-std::vector<CellState> toCellStateVector(const std::string& s) {
-    std::vector<CellState> result;
-    for (char c : s) {
-        if (c == '?') result.push_back(CellState::EMPTY);
-        else if (c == '0') result.push_back(CellState::EMPTY);
-        else if (c == '1') result.push_back(CellState::FILLED);
-    }
-    return result;
-}
-
-void printSolutions(const std::vector<std::vector<int>>& solutions) {
-    for (const auto& solution : solutions) {
-        for (int cell : solution) {
-            std::cout << cell;
-        }
-        std::cout << std::endl;
-    }
-}
-
-// non-void generator
 template<typename T>
 struct generator {
     struct promise_type {
@@ -275,12 +167,63 @@ private:
 };
 
 generator<void> nonogram_solver() {
-    std::vector<int> hints = { 1, 2, 3 };
-	findPlacements(10, hints, toCellStateVector("?????"));
-}
+    int totalLength = 10;
+    std::vector<int> hintNumbers = { 1, 2, 3 };
+	std::vector<CellState> cellStates = { UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN,};
 
-std::optional<generator<void>> solve() {
-    return nonogram_solver();
+	// ===================================================================
+
+    std::stack<SearchState> stk;
+    stk.push({0, 0, {}});
+
+    while (!stk.empty()) {
+        SearchState current = stk.top();
+        stk.pop();
+
+        printf("%d\n", stk.size());
+
+        if (current.hint_index == hintNumbers.size()) {
+            std::vector<CellState> finalPlacement = current.current_placement;
+            while (finalPlacement.size() < totalLength) {
+                finalPlacement.push_back(WHITE);
+            }
+
+            co_return;
+
+			continue;
+        }
+
+        int currentHintSize = hintNumbers[current.hint_index];
+
+        for (int placePosition = totalLength - currentHintSize; placePosition >= current.current_pos; --placePosition) {
+            int space_for_zeros = placePosition - current.current_pos;
+
+            if (current.hint_index >= hintNumbers.size() && placePosition > 0 && current.current_placement.back() == 1) {
+                continue;
+            }
+
+            //if (isPlacementValid(i, currentHintSize, totalLength, cellStates)) {
+                SearchState nextState = current;
+                
+                for (int i = 0; i < space_for_zeros; ++i) {
+                    nextState.current_placement.push_back(WHITE);
+                }
+                
+                for (int i = 0; i < currentHintSize; ++i) {
+                    nextState.current_placement.push_back(BLACK);
+                }
+                
+                if (nextState.current_placement.size() < totalLength) {
+                    nextState.current_placement.push_back(WHITE);
+                }
+
+                nextState.current_pos = placePosition + currentHintSize + 1;
+                nextState.hint_index++;
+
+                stk.push(nextState);
+            //}
+        }
+    }
 }
 
 void render_nonogram_table() {
@@ -322,9 +265,9 @@ void render_nonogram_table() {
                 } else if (c < tableColumnHeaderCount) {
                     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.9f, 0.6f, 0.6f, 1.0f));
                 } else {
-                    if(nonogramGrid[r - tableRowHeaderCount][c - tableColumnHeaderCount] == FILLED) {
+                    if(nonogramGrid[r - tableRowHeaderCount][c - tableColumnHeaderCount] == BLACK) {
                         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.2f, 0.2f, 1.0f));
-                    } else if(nonogramGrid[r - tableRowHeaderCount][c - tableColumnHeaderCount] == EMPTY) {
+                    } else if(nonogramGrid[r - tableRowHeaderCount][c - tableColumnHeaderCount] == WHITE) {
                         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
                     } else {
                         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.9f, 0.9f, 0.9f, 1.0f));
@@ -436,7 +379,7 @@ int main() {
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
 
-    nonogramGrid.resize(tableRowCount, std::vector<CellState>(tableColumnCount, EMPTY));
+    nonogramGrid.resize(tableRowCount, std::vector<CellState>(tableColumnCount, WHITE));
     srand(static_cast<unsigned int>(time(0)));
 
     bool first_time = true;
