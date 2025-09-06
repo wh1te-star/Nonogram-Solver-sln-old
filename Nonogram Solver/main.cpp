@@ -51,11 +51,23 @@ std::vector<std::vector<int>> rowHintNumbers;
 int tableRowHeaderCount;
 int tableColumnHeaderCount;
 
-std::vector<std::vector<CellState>> all_solutions;
-
-
 std::vector<std::vector<CellState>> nonogramGrid;
 
+enum PROCESS_STATE {
+    PROCESS_NONE,
+    PROCESS_ROW_SIDE_INIT,
+    PROCESS_ROW_INIT,
+    PROCESS_ROW,
+    PROCESS_ROW_DEINIT,
+    PROCESS_ROW_SIDE_DEINIT,
+    PROCESS_COLUMN_SIDE_INIT,
+    PROCESS_COLUMN_INIT,
+    PROCESS_COLUMN,
+    PROCESS_COLUMN_DEINIT,
+    PROCESS_COLUMN_SIDE_DEINIT,
+};
+PROCESS_STATE processState = PROCESS_NONE;
+std::vector<std::vector<CellState>> all_solutions;
 int processingRow = -1;
 int processingColumn = -1;
 int solution_index = -1;
@@ -422,18 +434,63 @@ void render_nonogram_table() {
     ImGui::PopStyleVar();
 }
 
-void gotoColumnProcess() {
-    processingColumn = 0;
-	processingRow = -1;
-	solution_index = -1;
-}
-
 void gotoRowProcess() {
     processingRow = 0;
     processingColumn = -1;
     solution_index = -1;
 }
 
+void gotoColumnProcess() {
+    processingColumn = 0;
+	processingRow = -1;
+	solution_index = -1;
+}
+
+void gotoNextRow() {
+}
+
+void frameUpdate() {
+    switch (processState) {
+    case PROCESS_NONE:
+        break;
+
+    case PROCESS_ROW_SIDE_INIT:
+        break;
+
+    case PROCESS_ROW_INIT:
+        break;
+
+    case PROCESS_ROW:
+        break;
+
+    case PROCESS_ROW_DEINIT:
+        break;
+
+    case PROCESS_ROW_SIDE_DEINIT:
+        break;
+
+    case PROCESS_COLUMN_SIDE_INIT:
+        break;
+
+    case PROCESS_COLUMN_INIT:
+        break;
+
+    case PROCESS_COLUMN:
+        break;
+
+    case PROCESS_COLUMN_DEINIT:
+        break;
+
+    case PROCESS_COLUMN_SIDE_DEINIT:
+        break;
+
+    default:
+        assert(false);
+        break;
+    }
+}
+
+/*
 void frameUpdate() {
     if (processingRow == nonogramGrid.size()) {
 		gotoColumnProcess();
@@ -488,6 +545,7 @@ void frameUpdate() {
 		}
     }
 }
+*/
 
 int main() {
     glfwSetErrorCallback(glfw_error_callback);
@@ -593,13 +651,11 @@ int main() {
         ImGui::Text("Control Buttons");
         ImGui::Spacing();
         if(ImGui::Button("Solve", ImVec2(-1, 0))) {
-			processingRow = 0;
+			processState = PROCESS_ROW_SIDE_INIT;
         }
         ImGui::Spacing();
         if (ImGui::Button("Stop", ImVec2(-1, 0))) {
-			processingColumn = -1;
-			processingRow = -1;
-			solution_index = -1;
+            processState = PROCESS_NONE;
         }
         ImGui::End();
 
