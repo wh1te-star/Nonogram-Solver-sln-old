@@ -23,38 +23,42 @@ enum CellState {
     BLACK,
 };
 
-std::vector<std::string> columnHintNumbersString = {
-    "-, -, -, -, 3, 5, 6, -, -, -, -, -, -, -, -",
-    "2, -, 7, 7, 5, 3, 1, 6, 6, 5, 3, -, -, -, 2",
-    "2, 7, 2, 2, 1, 2, 2, 4, 1, 3, 5, 7, 7, 7, 2"
-};
-std::vector<std::string> rowHintNumbersString = {
-	"-, 2, 2",
-	"-, -, 7",
-	"-, -, 7",
-	"-, -, 7",
-	"3, 5, 3",
-	"5, 3, 5",
-	"6, 1, 6",
-	"-, 6, 6",
-	"6, 1, 6",
-	"5, 1, 5",
-	"3, 1, 3",
-	"-, -, 2",
-	"-, -, 2",
-	"-, -, 4",
-	"-, -, 2"
-};
+std::string columnHintNumbersString = R"###(
+	 ,  ,  ,  , 3, 5, 6,  ,  ,  ,  ,  ,  ,  ,  
+	2,  , 7, 7, 5, 3, 1, 6, 6, 5, 3,  ,  ,  , 2
+	2, 7, 2, 2, 1, 2, 2, 4, 1, 3, 5, 7, 7, 7, 2
+)###";
+std::string rowHintNumbersString = R"###(
+	 , 2, 2
+	 ,  , 7
+	 ,  , 7
+	 ,  , 7
+	3, 5, 3
+	5, 3, 5
+	6, 1, 6
+	 , 6, 6
+	6, 1, 6
+	5, 1, 5
+	3, 1, 3
+	 ,  , 2
+	 ,  , 2
+	 ,  , 4
+	 ,  , 2
+)###";
 std::vector<std::vector<int>> columnHintNumbers;
 std::vector<std::vector<int>> rowHintNumbers;
 
 int tableRowHeaderCount;
 int tableColumnHeaderCount;
 
+std::vector<std::vector<CellState>> all_solutions;
+
+
 std::vector<std::vector<CellState>> nonogramGrid;
 
 int processingRow = -1;
 int processingColumn = -1;
+int solution_index = -1;
 
 ImFont* fontSize10 = nullptr;
 ImFont* fontSize15 = nullptr;
@@ -81,51 +85,58 @@ void glfw_error_callback(int error, const char* description) {
     fprintf(stderr, "Glfw Error %d: %s\n", error, description);
 }
 
-std::vector<int> parseHints(const std::string& hintString) {
-    std::vector<int> hints;
+std::vector<std::vector<int>> parseHints(const std::string& hintString) {
+    std::vector<std::vector<int>> hintMatrix;
     std::stringstream ss(hintString);
-    std::string item;
-    
-    while (std::getline(ss, item, ',')) {
-        item.erase(0, item.find_first_not_of(" "));
-        item.erase(item.find_last_not_of(" ") + 1);
-        
-        if (item[0] != '-') {
-            try {
-                hints.push_back(std::stoi(item));
-            } catch (const std::invalid_argument& e) {
-                // Handle conversion error if needed
-                // For this case, we'll just ignore invalid items
+    std::string line;
+
+    while (std::getline(ss, line)) {
+        line.erase(0, line.find_first_not_of(" \t\n\r\f\v"));
+        line.erase(line.find_last_not_of(" \t\n\r\f\v") + 1);
+
+        if (line.empty()) {
+            continue;
+        }
+
+        std::vector<int> row;
+        std::stringstream line_ss(line);
+        std::string cell;
+
+        while (std::getline(line_ss, cell, ',')) {
+            cell.erase(0, cell.find_first_not_of(" \t\n\r\f\v"));
+            cell.erase(cell.find_last_not_of(" \t\n\r\f\v") + 1);
+
+            if (cell.empty()) {
+                row.push_back(0); 
+            } else {
+                row.push_back(std::stoi(cell));
             }
         }
+        hintMatrix.push_back(row);
     }
-    return hints;
+    return hintMatrix;
 }
 
 void initializeHints() {
-    tableRowHeaderCount = -1;
-	tableColumnHeaderCount = -1;
-    columnHintNumbers.clear();
-    rowHintNumbers.clear();
-
-	std::vector<std::vector<int>> tempColumnHints;
-    for (const auto& hintStr : columnHintNumbersString) {
-        tempColumnHints.push_back(parseHints(hintStr));
-    }
-
-    for(int i = 0; i < (int)tempColumnHints.size(); ++i) {
-        columnHintNumbers.push_back(tempColumnHints[(int)tempColumnHints.size() - 1 - i]);
-        if ((int)parseHints(hintStr).size() > tableColumnHeaderCount) {
-            tableColumnHeaderCount = (int)parseHints(hintStr).size();
-        }
-	}
-    
-    for (const auto& hintStr : rowHintNumbersString) {
-        rowHintNumbers.push_back(parseHints(hintStr));
-        if((int)parseHints(hintStr).size() > tableRowHeaderCount) {
-            tableRowHeaderCount = (int)parseHints(hintStr).size();
+	std::vector<std::vector<int>> tempColumnHintNumbers = parseHints(columnHintNumbersString);
+	tableColumnHeaderCount = tempColumnHintNumbers.size();
+    columnHintNumbers.resize(tempColumnHintNumbers.back().size(), std::vector<int>());
+    for(int k = 0; k < tempColumnHintNumbers.size(); k++) {
+        for(int i = 0; i < tempColumnHintNumbers[k].size(); i++) {
+			if (tempColumnHintNumbers[k][i] == 0) continue;
+			columnHintNumbers[i].push_back(tempColumnHintNumbers[k][i]);
 		}
-    }
+	}
+
+    std::vector<std::vector<int>> tempRowHintNumbers = parseHints(rowHintNumbersString);
+	tableRowHeaderCount = tempRowHintNumbers[0].size();
+	rowHintNumbers.resize(tempRowHintNumbers.size(), std::vector<int>());
+    for(int k = 0; k < tempRowHintNumbers.size(); k++) {
+        for(int i = 0; i < tempRowHintNumbers[k].size(); i++) {
+			if (tempRowHintNumbers[k][i] == 0) continue;
+			rowHintNumbers[k].push_back(tempRowHintNumbers[k][i]);
+		}
+	}
 }
 
 struct SearchState {
@@ -185,12 +196,10 @@ std::vector<std::vector<CellState>> findPlacements(
 }
 
 void render_nonogram_table() {
-	const int rowHintMaxCount = max(rowHintNumbers[n].size);
-	const int columnHintMaxCount = max(0, (int)rowHintNumbersString.size());
 	const int boardRowCount = nonogramGrid.size();
 	const int boardColumnCount = nonogramGrid[0].size();
-    const int rowTotalCount = rowHintMaxCount + boardRowCount;
-    const int columnTotalCount = columnHintMaxCount + boardColumnCount;
+    const int rowTotalCount = tableRowHeaderCount + boardRowCount;
+    const int columnTotalCount = tableColumnHeaderCount + boardColumnCount;
     ImVec2 container_size = ImGui::GetContentRegionAvail();
     
     float min_container_dim = ImMin(container_size.x / columnTotalCount, container_size.y / rowTotalCount);
@@ -213,23 +222,23 @@ void render_nonogram_table() {
             ImGui::TableSetupColumn("##", ImGuiTableColumnFlags_WidthFixed, cell_size);
         }
 
-        for (int r = 0; r < rowTotalCount; ++r) {
+        for (int rowIndex = 0; rowIndex < rowTotalCount; rowIndex++) {
             ImGui::TableNextRow(ImGuiTableRowFlags_None, cell_size);
-            for (int c = 0; c < columnTotalCount; ++c) {
-                ImGui::TableSetColumnIndex(c);
+            for (int columnIndex = 0; columnIndex < columnTotalCount; columnIndex++) {
+                ImGui::TableSetColumnIndex(columnIndex);
                 
                 ImVec2 button_size = ImVec2(cell_size, cell_size);
                 
-                if(r < tableRowHeaderCount && c < tableColumnHeaderCount) {
+                if(rowIndex < tableRowHeaderCount && columnIndex < tableColumnHeaderCount) {
                     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.5f, 0.5f, 0.5f, 1.0f));
-                } else if (r < tableRowHeaderCount) {
+                } else if (rowIndex < tableRowHeaderCount) {
                     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.6f, 0.9f, 1.0f));
-                } else if (c < tableColumnHeaderCount) {
+                } else if (columnIndex < tableColumnHeaderCount) {
                     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.9f, 0.6f, 0.6f, 1.0f));
                 } else {
-                    if(nonogramGrid[r - tableRowHeaderCount][c - tableColumnHeaderCount] == BLACK) {
+                    if(nonogramGrid[rowIndex - tableRowHeaderCount][columnIndex - tableColumnHeaderCount] == BLACK) {
                         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.2f, 0.2f, 1.0f));
-                    } else if(nonogramGrid[r - tableRowHeaderCount][c - tableColumnHeaderCount] == WHITE) {
+                    } else if(nonogramGrid[rowIndex - tableRowHeaderCount][columnIndex - tableColumnHeaderCount] == WHITE) {
                         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
                     } else {
                         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.9f, 0.9f, 0.9f, 1.0f));
@@ -240,8 +249,8 @@ void render_nonogram_table() {
 
                 ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.0f);
 
-                char label[32];
-                if (r < tableRowHeaderCount || c < tableColumnHeaderCount) {
+                std::string label = "";
+                if (rowIndex < tableRowHeaderCount || columnIndex < tableColumnHeaderCount) {
                     if (cell_size >= 120.0f) {
                         ImGui::PushFont(fontSize60);
                     } else if (cell_size >= 110.0f) {
@@ -265,14 +274,26 @@ void render_nonogram_table() {
                     } else {
                         ImGui::PushFont(fontSize10);
                     }
-                    int number_value = ((r + c) * 10) % 1000;
-                    sprintf_s(label, "%d##%d,%d", number_value, r, c);
-                } else {
-                    sprintf_s(label, " ##%d,%d", r, c);
+
+                    if (rowIndex >= tableRowHeaderCount) {
+						int rowHintIndex = rowIndex - tableRowHeaderCount;
+						int columnHintIndex = tableColumnHeaderCount - columnIndex - 1;
+                        if(columnHintIndex < rowHintNumbers[rowHintIndex].size()) {
+                            label = std::to_string(rowHintNumbers[rowHintIndex][columnHintIndex]);
+						}
+                    }
+
+                    if (columnIndex >= tableColumnHeaderCount) {
+						int columnHintIndex = columnIndex - tableColumnHeaderCount;
+                        int rowHintIndex = columnHintNumbers[columnHintIndex].size() - (tableRowHeaderCount - rowIndex - 1) - 1;
+                        if(rowHintIndex < columnHintNumbers[columnHintIndex].size()) {
+                            label = std::to_string(columnHintNumbers[columnHintIndex][rowHintIndex]);
+						}
+                    }
                 }
-                ImGui::Button(label, button_size);
+                ImGui::Button(label.c_str(), button_size);
                 
-                if (r < tableRowHeaderCount || c < tableColumnHeaderCount) {
+                if (rowIndex < tableRowHeaderCount || columnIndex < tableColumnHeaderCount) {
                     ImGui::PopFont();
                 }
                 ImGui::PopStyleVar();
@@ -283,19 +304,43 @@ void render_nonogram_table() {
                 ImVec2 p_max = ImGui::GetItemRectMax();
 
                 float columnThickness = 1.0f;
-                if (c == tableColumnHeaderCount - 1) columnThickness = 6.0f;
-                if (c >= tableColumnHeaderCount && (c - tableColumnHeaderCount) % 5 == 4) columnThickness = 3.0f;
+                if (columnIndex == tableColumnHeaderCount - 1) columnThickness = 6.0f;
+                if (columnIndex >= tableColumnHeaderCount && (columnIndex - tableColumnHeaderCount) % 5 == 4) columnThickness = 3.0f;
                 draw_list->AddLine(ImVec2(p_max.x, p_min.y), ImVec2(p_max.x, p_max.y), IM_COL32(0, 0, 0, 255), columnThickness);
                 
                 float rowThickness = 1.0f;
-                if (r == tableRowHeaderCount - 1) rowThickness = 6.0f;
-                if (r >= tableRowHeaderCount && (r - tableRowHeaderCount) % 5 == 4) rowThickness = 3.0f;
+                if (rowIndex == tableRowHeaderCount - 1) rowThickness = 6.0f;
+                if (rowIndex >= tableRowHeaderCount && (rowIndex - tableRowHeaderCount) % 5 == 4) rowThickness = 3.0f;
                 draw_list->AddLine(ImVec2(p_min.x, p_max.y), ImVec2(p_max.x, p_max.y), IM_COL32(0, 0, 0, 255), rowThickness);
             }
         }
         ImGui::EndTable();
     }
     ImGui::PopStyleVar();
+}
+
+void frameUpdate() {
+    if (processingRow == nonogramGrid.size()) {
+        processingRow = -1;
+    } else if (processingRow != -1) {
+        if (solution_index == -1) {
+            all_solutions = findPlacements(
+                nonogramGrid[0].size(),
+                rowHintNumbers[processingRow],
+                nonogramGrid[processingRow]
+			);
+			solution_index = 0;
+        }
+        else if (solution_index == all_solutions.size()) {
+            processingRow++;
+			solution_index = -1;
+        } else {
+            for (int i = 0; i < nonogramGrid[processingRow].size();i++) {
+				nonogramGrid[processingRow][i] = all_solutions[solution_index][i];
+			}
+			solution_index++;
+		}
+	}
 }
 
 int main() {
@@ -350,22 +395,12 @@ int main() {
     double last_update_time = glfwGetTime();
     const double update_interval = 0.1;
 
-	size_t solution_index = 0;
-	std::vector<std::vector<CellState>> all_solutions = findPlacements(10, {1, 2, 3}, { UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN,});
-
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
 
     double current_time = glfwGetTime();
     if (current_time - last_update_time >= update_interval) {
-        if (solution_index < all_solutions.size()) {
-            const auto& current_solution = all_solutions[solution_index];
-            for (int c = 0; c < 10; ++c) {
-                // nonogramGridの該当行を更新
-                nonogramGrid[0][c] = current_solution[c];
-            }
-            solution_index++;
-        }
+        frameUpdate();
         last_update_time = current_time;
     }
 
@@ -412,7 +447,7 @@ int main() {
         ImGui::Text("Control Buttons");
         ImGui::Spacing();
         if(ImGui::Button("Solve", ImVec2(-1, 0))) {
-			processingColumn = 0;
+			processingRow = 0;
         }
         ImGui::Spacing();
         if (ImGui::Button("Stop", ImVec2(-1, 0))) {
