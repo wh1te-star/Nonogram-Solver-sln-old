@@ -24,26 +24,36 @@ enum CellState {
 };
 
 std::string columnHintNumbersString = R"###(
-	 ,  ,  ,  , 3, 5, 6,  ,  ,  ,  ,  ,  ,  ,  
-	2,  , 7, 7, 5, 3, 1, 6, 6, 5, 3,  ,  ,  , 2
-	2, 7, 2, 2, 1, 2, 2, 4, 1, 3, 5, 7, 7, 7, 2
+  ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,  1,   ,   ,   ,   ,   ,   ,   ,   ,   
+  ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,  2,   ,  2,   ,   ,   ,   ,   ,   ,   ,   ,   
+  ,   ,   ,   ,   ,   ,   ,   ,  2,  2,   ,   ,  2,   ,  2,   ,   ,  2,  2,  2,  1,  2,  1,   ,   ,   ,   ,   ,   ,   
+  ,   ,   ,   ,   ,   ,  2,   ,  1,  1,  2,  2,  1,  2,  1,  2,  1,  2,  2,  1,  1,  1,  1,  1,  2,  1,   ,   ,   ,   
+  ,   ,   ,   ,   ,  2,  2,  2,  1,  2,  1,  1,  1,  1,  1,  1,  5,  2,  1,  1,  1,  2,  2,  2,  1,  1,  2,   ,   ,   
+  ,   ,   ,   ,  3,  2,  1,  1,  1,  1,  1,  2,  1,  1,  1,  2,  1,  1,  1,  2,  1,  1,  2,  1,  2,  1,  1,  2,   ,   
+  ,   ,  4,  4,  6,  2,  1,  2,  1,  1,  3,  1,  2,  2,  2,  1,  3,  1,  1,  2,  1,  2,  3,  1,  2,  1,  1,  1,  2,   
+12, 14,  4,  3,  2,  2,  2,  4,  2,  1,  2,  1,  1,  1,  1,  1,  2,  1,  2,  4,  2,  2,  2,  3,  4,  7,  7,  2,  2,  5
 )###";
 std::string rowHintNumbersString = R"###(
-	 , 2, 2
-	 ,  , 7
-	 ,  , 7
-	 ,  , 7
-	3, 5, 3
-	5, 3, 5
-	6, 1, 6
-	 , 6, 6
-	6, 1, 6
-	5, 1, 5
-	3, 1, 3
-	 ,  , 2
-	 ,  , 2
-	 ,  , 4
-	 ,  , 2
+  ,   ,   ,   ,   ,   ,   ,   ,   ,  8
+  ,   ,   ,   ,   , 14,  2,  1,  1,  2
+  ,   ,   ,   , 14,  2,  1,  1,  1,  2
+  ,   ,   ,   ,   ,  4,  2,  2,  2,  2
+  ,   ,   ,   ,  4,  1,  1,  2,  2,  1
+  ,   ,   ,  3, 11,  2,  2,  1,  1,  1
+  ,   ,   ,   ,  2,  2,  1,  2,  2,  1
+  ,   ,   ,  2,  2,  2,  1,  1,  1,  2
+  ,   ,   ,   ,  2,  1,  2,  1,  2,  2
+  ,   ,   ,   ,   ,  2,  1,  2,  1,  2
+  ,   ,   ,   ,   ,   ,   ,  2,  1,  8
+  ,   ,   ,   ,   ,   ,  2,  1,  1,  2
+  ,   ,   ,   ,   ,   ,   ,  2, 19,  2
+ 2,  1,  1,  1,  1,  1,  1,  1,  1,  2
+  ,  3,  1,  1,  1,  3,  1,  1,  1,  3
+  ,   ,   ,  4,  1,  3,  1,  3,  1,  4
+  ,   ,   ,   ,  8,  1,  1,  1,  1,  8
+  ,   ,   ,   ,  6,  1,  1,  1,  1,  6
+  ,   ,   ,   ,   ,  2,  2,  1,  2,  2
+  ,   ,   ,   ,   ,   ,  3,  1,  1,  3
 )###";
 std::vector<std::vector<int>> columnHintNumbers;
 std::vector<std::vector<int>> rowHintNumbers;
@@ -142,23 +152,35 @@ std::vector<std::vector<int>> parseHints(const std::string& hintString) {
 
 void initializeHints() {
 	std::vector<std::vector<int>> tempColumnHintNumbers = parseHints(columnHintNumbersString);
-	tableColumnHeaderCount = tempColumnHintNumbers.size();
     columnHintNumbers.resize(tempColumnHintNumbers.back().size(), std::vector<int>());
     for(int k = 0; k < tempColumnHintNumbers.size(); k++) {
         for(int i = 0; i < tempColumnHintNumbers[k].size(); i++) {
 			if (tempColumnHintNumbers[k][i] == 0) continue;
 			columnHintNumbers[i].push_back(tempColumnHintNumbers[k][i]);
 		}
+        if (tempColumnHintNumbers[k].size() > columnHintNumbers.size()) {
+        }
 	}
 
+    tableColumnHeaderCount = -1;
+    for (int i = 0; i < columnHintNumbers.size(); i++) {
+        if ((int)columnHintNumbers[i].size() > tableColumnHeaderCount) {
+            tableColumnHeaderCount = columnHintNumbers[i].size();
+        }
+    }
+
     std::vector<std::vector<int>> tempRowHintNumbers = parseHints(rowHintNumbersString);
-	tableRowHeaderCount = tempRowHintNumbers[0].size();
 	rowHintNumbers.resize(tempRowHintNumbers.size(), std::vector<int>());
+
+    tableRowHeaderCount = -1;
     for(int k = 0; k < tempRowHintNumbers.size(); k++) {
         for(int i = 0; i < tempRowHintNumbers[k].size(); i++) {
 			if (tempRowHintNumbers[k][i] == 0) continue;
 			rowHintNumbers[k].push_back(tempRowHintNumbers[k][i]);
 		}
+        if ((int)tempRowHintNumbers[k].size() > tableRowHeaderCount) {
+            tableRowHeaderCount = tempRowHintNumbers[k].size();
+        }
 	}
 }
 
@@ -185,7 +207,7 @@ struct SearchState {
     std::vector<CellState> current_placement;
 };
 
-std::vector<std::vector<CellState>> findPlacements(
+std::vector<std::vector<CellState>> FindPlacementsExhaustive(
     int totalLength,
     const std::vector<int>& hintNumbers,
     const std::vector<CellState>& determinedStates
@@ -276,6 +298,55 @@ std::vector<std::vector<CellState>> findPlacements(
     }
     std::reverse(solutions.begin(), solutions.end());
     return solutions;
+}
+
+std::vector<std::vector<CellState>> findPlacementsOverlap(
+    int totalLength,
+    const std::vector<int>& hintNumbers,
+    const std::vector<CellState>& determinedStates
+) {
+    std::vector<std::vector<CellState>> placements = {};
+	int totalLengthNeeded = std::accumulate(hintNumbers.begin(), hintNumbers.end(), 0) + hintNumbers.size() - 1;
+    for(int startPosition = 0; startPosition <= totalLength - totalLengthNeeded; startPosition++) {
+        std::vector<CellState> placement(totalLength, WHITE);
+        bool canPlaceAllHints = true;
+
+        int position = 0;
+        for(int i = 0; i < startPosition; i++) {
+            if (!canPlace(WHITE, determinedStates[position])) {
+                canPlaceAllHints = false;
+                break;
+            }
+            placement[position] = WHITE;
+            position++;
+		}
+		if (!canPlaceAllHints) continue;
+
+        for (int hint : hintNumbers) {
+            for (int i = 0; i < hint; ++i) {
+                if (position >= totalLength || !canPlace(BLACK, determinedStates[position])) {
+                    canPlaceAllHints = false;
+                    break;
+                }
+                placement[position] = BLACK;
+                position++;
+            }
+            if (!canPlaceAllHints) break;
+            if (position < totalLength) {
+                if (!canPlace(WHITE, determinedStates[position])) {
+                    canPlaceAllHints = false;
+                    break;
+                }
+                placement[position]= WHITE;
+                position++;
+            }
+        }
+        if (canPlaceAllHints) {
+            placements.push_back(placement);
+        }
+	}
+
+    return placements;
 }
 
 std::vector<CellState> determineCellStates(
@@ -456,7 +527,7 @@ void frameUpdate() {
             break;
         }
 
-		all_solutions = findPlacements(
+		all_solutions = findPlacementsOverlap(
 			nonogramGrid[processingRow].size(),
 			rowHintNumbers[processingRow],
 			nonogramGrid[processingRow]
@@ -509,7 +580,7 @@ void frameUpdate() {
             break;
         }
 
-		all_solutions = findPlacements(
+		all_solutions = findPlacementsOverlap(
 			nonogramGrid.size(),
 			columnHintNumbers[processingColumn],
 			extractColumn(nonogramGrid, processingColumn)
@@ -551,56 +622,6 @@ void frameUpdate() {
         break;
     }
 }
-
-/*
-void frameUpdate() {
-    if (processingRow == nonogramGrid.size()) {
-    } else if (processingRow != -1) {
-        if (solution_index == -1) {
-        }
-        else if (solution_index == all_solutions.size()) {
-			std::vector<CellState> determinedStates = determineCellStates(all_solutions);
-            for (int i = 0; i < nonogramGrid[processingRow].size(); i++) {
-				nonogramGrid[processingRow][i] = determinedStates[i];
-            }
-
-            processingRow++;
-			solution_index = -1;
-        } else {
-            for (int i = 0; i < nonogramGrid[processingRow].size();i++) {
-				nonogramGrid[processingRow][i] = all_solutions[solution_index][i];
-			}
-			solution_index++;
-		}
-    }
-    else if (processingColumn == nonogramGrid[0].size()) {
-		gotoRowProcess();
-    } else if (processingColumn != -1) {
-        if (solution_index == -1) {
-			all_solutions = findPlacements(
-				nonogramGrid.size(),
-				columnHintNumbers[processingColumn],
-				extractColumn(nonogramGrid, processingColumn)
-			);
-			solution_index = 0;
-        }
-        else if (solution_index == all_solutions.size()) {
-			std::vector<CellState> determinedStates = determineCellStates(all_solutions);
-            for (int i = 0; i < nonogramGrid.size(); i++) {
-				nonogramGrid[i][processingColumn] = determinedStates[i];
-            }
-
-            processingColumn++;
-			solution_index = -1;
-        } else {
-            for (int i = 0; i < nonogramGrid.size();i++) {
-				nonogramGrid[i][processingColumn] = all_solutions[solution_index][i];
-			}
-			solution_index++;
-		}
-    }
-}
-*/
 
 int main() {
     glfwSetErrorCallback(glfw_error_callback);
@@ -706,8 +727,7 @@ int main() {
         ImGui::Text("Control Buttons");
         ImGui::Spacing();
         if(ImGui::Button("Solve", ImVec2(-1, 0))) {
-			//processState = PROCESS_ROW_SIDE_INIT;
-			processState = PROCESS_COLUMN_SIDE_INIT;
+			processState = PROCESS_ROW_SIDE_INIT;
         }
         ImGui::Spacing();
         if (ImGui::Button("Stop", ImVec2(-1, 0))) {
