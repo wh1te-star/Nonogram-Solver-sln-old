@@ -195,6 +195,29 @@ std::vector<std::vector<CellState>> findPlacements(
     return solutions;
 }
 
+std::vector<CellState> determineCellStates(
+    const std::vector<std::vector<CellState>> placements
+) {
+    int length = placements[0].size();
+    std::vector<CellState> result(length, UNKNOWN);
+    if (placements.empty()) return result;
+
+    for (int i = 0; i < length; ++i) {
+        CellState firstState = placements[0][i];
+        bool allSame = true;
+        for (const auto& placement : placements) {
+            if (placement[i] != firstState) {
+                allSame = false;
+                break;
+            }
+        }
+        if (allSame) {
+            result[i] = firstState;
+        }
+    }
+    return result;
+}
+
 void render_nonogram_table() {
 	const int boardRowCount = nonogramGrid.size();
 	const int boardColumnCount = nonogramGrid[0].size();
@@ -332,6 +355,11 @@ void frameUpdate() {
 			solution_index = 0;
         }
         else if (solution_index == all_solutions.size()) {
+			std::vector<CellState> determinedStates = determineCellStates(all_solutions);
+            for (int i = 0; i < nonogramGrid[processingRow].size(); i++) {
+				nonogramGrid[processingRow][i] = determinedStates[i];
+            }
+
             processingRow++;
 			solution_index = -1;
         } else {
