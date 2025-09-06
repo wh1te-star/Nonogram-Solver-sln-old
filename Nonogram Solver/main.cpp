@@ -15,6 +15,7 @@
 #include <ctime>
 #include <iostream>
 #include <numeric>
+#include <sstream>
 
 enum CellState {
     UNKNOWN,
@@ -22,12 +23,38 @@ enum CellState {
     BLACK,
 };
 
+std::vector<std::string> columnHintNumbersString = {
+    "-, -, -, -, 3, 5, 6, -, -, -, -, -, -, -, -",
+    "2, -, 7, 7, 5, 3, 1, 6, 6, 5, 3, -, -, -, 2",
+    "2, 7, 2, 2, 1, 2, 2, 4, 1, 3, 5, 7, 7, 7, 2"
+};
+std::vector<std::string> rowHintNumbersString = {
+	"-, 2, 2",
+	"-, -, 7",
+	"-, -, 7",
+	"-, -, 7",
+	"3, 5, 3",
+	"5, 3, 5",
+	"6, 1, 6",
+	"-, 6, 6",
+	"6, 1, 6",
+	"5, 1, 5",
+	"3, 1, 3",
+	"-, -, 2",
+	"-, -, 2",
+	"-, -, 4",
+	"-, -, 2"
+};
+std::vector<std::vector<int>> columnHintNumbers;
+std::vector<std::vector<int>> rowHintNumbers;
+
+int tableRowHeaderCount;
+int tableColumnHeaderCount;
+
 std::vector<std::vector<CellState>> nonogramGrid;
 
-int tableRowHeaderCount = 5;
-int tableRowCount = 10;
-int tableColumnHeaderCount = 5;
-int tableColumnCount = 15;
+int processingRow = -1;
+int processingColumn = -1;
 
 ImFont* fontSize10 = nullptr;
 ImFont* fontSize15 = nullptr;
@@ -54,125 +81,65 @@ void glfw_error_callback(int error, const char* description) {
     fprintf(stderr, "Glfw Error %d: %s\n", error, description);
 }
 
+std::vector<int> parseHints(const std::string& hintString) {
+    std::vector<int> hints;
+    std::stringstream ss(hintString);
+    std::string item;
+    
+    while (std::getline(ss, item, ',')) {
+        item.erase(0, item.find_first_not_of(" "));
+        item.erase(item.find_last_not_of(" ") + 1);
+        
+        if (item[0] != '-') {
+            try {
+                hints.push_back(std::stoi(item));
+            } catch (const std::invalid_argument& e) {
+                // Handle conversion error if needed
+                // For this case, we'll just ignore invalid items
+            }
+        }
+    }
+    return hints;
+}
+
+void initializeHints() {
+    tableRowHeaderCount = -1;
+	tableColumnHeaderCount = -1;
+    columnHintNumbers.clear();
+    rowHintNumbers.clear();
+
+	std::vector<std::vector<int>> tempColumnHints;
+    for (const auto& hintStr : columnHintNumbersString) {
+        tempColumnHints.push_back(parseHints(hintStr));
+    }
+
+    for(int i = 0; i < (int)tempColumnHints.size(); ++i) {
+        columnHintNumbers.push_back(tempColumnHints[(int)tempColumnHints.size() - 1 - i]);
+        if ((int)parseHints(hintStr).size() > tableColumnHeaderCount) {
+            tableColumnHeaderCount = (int)parseHints(hintStr).size();
+        }
+	}
+    
+    for (const auto& hintStr : rowHintNumbersString) {
+        rowHintNumbers.push_back(parseHints(hintStr));
+        if((int)parseHints(hintStr).size() > tableRowHeaderCount) {
+            tableRowHeaderCount = (int)parseHints(hintStr).size();
+		}
+    }
+}
+
 struct SearchState {
     int current_pos;
     int hint_index;
     std::vector<CellState> current_placement;
 };
 
-void findPlacements(
+std::vector<std::vector<CellState>> findPlacements(
     int totalLength,
     const std::vector<int>& hintNumbers,
     const std::vector<CellState>& cellStates
-) {}
-
-template<typename T>
-struct generator {
-    struct promise_type {
-        T value_;
-        std::suspend_always yield_value(T value) {
-            value_ = std::move(value);
-            return {};
-        }
-        std::suspend_always initial_suspend() { return {}; }
-        std::suspend_always final_suspend() noexcept { return {}; }
-        void unhandled_exception() { throw; }
-        generator get_return_object() { return generator{std::coroutine_handle<promise_type>::from_promise(*this)}; }
-        void return_void() {}
-    };
-
-    generator(std::coroutine_handle<promise_type> handle) : handle_(handle) {}
-    
-    generator(generator&& other) noexcept : handle_(std::exchange(other.handle_, nullptr)) {}
-    
-    generator& operator=(generator&& other) noexcept {
-        if (this != &other) {
-            if (handle_) {
-                handle_.destroy();
-            }
-            handle_ = std::exchange(other.handle_, nullptr);
-        }
-        return *this;
-    }
-    
-    generator(const generator&) = delete;
-    generator& operator=(const generator&) = delete;
-    
-    ~generator() {
-        if (handle_) {
-            handle_.destroy();
-        }
-    }
-    
-    bool next() {
-        if (!handle_ || handle_.done()) {
-            return false;
-        }
-        handle_.resume();
-        return !handle_.done();
-    }
-    
-    T value() const {
-        return handle_.promise().value_;
-    }
-
-private:
-    std::coroutine_handle<promise_type> handle_ = nullptr;
-};
-
-// void generator specialization
-template<>
-struct generator<void> {
-    struct promise_type {
-        std::suspend_always initial_suspend() { return {}; }
-        std::suspend_always final_suspend() noexcept { return {}; }
-        void unhandled_exception() { throw; }
-        generator get_return_object() { return generator{std::coroutine_handle<promise_type>::from_promise(*this)}; }
-        void return_void() {}
-    };
-
-    generator(std::coroutine_handle<promise_type> handle) : handle_(handle) {}
-    
-    generator(generator&& other) noexcept : handle_(std::exchange(other.handle_, nullptr)) {}
-    
-    generator& operator=(generator&& other) noexcept {
-        if (this != &other) {
-            if (handle_) {
-                handle_.destroy();
-            }
-            handle_ = std::exchange(other.handle_, nullptr);
-        }
-        return *this;
-    }
-    
-    generator(const generator&) = delete;
-    generator& operator=(const generator&) = delete;
-    
-    ~generator() {
-        if (handle_) {
-            handle_.destroy();
-        }
-    }
-    
-    bool next() {
-        if (!handle_ || handle_.done()) {
-            return false;
-        }
-        handle_.resume();
-        return !handle_.done();
-    }
-    
-private:
-    std::coroutine_handle<promise_type> handle_ = nullptr;
-};
-
-generator<void> nonogram_solver() {
-    int totalLength = 10;
-    std::vector<int> hintNumbers = { 1, 2, 3 };
-	std::vector<CellState> cellStates = { UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN,};
-
-	// ===================================================================
-
+) {
+    std::vector<std::vector<CellState>> solutions;
     std::stack<SearchState> stk;
     stk.push({0, 0, {}});
 
@@ -180,62 +147,57 @@ generator<void> nonogram_solver() {
         SearchState current = stk.top();
         stk.pop();
 
-        printf("%d\n", stk.size());
-
         if (current.hint_index == hintNumbers.size()) {
             std::vector<CellState> finalPlacement = current.current_placement;
             while (finalPlacement.size() < totalLength) {
                 finalPlacement.push_back(WHITE);
             }
-
-            co_return;
-
-			continue;
+            solutions.push_back(finalPlacement);
+            continue;
         }
 
-        int currentHintSize = hintNumbers[current.hint_index];
+        int currentHintNumber = hintNumbers[current.hint_index];
 
-        for (int placePosition = totalLength - currentHintSize; placePosition >= current.current_pos; --placePosition) {
-            int space_for_zeros = placePosition - current.current_pos;
-
-            if (current.hint_index >= hintNumbers.size() && placePosition > 0 && current.current_placement.back() == 1) {
-                continue;
+        for (int placePosition = current.current_pos; placePosition <= totalLength - currentHintNumber; placePosition++) {
+            // isPlacementValid logic goes here
+            SearchState nextState = current;
+            
+            for (int i = 0; i < (placePosition - current.current_pos); ++i) {
+                nextState.current_placement.push_back(WHITE);
+            }
+            
+            for (int i = 0; i < currentHintNumber; ++i) {
+                nextState.current_placement.push_back(BLACK);
+            }
+            
+            if (nextState.current_placement.size() < totalLength) {
+                nextState.current_placement.push_back(WHITE);
             }
 
-            //if (isPlacementValid(i, currentHintSize, totalLength, cellStates)) {
-                SearchState nextState = current;
-                
-                for (int i = 0; i < space_for_zeros; ++i) {
-                    nextState.current_placement.push_back(WHITE);
-                }
-                
-                for (int i = 0; i < currentHintSize; ++i) {
-                    nextState.current_placement.push_back(BLACK);
-                }
-                
-                if (nextState.current_placement.size() < totalLength) {
-                    nextState.current_placement.push_back(WHITE);
-                }
-
-                nextState.current_pos = placePosition + currentHintSize + 1;
-                nextState.hint_index++;
-
-                stk.push(nextState);
-            //}
+            nextState.current_pos = placePosition + currentHintNumber + 1;
+            nextState.hint_index++;
+            stk.push(nextState);
         }
     }
+
+    std::reverse(solutions.begin(), solutions.end());
+    return solutions;
 }
 
 void render_nonogram_table() {
-    const int tableRowTotalCount = tableRowHeaderCount + tableRowCount;
-    const int tableColumnTotalCount = tableColumnHeaderCount + tableColumnCount;
+	const int rowHintMaxCount = max(rowHintNumbers[n].size);
+	const int columnHintMaxCount = max(0, (int)rowHintNumbersString.size());
+	const int boardRowCount = nonogramGrid.size();
+	const int boardColumnCount = nonogramGrid[0].size();
+    const int rowTotalCount = rowHintMaxCount + boardRowCount;
+    const int columnTotalCount = columnHintMaxCount + boardColumnCount;
     ImVec2 container_size = ImGui::GetContentRegionAvail();
     
-    float min_container_dim = ImMin(container_size.x / tableColumnTotalCount, container_size.y / tableRowTotalCount);
+    float min_container_dim = ImMin(container_size.x / columnTotalCount, container_size.y / rowTotalCount);
     float cell_size = round(min_container_dim);
 
-    float table_width = cell_size * tableColumnTotalCount;
-    float table_height = cell_size * tableRowTotalCount;
+    float table_width = cell_size * columnTotalCount;
+    float table_height = cell_size * rowTotalCount;
 
     float cursor_x = (container_size.x - table_width) * 0.5f;
     float cursor_y = (container_size.y - table_height) * 0.5f;
@@ -245,15 +207,15 @@ void render_nonogram_table() {
 
     ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2(0, 0));
 
-    if (ImGui::BeginTable("NonogramGrid", tableColumnTotalCount, ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_NoBordersInBody)) {
+    if (ImGui::BeginTable("NonogramGrid", columnTotalCount, ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_NoBordersInBody)) {
 
-        for (int i = 0; i < tableColumnTotalCount; ++i) {
+        for (int i = 0; i < columnTotalCount; ++i) {
             ImGui::TableSetupColumn("##", ImGuiTableColumnFlags_WidthFixed, cell_size);
         }
 
-        for (int r = 0; r < tableRowTotalCount; ++r) {
+        for (int r = 0; r < rowTotalCount; ++r) {
             ImGui::TableNextRow(ImGuiTableRowFlags_None, cell_size);
-            for (int c = 0; c < tableColumnTotalCount; ++c) {
+            for (int c = 0; c < columnTotalCount; ++c) {
                 ImGui::TableSetColumnIndex(c);
                 
                 ImVec2 button_size = ImVec2(cell_size, cell_size);
@@ -379,23 +341,33 @@ int main() {
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
 
-    nonogramGrid.resize(tableRowCount, std::vector<CellState>(tableColumnCount, WHITE));
+	initializeHints();
+
+    nonogramGrid.resize(rowHintNumbers.size(), std::vector<CellState>(columnHintNumbers.size(), UNKNOWN));
     srand(static_cast<unsigned int>(time(0)));
 
     bool first_time = true;
     double last_update_time = glfwGetTime();
     const double update_interval = 0.1;
 
-    std::optional<generator<void>> solver_gen;
+	size_t solution_index = 0;
+	std::vector<std::vector<CellState>> all_solutions = findPlacements(10, {1, 2, 3}, { UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN,});
 
     while (!glfwWindowShouldClose(window)) {
         glfwPollEvents();
 
-        double current_time = glfwGetTime();
-        if (solver_gen.has_value() && current_time - last_update_time >= update_interval) {
-            solver_gen->next();
-            last_update_time = current_time;
+    double current_time = glfwGetTime();
+    if (current_time - last_update_time >= update_interval) {
+        if (solution_index < all_solutions.size()) {
+            const auto& current_solution = all_solutions[solution_index];
+            for (int c = 0; c < 10; ++c) {
+                // nonogramGridの該当行を更新
+                nonogramGrid[0][c] = current_solution[c];
+            }
+            solution_index++;
         }
+        last_update_time = current_time;
+    }
 
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
@@ -440,13 +412,12 @@ int main() {
         ImGui::Text("Control Buttons");
         ImGui::Spacing();
         if(ImGui::Button("Solve", ImVec2(-1, 0))) {
-            if (!solver_gen.has_value()) {
-                solver_gen.emplace(nonogram_solver());
-            }
+			processingColumn = 0;
         }
         ImGui::Spacing();
         if (ImGui::Button("Stop", ImVec2(-1, 0))) {
-            solver_gen.reset();
+			processingColumn = -1;
+			processingRow = -1;
         }
         ImGui::End();
 

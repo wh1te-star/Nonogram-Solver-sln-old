@@ -45,5 +45,8 @@
     <ClCompile Include="libs\GLAD\src\glad.c">
       <Filter>imgui</Filter>
     </ClCompile>
+    <ClCompile Include="numbers.cpp">
+      <Filter>リソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

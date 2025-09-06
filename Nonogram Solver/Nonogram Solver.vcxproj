@@ -136,6 +136,7 @@
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="libs\GLAD\src\glad.c" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="numbers.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
