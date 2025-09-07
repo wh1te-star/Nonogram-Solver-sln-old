@@ -77,10 +77,8 @@ enum PROCESS_STATE {
     PROCESS_COLUMN_SIDE_DEINIT,
 };
 PROCESS_STATE processState = PROCESS_NONE;
-std::vector<std::vector<CellState>> all_solutions;
 int processingRow = -1;
 int processingColumn = -1;
-int solution_index = -1;
 
 ImFont* fontSize10 = nullptr;
 ImFont* fontSize15 = nullptr;
@@ -207,6 +205,59 @@ struct SearchState {
     std::vector<CellState> current_placement;
 };
 
+long long countPlacements(
+    int totalLength,
+    const std::vector<int>& hintNumbers,
+    const std::vector<CellState>& determinedStates
+) {
+    int numHints = hintNumbers.size();
+    
+    std::vector<std::vector<long long>> dp(numHints + 1, std::vector<long long>(totalLength + 1, 0));
+
+    dp[0][0] = 1;
+    for (int j = 1; j <= totalLength; ++j) {
+        if (canPlace(WHITE, determinedStates[j-1])) {
+            dp[0][j] = 1;
+        } else {
+            break;
+        }
+    }
+
+    for (int i = 1; i <= numHints; ++i) {
+        int currentHintLength = hintNumbers[i-1];
+        
+        for (int j = 1; j <= totalLength; ++j) {
+            if (canPlace(WHITE, determinedStates[j-1])) {
+                dp[i][j] = dp[i][j-1];
+            }
+            
+            if (j >= currentHintLength) {
+                bool isSeparated = (j == currentHintLength) || (canPlace(WHITE, determinedStates[j - currentHintLength - 1]));
+
+                bool blockFits = true;
+                for (int k = 0; k < currentHintLength; ++k) {
+                    if (!canPlace(BLACK, determinedStates[j - 1 - k])) {
+                        blockFits = false;
+                        break;
+                    }
+                }
+                
+                if (isSeparated && blockFits) {
+                    int prevJ = j - currentHintLength - 1;
+                    if (prevJ < 0) {
+                        // 最初からブロックを置く場合
+                        dp[i][j] += dp[i-1][0];
+                    } else {
+                        dp[i][j] += dp[i-1][prevJ];
+                    }
+                }
+            }
+        }
+    }
+
+    return dp[numHints][totalLength];
+}
+
 std::vector<std::vector<CellState>> FindPlacementsExhaustive(
     int totalLength,
     const std::vector<int>& hintNumbers,
@@ -300,53 +351,131 @@ std::vector<std::vector<CellState>> FindPlacementsExhaustive(
     return solutions;
 }
 
-std::vector<std::vector<CellState>> findPlacementsOverlap(
+bool canPlaceBlock(
+    const std::vector<CellState>& determinedCells,
+    int startPos,
+    int hintLength
+) {
+    // Check if the block fits within the line
+    if (startPos + hintLength > determinedCells.size() || startPos < 0) {
+        return false;
+    }
+
+    // Check for conflicts with WHITE cells in the determined area
+    for (int i = 0; i < hintLength; ++i) {
+        if (determinedCells[startPos + i] == WHITE) {
+            return false;
+        }
+    }
+    return true;
+}
+
+std::vector<int> getLeftmostPositions(
+    const std::vector<CellState>& determinedCells,
+    const std::vector<int>& hints
+) {
+    std::vector<int> positions;
+    int currentPos = 0;
+    for (size_t i = 0; i < hints.size(); ++i) {
+        int hint = hints[i];
+        while (true) {
+            if (canPlaceBlock(determinedCells, currentPos, hint)) {
+                if (i > 0 && determinedCells[currentPos - 1] == BLACK) {
+                    currentPos++;
+                    continue;
+                }
+                break;
+            }
+            currentPos++;
+            if (currentPos > determinedCells.size()) {
+                 return {};
+            }
+        }
+        positions.push_back(currentPos);
+        currentPos += hint + 1;
+    }
+    return positions;
+}
+
+std::vector<int> getRightmostPositions(
+    const std::vector<CellState>& determinedCells,
+    const std::vector<int>& hints
+) {
+    std::vector<int> positions(hints.size());
+    int currentPos = determinedCells.size() - 1;
+    for (int i = hints.size() - 1; i >= 0; --i) {
+        int hint = hints[i];
+		int blockStartPos = currentPos - hint + 1;
+		int blockEndPos = currentPos;
+        while (true) {
+            if (canPlaceBlock(determinedCells, blockStartPos, hint)) {
+                if (i < hints.size() - 1 && determinedCells[currentPos + 1] == BLACK) {
+                    currentPos--;
+                    continue;
+                }
+                break;
+            }
+            currentPos--;
+            if (currentPos < 0) {
+                 return {};
+            }
+        }
+        positions[i] = currentPos - hint + 1;
+        currentPos -= (hint + 1);
+    }
+    return positions;
+}
+
+std::vector<CellState> constructPlacement(
+    int totalLength,
+    const std::vector<int>& hints,
+    const std::vector<int>& positions
+) {
+    std::vector<CellState> placement(totalLength, WHITE);
+    for (size_t i = 0; i < hints.size(); ++i) {
+        for (int j = 0; j < hints[i]; ++j) {
+            placement[positions[i] + j] = BLACK;
+        }
+    }
+    return placement;
+}
+
+std::vector<CellState> determineByOverlap(
     int totalLength,
     const std::vector<int>& hintNumbers,
     const std::vector<CellState>& determinedStates
 ) {
-    std::vector<std::vector<CellState>> placements = {};
-	int totalLengthNeeded = std::accumulate(hintNumbers.begin(), hintNumbers.end(), 0) + hintNumbers.size() - 1;
-    for(int startPosition = 0; startPosition <= totalLength - totalLengthNeeded; startPosition++) {
-        std::vector<CellState> placement(totalLength, WHITE);
-        bool canPlaceAllHints = true;
+    std::vector<CellState> determined = determinedStates;
 
-        int position = 0;
-        for(int i = 0; i < startPosition; i++) {
-            if (!canPlace(WHITE, determinedStates[position])) {
-                canPlaceAllHints = false;
-                break;
-            }
-            placement[position] = WHITE;
-            position++;
-		}
-		if (!canPlaceAllHints) continue;
+    std::vector<int> leftmostPositions = getLeftmostPositions(determinedStates, hintNumbers);
+    if (leftmostPositions.empty()) {
+        return std::vector<CellState>(totalLength, UNKNOWN);
+    }
 
-        for (int hint : hintNumbers) {
-            for (int i = 0; i < hint; ++i) {
-                if (position >= totalLength || !canPlace(BLACK, determinedStates[position])) {
-                    canPlaceAllHints = false;
-                    break;
-                }
-                placement[position] = BLACK;
-                position++;
+    std::vector<int> rightmostPositions = getRightmostPositions(determinedStates, hintNumbers);
+    if (rightmostPositions.empty()) {
+        return std::vector<CellState>(totalLength, UNKNOWN);
+    }
+
+    for(int i = 0; i < leftmostPositions.front(); i++) {
+        determined[i] = WHITE;
+	}
+    for(int i = totalLength-1; i > rightmostPositions.back() + hintNumbers.back(); i--) {
+        determined[i] = WHITE;
+	}
+    for(int k = 0; k < hintNumbers.size(); k++) {
+        int leftStart = leftmostPositions[k];
+        int leftEnd = leftStart + hintNumbers[k] - 1;
+        int rightStart = rightmostPositions[k];
+        int rightEnd = rightStart + hintNumbers[k] - 1;
+        for(int i = leftStart; i <= leftEnd; i++) {
+            if (i >= rightStart && i <= rightEnd) {
+                determined[i] = BLACK;
             }
-            if (!canPlaceAllHints) break;
-            if (position < totalLength) {
-                if (!canPlace(WHITE, determinedStates[position])) {
-                    canPlaceAllHints = false;
-                    break;
-                }
-                placement[position]= WHITE;
-                position++;
-            }
-        }
-        if (canPlaceAllHints) {
-            placements.push_back(placement);
         }
 	}
 
-    return placements;
+    return determined;
 }
 
 std::vector<CellState> determineCellStates(
@@ -418,9 +547,19 @@ void render_nonogram_table() {
                 if(rowIndex < tableRowHeaderCount && columnIndex < tableColumnHeaderCount) {
                     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.5f, 0.5f, 0.5f, 1.0f));
                 } else if (rowIndex < tableRowHeaderCount) {
-                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.6f, 0.9f, 1.0f));
+                    if (columnIndex - tableColumnHeaderCount == processingColumn) {
+                        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.6f, 0.6f, 1.0f));
+                    }
+                    else {
+                        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.6f, 0.9f, 1.0f));
+                    }
                 } else if (columnIndex < tableColumnHeaderCount) {
-                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.9f, 0.6f, 0.6f, 1.0f));
+                    if (rowIndex - tableRowHeaderCount == processingRow) {
+                        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.6f, 0.6f, 1.0f));
+                    }
+                    else {
+                        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.9f, 0.6f, 0.6f, 1.0f));
+                    }
                 } else {
                     if(nonogramGrid[rowIndex - tableRowHeaderCount][columnIndex - tableColumnHeaderCount] == BLACK) {
                         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.2f, 0.2f, 1.0f));
@@ -506,7 +645,7 @@ void render_nonogram_table() {
 }
 
 void frameUpdate() {
-	std::vector<CellState> determinedStates = std::vector<CellState>();
+	std::vector<CellState> determinedCells = std::vector<CellState>();
     switch (processState) {
     case PROCESS_NONE:
         break;
@@ -514,7 +653,6 @@ void frameUpdate() {
     case PROCESS_ROW_SIDE_INIT:
 		processingRow = 0;
 		processingColumn = -1;
-		solution_index = -1;
 
 		processState = PROCESS_ROW_INIT;
         break;
@@ -527,33 +665,23 @@ void frameUpdate() {
             break;
         }
 
-		all_solutions = findPlacementsOverlap(
-			nonogramGrid[processingRow].size(),
-			rowHintNumbers[processingRow],
-			nonogramGrid[processingRow]
-		);
-		solution_index = 0;
-
 		processState = PROCESS_ROW;
         break;
 
     case PROCESS_ROW:
-		for (int i = 0; i < nonogramGrid[processingRow].size();i++) {
-			nonogramGrid[processingRow][i] = all_solutions[solution_index][i];
-		}
-		solution_index++;
+		determinedCells = determineByOverlap(
+			nonogramGrid[processingRow].size(),
+			rowHintNumbers[processingRow],
+			nonogramGrid[processingRow]
+		);
+        for (int i = 0; i < nonogramGrid[processingRow].size(); i++) {
+			nonogramGrid[processingRow][i] = determinedCells[i];
+        }
 
-		if (solution_index == all_solutions.size())
-			processState = PROCESS_ROW_DEINIT;
+		processState = PROCESS_ROW_DEINIT;
         break;
 
     case PROCESS_ROW_DEINIT:
-		determinedStates = determineCellStates(all_solutions);
-		for (int i = 0; i < nonogramGrid[processingRow].size(); i++) {
-			nonogramGrid[processingRow][i] = determinedStates[i];
-		}
-		solution_index = -1;
-		all_solutions.clear();
         processingRow++;
 
 		processState = PROCESS_ROW_INIT;
@@ -567,7 +695,6 @@ void frameUpdate() {
     case PROCESS_COLUMN_SIDE_INIT:
 		processingColumn = 0;
 		processingRow = -1;
-		solution_index = -1;
 
         processState = PROCESS_COLUMN_INIT;
         break;
@@ -580,33 +707,23 @@ void frameUpdate() {
             break;
         }
 
-		all_solutions = findPlacementsOverlap(
-			nonogramGrid.size(),
-			columnHintNumbers[processingColumn],
-			extractColumn(nonogramGrid, processingColumn)
-		);
-		solution_index = 0;
-
 		processState = PROCESS_COLUMN;
         break;
 
     case PROCESS_COLUMN:
-		for (int i = 0; i < nonogramGrid.size();i++) {
-			nonogramGrid[i][processingColumn] = all_solutions[solution_index][i];
-		}
-		solution_index++;
+        determinedCells = determineByOverlap(
+			nonogramGrid.size(),
+			columnHintNumbers[processingColumn],
+			extractColumn(nonogramGrid, processingColumn)
+		);
+        for (int i = 0; i < nonogramGrid.size(); i++) {
+			nonogramGrid[i][processingColumn] = determinedCells[i];
+        }
 
-		if (solution_index == all_solutions.size())
-			processState = PROCESS_COLUMN_DEINIT;
+		processState = PROCESS_COLUMN_DEINIT;
         break;
 
     case PROCESS_COLUMN_DEINIT:
-		determinedStates = determineCellStates(all_solutions);
-		for (int i = 0; i < nonogramGrid.size(); i++) {
-			nonogramGrid[i][processingColumn] = determinedStates[i];
-		}
-		solution_index = -1;
-		all_solutions.clear();
         processingColumn++;
 
 		processState = PROCESS_COLUMN_INIT;
@@ -624,6 +741,12 @@ void frameUpdate() {
 }
 
 int main() {
+	determineByOverlap(
+        10,
+        { 3, 2 },
+        { UNKNOWN, UNKNOWN, WHITE, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN }
+    );
+
     glfwSetErrorCallback(glfw_error_callback);
     if (!glfwInit()) return 1;
 
