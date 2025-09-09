@@ -61,6 +61,9 @@ std::vector<std::vector<int>> rowHintNumbers;
 int tableRowHeaderCount;
 int tableColumnHeaderCount;
 
+int additionalInfoRowCount = 1;
+int additionalInfoColumnCount = 1;
+
 std::vector<std::vector<CellState>> nonogramGrid;
 
 enum PROCESS_STATE {
@@ -513,8 +516,8 @@ bool isSolved(std::vector<CellState> states) {
 void render_nonogram_table() {
 	const int boardRowCount = nonogramGrid.size();
 	const int boardColumnCount = nonogramGrid[0].size();
-    const int rowTotalCount = tableRowHeaderCount + boardRowCount;
-    const int columnTotalCount = tableColumnHeaderCount + boardColumnCount;
+    const int rowTotalCount = tableRowHeaderCount + boardRowCount + additionalInfoRowCount;
+    const int columnTotalCount = tableColumnHeaderCount + boardColumnCount + additionalInfoColumnCount;
     ImVec2 container_size = ImGui::GetContentRegionAvail();
     
     float min_container_dim = ImMin(container_size.x / columnTotalCount, container_size.y / rowTotalCount);
