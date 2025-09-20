@@ -17,12 +17,6 @@
 #include <numeric>
 #include <sstream>
 
-enum CellState {
-    UNKNOWN,
-    WHITE,
-    BLACK,
-};
-
 std::string columnHintNumbersString = R"###(
   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,  1,   ,   ,   ,   ,   ,   ,   ,   ,   
   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,  2,   ,  2,   ,   ,   ,   ,   ,   ,   ,   ,   
