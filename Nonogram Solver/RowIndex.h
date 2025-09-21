@@ -1,24 +1,16 @@
 #ifndef ROWINDEX_H
 #define ROWINDEX_H
 
-class RowIndex {
-private:
-    const int index;
 
+#include "CellIndex.h"
+
+class RowIndex : public CellIndex {
 public:
-    explicit RowIndex(int idx);
-
-    int get() const;
+    explicit RowIndex(int index);
 
     RowIndex operator+(int shift) const;
     RowIndex operator-(int shift) const;
-
-    bool operator==(const RowIndex& other) const;
-    bool operator!=(const RowIndex& other) const;
-    bool operator<(const RowIndex& other) const;
-    bool operator<=(const RowIndex& other) const;
-    bool operator>(const RowIndex& other) const;
-    bool operator>=(const RowIndex& other) const;
 };
+
 
 #endif

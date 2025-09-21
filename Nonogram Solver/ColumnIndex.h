@@ -1,24 +1,15 @@
 #ifndef COLUMNINDEX_H
 #define COLUMNINDEX_H
 
-class ColumnIndex {
-private:
-    const int index;
 
+#include "CellIndex.h"
+
+class ColumnIndex : public CellIndex {
 public:
-    explicit ColumnIndex(int idx);
-
-    int get() const;
+    explicit ColumnIndex(int index);
 
     ColumnIndex operator+(int shift) const;
     ColumnIndex operator-(int shift) const;
-
-    bool operator==(const ColumnIndex& other) const;
-    bool operator!=(const ColumnIndex& other) const;
-    bool operator<(const ColumnIndex& other) const;
-    bool operator<=(const ColumnIndex& other) const;
-    bool operator>(const ColumnIndex& other) const;
-    bool operator>=(const ColumnIndex& other) const;
 };
 
 #endif

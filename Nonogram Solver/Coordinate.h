@@ -6,11 +6,17 @@
 
 class Coordinate {
 private:
-    const RowIndex rowIndex;
-    const ColumnIndex columnIndex;
+    RowIndex rowIndex;
+    ColumnIndex columnIndex;
 
 public:
     explicit Coordinate(RowIndex rowIndex, ColumnIndex columnIndex);
+
+    bool operator==(const Coordinate& other) const;
+    bool operator!=(const Coordinate& other) const;
+
+    RowIndex getRowIndex() const;
+    ColumnIndex getColumnIndex() const;
 
     Coordinate move(int rowShift, int columnShift) const;
 };

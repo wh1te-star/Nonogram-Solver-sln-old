@@ -3,16 +3,19 @@
 
 
 #include <vector>
-#include "CellState.h"
+#include "Cell.h"
 #include "Orientation.h"
 
 class Line {
 private:
-	const Orientation orientation;
-    const std::vector<CellState> line;
+	Orientation orientation;
+    std::vector<Cell> line;
+
+    bool operator==(const Line& other) const;
+    bool operator!=(const Line& other) const;
 
 public:
-    explicit Line(Orientation orientation, std::vector<CellState> line);
+    explicit Line(Orientation orientation, std::vector<Cell> line);
 };
 
 #endif

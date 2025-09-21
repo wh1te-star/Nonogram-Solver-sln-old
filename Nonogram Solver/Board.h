@@ -3,23 +3,33 @@
 
 
 #include <vector>
-#include "CellState.h"
+#include "Cell.h"
 #include "Coordinate.h"
 #include "Line.h"
+#include "RowLength.h"
+#include "ColumnLength.h"
 
 class Board {
 private:
-	std::vector<std::vector<CellState>> board;
+	RowLength rowLength;
+	ColumnLength columnLength;
+	std::vector<std::vector<Cell>> board;
 
 public:
-	Board(int rows, int cols);
-	~Board();
-
-	Board fillCell(Coordinate coordinate, CellState cellState);
-	Board fillLine(Coordinate coordinate, Line line);
+	Board(RowLength rowLength, ColumnLength columnLength);
 
 	bool operator==(const Board& other) const;
 	bool operator!=(const Board& other) const;
+	std::vector<Cell>& operator[](RowIndex rowIndex);
+	const std::vector<Cell>& operator[](RowIndex rowIndex) const;
+
+	ColumnIndex leftMostColumnIndex() const;
+	ColumnIndex rightMostColumnIndex() const;
+	RowIndex topMostRowIndex() const;
+	RowIndex bottomMostRowIndex() const;
+	bool isInRange(Coordinate coordinate) const;
+	void colorCell(Coordinate coordinate, CellColor cellColor);
+	void colorLine(Coordinate coordinate, Line line);
 };
 
 

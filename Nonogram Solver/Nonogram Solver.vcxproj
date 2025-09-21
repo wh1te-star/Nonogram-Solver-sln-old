@@ -127,9 +127,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="CellState.h" />
+    <ClCompile Include="BoardLength.cpp" />
+    <ClCompile Include="Cell.cpp" />
+    <ClCompile Include="Cell.h" />
+    <ClCompile Include="CellColor.cpp" />
+    <ClCompile Include="CellIndex.cpp" />
     <ClCompile Include="ColumnIndex.cpp" />
     <ClCompile Include="ColumnIndex.h" />
+    <ClCompile Include="ColumnLength.cpp" />
     <ClCompile Include="Coordinate.cpp" />
     <ClCompile Include="imgui\backends\imgui_impl_glfw.cpp" />
     <ClCompile Include="imgui\backends\imgui_impl_opengl3.cpp" />
@@ -144,13 +149,18 @@
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="numbers.cpp" />
     <ClCompile Include="RowIndex.cpp" />
+    <ClCompile Include="RowLength.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BoardLength.h" />
+    <ClInclude Include="CellIndex.h" />
+    <ClInclude Include="ColumnLength.h" />
     <ClInclude Include="Coordinate.h" />
     <ClInclude Include="Line.h" />
     <ClInclude Include="Board.h" />
     <ClInclude Include="Orientation.h" />
     <ClInclude Include="RowIndex.h" />
+    <ClInclude Include="RowLength.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
