@@ -144,7 +144,7 @@
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="libs\GLAD\src\glad.c" />
-    <ClCompile Include="Line.cpp" />
+    <ClCompile Include="Placement.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Board.cpp" />
     <ClCompile Include="numbers.cpp" />
@@ -156,7 +156,7 @@
     <ClInclude Include="CellIndex.h" />
     <ClInclude Include="ColumnLength.h" />
     <ClInclude Include="Coordinate.h" />
-    <ClInclude Include="Line.h" />
+    <ClInclude Include="Placement.h" />
     <ClInclude Include="Board.h" />
     <ClInclude Include="Orientation.h" />
     <ClInclude Include="RowIndex.h" />
