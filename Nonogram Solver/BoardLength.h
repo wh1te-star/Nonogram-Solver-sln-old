@@ -4,10 +4,10 @@
 class BoardLength {
 protected:
     int length;
-    BoardLength(int length) : length(length) {}
+    BoardLength(int length);
 
 public:
-    int getLength() const { return length; }
+    int getLength() const;
     
     bool operator==(const BoardLength& other) const;
     bool operator!=(const BoardLength& other) const;

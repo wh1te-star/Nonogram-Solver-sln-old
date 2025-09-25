@@ -4,10 +4,10 @@
 class CellIndex {
 protected:
     int index;
-    CellIndex(int index) : index(index) {}
+    explicit CellIndex(int index);
 
 public:
-    int getIndex() const { return index; }
+    int getIndex() const;
     
     bool operator==(const CellIndex& other) const;
     bool operator!=(const CellIndex& other) const;

@@ -4,17 +4,20 @@
 
 #include <vector>
 #include "Cell.h"
-#include "Orientation.h"
+#include "Coordinate.h"
 
 class Placement {
 private:
+    Coordinate coordinate;
     std::vector<Cell> placement;
 
-    bool operator==(const Placement& other) const;
-    bool operator!=(const Placement& other) const;
+protected:
+    explicit Placement(Coordinate coordinate, std::vector<Cell> placement);
+    virtual ~Placement() = default;
 
 public:
-    explicit Placement(std::vector<Cell> placement);
+    bool operator==(const Placement& other) const;
+    bool operator!=(const Placement& other) const;
 };
 
 #endif

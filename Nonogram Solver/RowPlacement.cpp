@@ -1,4 +1,6 @@
 #include "RowPlacement.h"
+#include "Coordinate.h"
 
-RowPlacement::RowPlacement(std::vector<Cell> placement) : Placement(placement) {}
+RowPlacement::RowPlacement(Coordinate coordinate, std::vector<Cell> placement) :
+	Placement(coordinate, placement) {}
 

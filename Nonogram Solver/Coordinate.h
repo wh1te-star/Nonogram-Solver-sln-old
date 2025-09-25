@@ -1,8 +1,9 @@
-#include "RowIndex.h"
-#include "ColumnIndex.h"
-
 #ifndef COORDINATE_H
 #define COORDINATE_H
+
+
+#include "RowIndex.h"
+#include "ColumnIndex.h"
 
 class Coordinate {
 private:

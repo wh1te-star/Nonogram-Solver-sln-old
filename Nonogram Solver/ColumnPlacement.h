@@ -3,10 +3,11 @@
 
 
 #include "Placement.h"
+#include "Coordinate.h"
 
 class ColumnPlacement : public Placement {
 public:
-    explicit ColumnPlacement(std::vector<Cell> placement);
+    explicit ColumnPlacement(Coordinate coordinate, std::vector<Cell> placement);
 };
 
 

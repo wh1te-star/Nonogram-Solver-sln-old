@@ -5,7 +5,7 @@
 #include <vector>
 #include "Cell.h"
 #include "Coordinate.h"
-#include "Line.h"
+#include "Placement.h"
 #include "RowLength.h"
 #include "ColumnLength.h"
 
@@ -29,7 +29,7 @@ public:
 	RowIndex bottomMostRowIndex() const;
 	bool isInRange(Coordinate coordinate) const;
 	void colorCell(Coordinate coordinate, CellColor cellColor);
-	void colorLine(Coordinate coordinate, Line line);
+	void colorLine(Coordinate coordinate, Placement placement);
 };
 
 

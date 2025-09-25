@@ -1,11 +1,12 @@
 #include "placement.h"
 #include "Cell.h"
+#include "Coordinate.h"
 
-Placement::Placement(std::vector<Cell> placement) :
-	placement(placement) {}
+Placement::Placement(Coordinate coordinate, std::vector<Cell> placement) :
+    coordinate(coordinate), placement(placement) {}
 
 bool Placement::operator==(const Placement& other) const {
-	return placement == other.placement;
+	return coordinate == other.coordinate && placement == other.placement;
 }
 
 bool Placement::operator!=(const Placement& other) const {
