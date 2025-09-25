@@ -135,6 +135,7 @@
     <ClCompile Include="ColumnIndex.cpp" />
     <ClCompile Include="ColumnIndex.h" />
     <ClCompile Include="ColumnLength.cpp" />
+    <ClCompile Include="ColumnPlacement.cpp" />
     <ClCompile Include="Coordinate.cpp" />
     <ClCompile Include="imgui\backends\imgui_impl_glfw.cpp" />
     <ClCompile Include="imgui\backends\imgui_impl_opengl3.cpp" />
@@ -150,17 +151,20 @@
     <ClCompile Include="numbers.cpp" />
     <ClCompile Include="RowIndex.cpp" />
     <ClCompile Include="RowLength.cpp" />
+    <ClCompile Include="RowPlacement.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BoardLength.h" />
     <ClInclude Include="CellIndex.h" />
     <ClInclude Include="ColumnLength.h" />
+    <ClInclude Include="ColumnPlacement.h" />
     <ClInclude Include="Coordinate.h" />
     <ClInclude Include="Placement.h" />
     <ClInclude Include="Board.h" />
     <ClInclude Include="Orientation.h" />
     <ClInclude Include="RowIndex.h" />
     <ClInclude Include="RowLength.h" />
+    <ClInclude Include="RowPlacement.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
