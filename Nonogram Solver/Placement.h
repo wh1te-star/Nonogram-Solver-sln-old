@@ -13,9 +13,9 @@ private:
 
 protected:
     explicit Placement(Coordinate coordinate, std::vector<Cell> placement);
-    virtual ~Placement() = default;
 
 public:
+    virtual ~Placement() = default;
     bool operator==(const Placement& other) const;
     bool operator!=(const Placement& other) const;
 };
