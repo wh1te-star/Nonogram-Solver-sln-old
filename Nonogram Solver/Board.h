@@ -29,7 +29,7 @@ public:
 	RowIndex bottomMostRowIndex() const;
 	bool isInRange(Coordinate coordinate) const;
 	void colorCell(Coordinate coordinate, CellColor cellColor);
-	void colorLine(Coordinate coordinate, Placement placement);
+	void applyPlacement(Coordinate coordinate, Placement& placement);
 };
 
 

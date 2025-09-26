@@ -8,6 +8,7 @@
 class RowPlacement : public Placement {
 public:
     explicit RowPlacement(Coordinate coordinate, std::vector<Cell> placement);
+    std::vector<CellLocation> getCellLocationList() override;
 };
 
 

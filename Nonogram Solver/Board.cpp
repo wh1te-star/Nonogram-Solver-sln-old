@@ -66,41 +66,14 @@ void Board::colorCell(Coordinate coordinate, CellColor cellColor) {
 	}
 }
 
-void Board::colorLine(Coordinate coordinate, Placement placement) {
-	RowIndex rowIndex = coordinate.getRowIndex();
-	ColumnIndex columnIndex = coordinate.getColumnIndex();
+void Board::applyPlacement(Coordinate coordinate, Placement& placement) {
+	assert(
+		typeid(placement) == typeid(RowPlacement) ||
+		typeid(placement) == typeid(ColumnPlacement)
+	);
 
-	/*
-	if(typeid(placement) == typeid(RowPlacement)){
-		if (row < 0 || row >= board.size()) {
-			return;
-		}
-		for (int i = 0; i < placement.line.size(); ++i) {
-			int colIdx = column + i;
-			if (colIdx < 0 || colIdx >= board[0].size()) {
-				continue;
-			}
-			if (board[row][colIdx].canColor(placement.line[i].get())) {
-				board[row][colIdx] = placement.line[i];
-			}
-		}
-	} else if (typeid(placement) == typeid(ColumnPlacement)) {
-		if (column < 0 || column >= board[0].size()) {
-			return;
-		}
-		for (int i = 0; i < placement.line.size(); ++i) {
-			int rowIdx = row + i;
-			if (rowIdx < 0 || rowIdx >= board.size()) {
-				continue;
-			}
-			if (board[rowIdx][column].canColor(placement.line[i].get())) {
-				board[rowIdx][column] = placement.line[i];
-			}
-		}
+	for(CellLocation cellLocation : placement.getCellLocationList()) {
+		colorCell(cellLocation.getCoordinate(), cellLocation.getCell().get());
 	}
-	else {
-		assert(false);
-	}
-	*/
 }
 
