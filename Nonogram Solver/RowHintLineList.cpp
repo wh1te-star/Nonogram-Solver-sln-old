@@ -1,5 +1,5 @@
-#include "ColumnHintLineList.h"
+#include "RowHintLineList.h"
 #include "HintLineList.h"
 
-ColumnHintLineList::ColumnHintLineList(std::vector<HintLine> hintLineList) :
+RowHintLineList::RowHintLineList(std::vector<HintLine> hintLineList) :
 	HintLineList(hintLineList) {}
