@@ -1,5 +1,5 @@
-﻿#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+﻿#include "glad/glad.h"
+#include "GLFW/glfw3.h"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
@@ -17,6 +17,7 @@
 #include <numeric>
 #include <sstream>
 
+/*
 std::string columnHintNumbersString = R"###(
   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,  1,   ,   ,   ,   ,   ,   ,   ,   ,   
   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,  2,   ,  2,   ,   ,   ,   ,   ,   ,   ,   ,   
@@ -889,5 +890,11 @@ int main() {
     glfwDestroyWindow(window);
     glfwTerminate();
 
+    return 0;
+}
+*/
+
+int main() {
+    ImVec2 container_size = ImGui::GetContentRegionAvail();
     return 0;
 }

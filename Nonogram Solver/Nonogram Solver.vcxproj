@@ -142,14 +142,6 @@
     <ClCompile Include="HintLine.cpp" />
     <ClCompile Include="HintLineList.cpp" />
     <ClCompile Include="HintNumber.cpp" />
-    <ClCompile Include="imgui\backends\imgui_impl_glfw.cpp" />
-    <ClCompile Include="imgui\backends\imgui_impl_opengl3.cpp" />
-    <ClCompile Include="imgui\imgui.cpp" />
-    <ClCompile Include="imgui\imgui_demo.cpp" />
-    <ClCompile Include="imgui\imgui_draw.cpp" />
-    <ClCompile Include="imgui\imgui_tables.cpp" />
-    <ClCompile Include="imgui\imgui_widgets.cpp" />
-    <ClCompile Include="libs\GLAD\src\glad.c" />
     <ClCompile Include="Placement.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Board.cpp" />
@@ -179,6 +171,44 @@
     <ClInclude Include="RowIndex.h" />
     <ClInclude Include="RowLength.h" />
     <ClInclude Include="RowPlacement.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Debug\Nonogram Solver.tlog\CL.command.1.tlog" />
+    <None Include="Debug\Nonogram Solver.tlog\CL.read.1.tlog" />
+    <None Include="Debug\Nonogram Solver.tlog\CL.write.1.tlog" />
+    <None Include="Debug\Nonogram Solver.tlog\Nonogram Solver.lastbuildstate" />
+    <None Include="Debug\Nonogram Solver.tlog\unsuccessfulbuild" />
+    <None Include="Debug\vc143.idb" />
+    <None Include="Debug\vc143.pdb" />
+    <None Include="imgui.ini" />
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="Debug\Board.obj" />
+    <Object Include="Debug\BoardLength.obj" />
+    <Object Include="Debug\Cell.obj" />
+    <Object Include="Debug\CellColor.obj" />
+    <Object Include="Debug\CellIndex.obj" />
+    <Object Include="Debug\CellLocation.obj" />
+    <Object Include="Debug\ColumnHintLineList.obj" />
+    <Object Include="Debug\ColumnIndex.obj" />
+    <Object Include="Debug\ColumnLength.obj" />
+    <Object Include="Debug\ColumnPlacement.obj" />
+    <Object Include="Debug\Coordinate.obj" />
+    <Object Include="Debug\HintLine.obj" />
+    <Object Include="Debug\HintLineList.obj" />
+    <Object Include="Debug\HintNumber.obj" />
+    <Object Include="Debug\imgui.obj" />
+    <Object Include="Debug\imgui_demo.obj" />
+    <Object Include="Debug\imgui_draw.obj" />
+    <Object Include="Debug\imgui_tables.obj" />
+    <Object Include="Debug\imgui_widgets.obj" />
+    <Object Include="Debug\numbers.obj" />
+    <Object Include="Debug\Placement.obj" />
+    <Object Include="Debug\PlacementCount.obj" />
+    <Object Include="Debug\RowHintLineList.obj" />
+    <Object Include="Debug\RowIndex.obj" />
+    <Object Include="Debug\RowLength.obj" />
+    <Object Include="Debug\RowPlacement.obj" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
