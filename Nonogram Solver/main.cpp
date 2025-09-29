@@ -16,6 +16,7 @@
 #include <iostream>
 #include <numeric>
 #include <sstream>
+#include "Board.h"
 
 /*
 std::string columnHintNumbersString = R"###(
@@ -61,7 +62,7 @@ int columnPlacementCountCells = 1;
 std::vector<int> rowPlacementCounts;
 std::vector<int> columnPlacementCounts;
 
-std::vector<std::vector<CellState>> nonogramGrid;
+Board nonogramGrid;
 
 enum PROCESS_STATE {
     PROCESS_NONE,
@@ -100,21 +101,6 @@ const ImWchar glyph_ranges_numbers[] = {
     0x002D, 0x002D, // Minus
     0,
 };
-
-void glfw_error_callback(int error, const char* description) {
-    fprintf(stderr, "Glfw Error %d: %s\n", error, description);
-}
-
-std::vector<CellState> extractColumn(const std::vector<std::vector<CellState>>& vec2d, size_t columnIndex) {
-    std::vector<CellState> result;
-    if (vec2d.empty() || columnIndex >= vec2d[0].size()) {
-        return result;
-    }
-    for (const auto& row : vec2d) {
-        result.push_back(row[columnIndex]);
-    }
-    return result;
-}
 
 std::vector<std::vector<int>> parseHints(const std::string& hintString) {
     std::vector<std::vector<int>> hintMatrix;
@@ -183,23 +169,6 @@ void initializeHints() {
 
     rowPlacementCounts.resize(nonogramGrid.size());
     columnPlacementCounts.resize(nonogramGrid[0].size());
-}
-
-bool canPlace(CellState placeState, CellState determinedState) {
-    if (determinedState == UNKNOWN) {
-        return true;
-    }
-    
-    if (placeState == WHITE) {
-        return determinedState == WHITE;
-    }
-    
-    if (placeState == BLACK) {
-        return determinedState == BLACK;
-    }
-    
-    assert(false);
-    return false;
 }
 
 struct SearchState {
@@ -742,14 +711,12 @@ void frameUpdate() {
         break;
     }
 }
+*/
+void glfw_error_callback(int error, const char* description) {
+    fprintf(stderr, "Glfw Error %d: %s\n", error, description);
+}
 
 int main() {
-	determineByOverlap(
-        10,
-        { 3, 2 },
-        { UNKNOWN, UNKNOWN, WHITE, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN, UNKNOWN }
-    );
-
     glfwSetErrorCallback(glfw_error_callback);
     if (!glfwInit()) return 1;
 
@@ -775,6 +742,7 @@ int main() {
     font_cfg.OversampleV = 1;
     font_cfg.PixelSnapH = true;
 
+    /*
     fontSize10 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 10.0f, &font_cfg, glyph_ranges_numbers);
     fontSize15 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 15.0f, &font_cfg, glyph_ranges_numbers);
     fontSize20 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 20.0f, &font_cfg, glyph_ranges_numbers);
@@ -788,13 +756,14 @@ int main() {
     fontSize60 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 60.0f, &font_cfg, glyph_ranges_numbers);
     fontSize65 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 65.0f, &font_cfg, glyph_ranges_numbers);
     fontSize70 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 70.0f, &font_cfg, glyph_ranges_numbers);
+    */
 
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
 
-	initializeHints();
+	//initializeHints();
 
-    nonogramGrid.resize(rowHintNumbers.size(), std::vector<CellState>(columnHintNumbers.size(), UNKNOWN));
+    //nonogramGrid.resize(rowHintNumbers.size(), std::vector<CellState>(columnHintNumbers.size(), UNKNOWN));
     srand(static_cast<unsigned int>(time(0)));
 
     bool first_time = true;
@@ -806,7 +775,7 @@ int main() {
 
     double current_time = glfwGetTime();
     if (current_time - last_update_time >= update_interval) {
-        frameUpdate();
+        //frameUpdate();
         last_update_time = current_time;
     }
 
@@ -853,16 +822,16 @@ int main() {
         ImGui::Text("Control Buttons");
         ImGui::Spacing();
         if(ImGui::Button("Solve", ImVec2(-1, 0))) {
-			processState = PROCESS_ROW_SIDE_INIT;
+			//processState = PROCESS_ROW_SIDE_INIT;
         }
         ImGui::Spacing();
         if (ImGui::Button("Stop", ImVec2(-1, 0))) {
-            processState = PROCESS_NONE;
+            //processState = PROCESS_NONE;
         }
         ImGui::End();
 
         ImGui::Begin("Nonogram Board", NULL, ImGuiWindowFlags_None);
-        render_nonogram_table();
+        //render_nonogram_table();
         ImGui::End();
 
         ImGui::Render();
@@ -890,77 +859,5 @@ int main() {
     glfwDestroyWindow(window);
     glfwTerminate();
 
-    return 0;
-}
-*/
-
-// Add this at the top to handle GLFW errors
-void glfw_error_callback(int error, const char* description) {
-    fprintf(stderr, "Glfw Error %d: %s\n", error, description);
-}
-
-int main() {
-    glfwSetErrorCallback(glfw_error_callback);
-    if (!glfwInit()) {
-        return 1;
-    }
-
-    // Set GLFW window hints for OpenGL 3.3
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    // ★ Here's how to define and initialize the window variable
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "ImGui Example", NULL, NULL);
-    if (window == NULL) {
-        return 1;
-    }
-    
-    // Make the window's context current
-    glfwMakeContextCurrent(window);
-    glfwSwapInterval(1); // Enable vsync
-
-    // Initialize GLAD to load OpenGL function pointers
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        fprintf(stderr, "Failed to initialize GLAD\n");
-        return 1;
-    }
-
-    // ImGui initialization (same as before)
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO();
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
-
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL3_Init("#version 330");
-
-    // Main loop (same as before)
-    while (!glfwWindowShouldClose(window)) {
-        glfwPollEvents();
-        
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
-        
-        // ★ Now you can safely call ImGui functions here
-        ImVec2 container_size = ImGui::GetContentRegionAvail();
-        
-        ImGui::Render();
-        int display_w, display_h;
-        glfwGetFramebufferSize(window, &display_w, &display_h);
-        glViewport(0, 0, display_w, display_h);
-        glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
-        glClear(GL_COLOR_BUFFER_BIT);
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-        glfwSwapBuffers(window);
-    }
-    
-    // Cleanup (same as before)
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
-    glfwDestroyWindow(window);
-    glfwTerminate();
     return 0;
 }
