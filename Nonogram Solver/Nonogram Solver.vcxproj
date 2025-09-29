@@ -158,6 +158,7 @@
     <ClCompile Include="RowIndex.cpp" />
     <ClCompile Include="RowLength.cpp" />
     <ClCompile Include="RowPlacement.cpp" />
+    <ClCompile Include="TestDataEasy.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BoardLength.h" />
@@ -188,6 +189,7 @@
     <ClInclude Include="RowIndex.h" />
     <ClInclude Include="RowLength.h" />
     <ClInclude Include="RowPlacement.h" />
+    <ClInclude Include="TestDataRepository.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="imgui.ini" />
