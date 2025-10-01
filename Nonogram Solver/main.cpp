@@ -16,7 +16,7 @@
 #include <iostream>
 #include <numeric>
 #include <sstream>
-#include "Board.h"
+#include "Board/Board/Board.h"
 
 /*
 std::string columnHintNumbersString = R"###(

@@ -42,132 +42,135 @@
     <ClCompile Include="libs\GLAD\src\glad.c">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="numbers.cpp">
-      <Filter>リソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Board.cpp">
+    <ClCompile Include="Board\Board\Board.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="RowIndex.cpp">
+    <ClCompile Include="Index\CellIndex\RowIndex.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="ColumnIndex.h">
+    <ClCompile Include="Index\CellIndex\ColumnIndex.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="ColumnIndex.cpp">
+    <ClCompile Include="Index\CellIndex\ColumnIndex.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Placement.cpp">
+    <ClCompile Include="Placement\Placement\Placement.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Cell.h">
+    <ClCompile Include="Cell\Cell\Cell.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Coordinate.cpp">
+    <ClCompile Include="Index\Coordinate\Coordinate.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="RowLength.cpp">
+    <ClCompile Include="Board\BoardLength\RowLength.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="ColumnLength.cpp">
+    <ClCompile Include="Board\BoardLength\ColumnLength.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Cell.cpp">
+    <ClCompile Include="Cell\Cell\Cell.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="CellIndex.cpp">
+    <ClCompile Include="Index\CellIndex\CellIndex.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="BoardLength.cpp">
+    <ClCompile Include="Board\BoardLength\BoardLength.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="RowPlacement.cpp">
+    <ClCompile Include="Placement\Placement\RowPlacement.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="ColumnPlacement.cpp">
+    <ClCompile Include="Placement\Placement\ColumnPlacement.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="CellColor.cpp">
+    <ClCompile Include="Cell\CellColor\CellColor.h">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="CellLocation.cpp">
+    <ClCompile Include="Cell\CellLocation\CellLocation.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="HintLine.cpp">
+    <ClCompile Include="Hint\HintLine\HintLine.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="HintNumber.cpp">
+    <ClCompile Include="Hint\HintNumber\HintNumber.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="HintLineList.cpp">
+    <ClCompile Include="Hint\HintLineList\HintLineList.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="RowHintLineList.cpp">
+    <ClCompile Include="Hint\HintLineList\RowHintLineList.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="ColumnHintLineList.cpp">
+    <ClCompile Include="Hint\HintLineList\ColumnHintLineList.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="PlacementCount.cpp">
+    <ClCompile Include="Placement\PlacementCount\PlacementCount.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="TestDataEasy.cpp">
+    <ClCompile Include="TestData\TestData\TestDataEasy.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="TestData\TestData\TestDataRepository.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="TestData\TestData\TestDataLambda.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="TestData\TestData\TestDataLarge.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="RowIndex.h">
+    <ClInclude Include="Index\CellIndex\RowIndex.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Placement.h">
+    <ClInclude Include="Placement\Placement\Placement.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Board.h">
+    <ClInclude Include="Board\Board\Board.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Coordinate.h">
+    <ClInclude Include="Index\Coordinate\Coordinate.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Orientation.h">
+    <ClInclude Include="Board\BoardLength\RowLength.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="RowLength.h">
+    <ClInclude Include="Board\BoardLength\ColumnLength.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="ColumnLength.h">
+    <ClInclude Include="Index\CellIndex\CellIndex.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="CellIndex.h">
+    <ClInclude Include="Board\BoardLength\BoardLength.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="BoardLength.h">
+    <ClInclude Include="Placement\Placement\RowPlacement.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="RowPlacement.h">
+    <ClInclude Include="Placement\Placement\ColumnPlacement.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="ColumnPlacement.h">
+    <ClInclude Include="Cell\CellLocation\CellLocation.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="CellLocation.h">
+    <ClInclude Include="Hint\HintLine\HintLine.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="HintLine.h">
+    <ClInclude Include="Hint\HintNumber\HintNumber.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="HintNumber.h">
+    <ClInclude Include="Hint\HintLineList\HintLineList.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="HintLineList.h">
+    <ClInclude Include="Hint\HintLineList\RowHintLineList.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="RowHintLineList.h">
+    <ClInclude Include="Hint\HintLineList\ColumnHintLineList.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="ColumnHintLineList.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="PlacementCount.h">
+    <ClInclude Include="Placement\PlacementCount\PlacementCount.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="imgui\backends\imgui_impl_glfw.h">
@@ -200,7 +203,7 @@
     <ClInclude Include="imgui\imstb_truetype.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="TestDataRepository.h">
+    <ClInclude Include="TestData\Repository\TestDataRepository.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

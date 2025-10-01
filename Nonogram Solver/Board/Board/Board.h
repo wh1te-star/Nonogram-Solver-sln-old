@@ -1,0 +1,39 @@
+#ifndef BOARD_H
+#define BOARD_H
+
+
+#include <vector>
+#include "Board/BoardLength/ColumnLength.h"
+#include "Board/BoardLength/RowLength.h"
+#include "Cell/Cell/Cell.h"
+#include "Cell/CellColor/CellColor.h"
+#include "Index/Coordinate/Coordinate.h"
+#include "Index/CellIndex/ColumnIndex.h"
+#include "Index/CellIndex/RowIndex.h"
+#include "Placement/Placement/Placement.h"
+
+class Board {
+private:
+	RowLength rowLength;
+	ColumnLength columnLength;
+	std::vector<std::vector<Cell>> board;
+
+public:
+	Board(RowLength rowLength, ColumnLength columnLength);
+
+	bool operator==(const Board& other) const;
+	bool operator!=(const Board& other) const;
+	std::vector<Cell>& operator[](RowIndex rowIndex);
+	const std::vector<Cell>& operator[](RowIndex rowIndex) const;
+
+	ColumnIndex leftMostColumnIndex() const;
+	ColumnIndex rightMostColumnIndex() const;
+	RowIndex topMostRowIndex() const;
+	RowIndex bottomMostRowIndex() const;
+	bool isInRange(Coordinate coordinate) const;
+	void colorCell(Coordinate coordinate, CellColor cellColor);
+	void applyPlacement(Coordinate coordinate, Placement& placement);
+};
+
+
+#endif

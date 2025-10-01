@@ -1,4 +1,0 @@
-enum Orientation {
-	Row,
-	Column
-};

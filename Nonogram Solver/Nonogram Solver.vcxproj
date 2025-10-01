@@ -102,7 +102,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir)imgui; $(ProjectDir)imgui/backends; $(ProjectDir)libs/GLAD/include; $(ProjectDir)libs/GLFW/include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir); $(ProjectDir)imgui; $(ProjectDir)imgui/backends; $(ProjectDir)libs/GLAD/include; $(ProjectDir)libs/GLFW/include;</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
@@ -127,21 +127,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="BoardLength.cpp" />
-    <ClCompile Include="Cell.cpp" />
-    <ClCompile Include="Cell.h" />
-    <ClCompile Include="CellColor.cpp" />
-    <ClCompile Include="CellIndex.cpp" />
-    <ClCompile Include="CellLocation.cpp" />
-    <ClCompile Include="ColumnHintLineList.cpp" />
-    <ClCompile Include="ColumnIndex.cpp" />
-    <ClCompile Include="ColumnIndex.h" />
-    <ClCompile Include="ColumnLength.cpp" />
-    <ClCompile Include="ColumnPlacement.cpp" />
-    <ClCompile Include="Coordinate.cpp" />
-    <ClCompile Include="HintLine.cpp" />
-    <ClCompile Include="HintLineList.cpp" />
-    <ClCompile Include="HintNumber.cpp" />
+    <ClCompile Include="Board\BoardLength\BoardLength.cpp" />
+    <ClCompile Include="Cell\Cell\Cell.cpp" />
+    <ClCompile Include="Cell\Cell\Cell.h" />
+    <ClCompile Include="Cell\CellColor\CellColor.h" />
+    <ClCompile Include="Index\CellIndex\CellIndex.cpp" />
+    <ClCompile Include="Cell\CellLocation\CellLocation.cpp" />
+    <ClCompile Include="Hint\HintLineList\ColumnHintLineList.cpp" />
+    <ClCompile Include="Index\CellIndex\ColumnIndex.cpp" />
+    <ClCompile Include="Index\CellIndex\ColumnIndex.h" />
+    <ClCompile Include="Board\BoardLength\ColumnLength.cpp" />
+    <ClCompile Include="Placement\Placement\ColumnPlacement.cpp" />
+    <ClCompile Include="Index\Coordinate\Coordinate.cpp" />
+    <ClCompile Include="Hint\HintLine\HintLine.cpp" />
+    <ClCompile Include="Hint\HintLineList\HintLineList.cpp" />
+    <ClCompile Include="Hint\HintNumber\HintNumber.cpp" />
     <ClCompile Include="imgui\imgui_draw.cpp" />
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
@@ -149,28 +149,30 @@
     <ClCompile Include="imgui\backends\imgui_impl_glfw.cpp" />
     <ClCompile Include="imgui\backends\imgui_impl_opengl3.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
-    <ClCompile Include="Placement.cpp" />
+    <ClCompile Include="Placement\Placement\Placement.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Board.cpp" />
-    <ClCompile Include="numbers.cpp" />
-    <ClCompile Include="PlacementCount.cpp" />
-    <ClCompile Include="RowHintLineList.cpp" />
-    <ClCompile Include="RowIndex.cpp" />
-    <ClCompile Include="RowLength.cpp" />
-    <ClCompile Include="RowPlacement.cpp" />
-    <ClCompile Include="TestDataEasy.cpp" />
+    <ClCompile Include="Board\Board\Board.cpp" />
+    <ClCompile Include="Placement\PlacementCount\PlacementCount.cpp" />
+    <ClCompile Include="Hint\HintLineList\RowHintLineList.cpp" />
+    <ClCompile Include="Index\CellIndex\RowIndex.cpp" />
+    <ClCompile Include="Board\BoardLength\RowLength.cpp" />
+    <ClCompile Include="Placement\Placement\RowPlacement.cpp" />
+    <ClCompile Include="TestData\TestData\TestDataEasy.cpp" />
+    <ClCompile Include="TestData\TestData\TestDataLambda.cpp" />
+    <ClCompile Include="TestData\TestData\TestDataLarge.cpp" />
+    <ClCompile Include="TestData\TestData\TestDataRepository.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="BoardLength.h" />
-    <ClInclude Include="CellIndex.h" />
-    <ClInclude Include="CellLocation.h" />
-    <ClInclude Include="ColumnHintLineList.h" />
-    <ClInclude Include="ColumnLength.h" />
-    <ClInclude Include="ColumnPlacement.h" />
-    <ClInclude Include="Coordinate.h" />
-    <ClInclude Include="HintLine.h" />
-    <ClInclude Include="HintLineList.h" />
-    <ClInclude Include="HintNumber.h" />
+    <ClInclude Include="Board\BoardLength\BoardLength.h" />
+    <ClInclude Include="Index\CellIndex\CellIndex.h" />
+    <ClInclude Include="Cell\CellLocation\CellLocation.h" />
+    <ClInclude Include="Hint\HintLineList\ColumnHintLineList.h" />
+    <ClInclude Include="Board\BoardLength\ColumnLength.h" />
+    <ClInclude Include="Placement\Placement\ColumnPlacement.h" />
+    <ClInclude Include="Index\Coordinate\Coordinate.h" />
+    <ClInclude Include="Hint\HintLine\HintLine.h" />
+    <ClInclude Include="Hint\HintLineList\HintLineList.h" />
+    <ClInclude Include="Hint\HintNumber\HintNumber.h" />
     <ClInclude Include="imgui\backends\imgui_impl_glfw.h" />
     <ClInclude Include="imgui\backends\imgui_impl_opengl3.h" />
     <ClInclude Include="imgui\imgui.h" />
@@ -181,15 +183,14 @@
     <ClInclude Include="libs\glad\include\glad\glad.h" />
     <ClInclude Include="libs\glfw\include\GLFW\glfw3.h" />
     <ClInclude Include="libs\glfw\include\GLFW\glfw3native.h" />
-    <ClInclude Include="Placement.h" />
-    <ClInclude Include="Board.h" />
-    <ClInclude Include="Orientation.h" />
-    <ClInclude Include="PlacementCount.h" />
-    <ClInclude Include="RowHintLineList.h" />
-    <ClInclude Include="RowIndex.h" />
-    <ClInclude Include="RowLength.h" />
-    <ClInclude Include="RowPlacement.h" />
-    <ClInclude Include="TestDataRepository.h" />
+    <ClInclude Include="Placement\Placement\Placement.h" />
+    <ClInclude Include="Board\Board\Board.h" />
+    <ClInclude Include="Placement\PlacementCount\PlacementCount.h" />
+    <ClInclude Include="Hint\HintLineList\RowHintLineList.h" />
+    <ClInclude Include="Index\CellIndex\RowIndex.h" />
+    <ClInclude Include="Board\BoardLength\RowLength.h" />
+    <ClInclude Include="Placement\Placement\RowPlacement.h" />
+    <ClInclude Include="TestData\Repository\TestDataRepository.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="imgui.ini" />
