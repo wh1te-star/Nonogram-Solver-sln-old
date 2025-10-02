@@ -1,4 +1,5 @@
 #include "Hint/HintLineList/HintLineList.h"
+#include <algorithm>
 #include "Hint/HintLine/HintLine.h"
 
 
@@ -15,4 +16,14 @@ bool HintLineList::operator!=(const HintLineList& other) const {
 
 std::vector<HintLine> HintLineList::getHintLineList() const {
 	return hintLineList;
+}
+
+int HintLineList::getMaxHintLineLength() {
+    int maxSize = 0;
+
+    for (const auto& hintLine : hintLineList) {
+        maxSize = std::max(maxSize, (int)hintLine.size());
+    }
+
+    return maxSize;
 }

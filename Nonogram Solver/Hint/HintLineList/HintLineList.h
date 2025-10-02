@@ -19,6 +19,7 @@ public:
     bool operator!=(const HintLineList& other) const;
 
     std::vector<HintLine> getHintLineList() const;
+    int getMaxHintLineLength();
 };
 
 #endif

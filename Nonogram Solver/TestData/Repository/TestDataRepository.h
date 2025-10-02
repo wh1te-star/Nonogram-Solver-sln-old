@@ -10,16 +10,20 @@
 
 class TestDataRepository {
 public:
+    enum TestDataType { EASY, LAMBDA, LARGE };
+
+	std::vector<std::vector<HintNumber>> parseHints(const std::string& hintString);
+	RowHintLineList getRowHintLineList(TestDataType type);
+	ColumnHintLineList getColumnHintLineList(TestDataType type);
+
+    std::string GetRowString(TestDataType type);
+    std::string GetColumnString(TestDataType type);
     std::string GetEasyRowString();
     std::string GetEasyColumnString();
     std::string GetLambdaRowString();
     std::string GetLambdaColumnString();
     std::string GetLargeRowString();
     std::string GetLargeColumnString();
-
-	std::vector<std::vector<HintNumber>> parseHints(const std::string& hintString);
-	RowHintLineList getRowHintLineList();
-	ColumnHintLineList getColumnHintLineList();
 };
 
 

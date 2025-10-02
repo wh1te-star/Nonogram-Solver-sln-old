@@ -14,6 +14,7 @@ public:
 	bool operator==(const HintLine& other) const;
 	bool operator!=(const HintLine& other) const;
 
+	size_t size() const;
 	std::vector<HintNumber> getNumbers() const;
 };
 

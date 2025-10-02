@@ -18,39 +18,6 @@
 #include <sstream>
 #include "Board/Board/Board.h"
 
-/*
-std::string columnHintNumbersString = R"###(
-  ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,  1,   ,   ,   ,   ,   ,   ,   ,   ,   
-  ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,  2,   ,  2,   ,   ,   ,   ,   ,   ,   ,   ,   
-  ,   ,   ,   ,   ,   ,   ,   ,  2,  2,   ,   ,  2,   ,  2,   ,   ,  2,  2,  2,  1,  2,  1,   ,   ,   ,   ,   ,   ,   
-  ,   ,   ,   ,   ,   ,  2,   ,  1,  1,  2,  2,  1,  2,  1,  2,  1,  2,  2,  1,  1,  1,  1,  1,  2,  1,   ,   ,   ,   
-  ,   ,   ,   ,   ,  2,  2,  2,  1,  2,  1,  1,  1,  1,  1,  1,  5,  2,  1,  1,  1,  2,  2,  2,  1,  1,  2,   ,   ,   
-  ,   ,   ,   ,  3,  2,  1,  1,  1,  1,  1,  2,  1,  1,  1,  2,  1,  1,  1,  2,  1,  1,  2,  1,  2,  1,  1,  2,   ,   
-  ,   ,  4,  4,  6,  2,  1,  2,  1,  1,  3,  1,  2,  2,  2,  1,  3,  1,  1,  2,  1,  2,  3,  1,  2,  1,  1,  1,  2,   
-12, 14,  4,  3,  2,  2,  2,  4,  2,  1,  2,  1,  1,  1,  1,  1,  2,  1,  2,  4,  2,  2,  2,  3,  4,  7,  7,  2,  2,  5
-)###";
-std::string rowHintNumbersString = R"###(
-  ,   ,   ,   ,   ,   ,   ,   ,   ,  8
-  ,   ,   ,   ,   , 14,  2,  1,  1,  2
-  ,   ,   ,   , 14,  2,  1,  1,  1,  2
-  ,   ,   ,   ,   ,  4,  2,  2,  2,  2
-  ,   ,   ,   ,  4,  1,  1,  2,  2,  1
-  ,   ,   ,  3, 11,  2,  2,  1,  1,  1
-  ,   ,   ,   ,  2,  2,  1,  2,  2,  1
-  ,   ,   ,  2,  2,  2,  1,  1,  1,  2
-  ,   ,   ,   ,  2,  1,  2,  1,  2,  2
-  ,   ,   ,   ,   ,  2,  1,  2,  1,  2
-  ,   ,   ,   ,   ,   ,   ,  2,  1,  8
-  ,   ,   ,   ,   ,   ,  2,  1,  1,  2
-  ,   ,   ,   ,   ,   ,   ,  2, 19,  2
- 2,  1,  1,  1,  1,  1,  1,  1,  1,  2
-  ,  3,  1,  1,  1,  3,  1,  1,  1,  3
-  ,   ,   ,  4,  1,  3,  1,  3,  1,  4
-  ,   ,   ,   ,  8,  1,  1,  1,  1,  8
-  ,   ,   ,   ,  6,  1,  1,  1,  1,  6
-  ,   ,   ,   ,   ,  2,  2,  1,  2,  2
-  ,   ,   ,   ,   ,   ,  3,  1,  1,  3
-)###";
 std::vector<std::vector<int>> columnHintNumbers;
 std::vector<std::vector<int>> rowHintNumbers;
 
@@ -101,75 +68,6 @@ const ImWchar glyph_ranges_numbers[] = {
     0x002D, 0x002D, // Minus
     0,
 };
-
-std::vector<std::vector<int>> parseHints(const std::string& hintString) {
-    std::vector<std::vector<int>> hintMatrix;
-    std::stringstream ss(hintString);
-    std::string line;
-
-    while (std::getline(ss, line)) {
-        line.erase(0, line.find_first_not_of(" \t\n\r\f\v"));
-        line.erase(line.find_last_not_of(" \t\n\r\f\v") + 1);
-
-        if (line.empty()) {
-            continue;
-        }
-
-        std::vector<int> row;
-        std::stringstream line_ss(line);
-        std::string cell;
-
-        while (std::getline(line_ss, cell, ',')) {
-            cell.erase(0, cell.find_first_not_of(" \t\n\r\f\v"));
-            cell.erase(cell.find_last_not_of(" \t\n\r\f\v") + 1);
-
-            if (cell.empty()) {
-                row.push_back(0); 
-            } else {
-                row.push_back(std::stoi(cell));
-            }
-        }
-        hintMatrix.push_back(row);
-    }
-    return hintMatrix;
-}
-
-void initializeHints() {
-	std::vector<std::vector<int>> tempColumnHintNumbers = parseHints(columnHintNumbersString);
-    columnHintNumbers.resize(tempColumnHintNumbers.back().size(), std::vector<int>());
-    for(int k = 0; k < tempColumnHintNumbers.size(); k++) {
-        for(int i = 0; i < tempColumnHintNumbers[k].size(); i++) {
-			if (tempColumnHintNumbers[k][i] == 0) continue;
-			columnHintNumbers[i].push_back(tempColumnHintNumbers[k][i]);
-		}
-        if (tempColumnHintNumbers[k].size() > columnHintNumbers.size()) {
-        }
-	}
-
-    tableColumnHeaderCount = -1;
-    for (int i = 0; i < columnHintNumbers.size(); i++) {
-        if ((int)columnHintNumbers[i].size() > tableColumnHeaderCount) {
-            tableColumnHeaderCount = columnHintNumbers[i].size();
-        }
-    }
-
-    std::vector<std::vector<int>> tempRowHintNumbers = parseHints(rowHintNumbersString);
-	rowHintNumbers.resize(tempRowHintNumbers.size(), std::vector<int>());
-
-    tableRowHeaderCount = -1;
-    for(int k = 0; k < tempRowHintNumbers.size(); k++) {
-        for(int i = 0; i < tempRowHintNumbers[k].size(); i++) {
-			if (tempRowHintNumbers[k][i] == 0) continue;
-			rowHintNumbers[k].push_back(tempRowHintNumbers[k][i]);
-		}
-        if ((int)tempRowHintNumbers[k].size() > tableRowHeaderCount) {
-            tableRowHeaderCount = tempRowHintNumbers[k].size();
-        }
-	}
-
-    rowPlacementCounts.resize(nonogramGrid.size());
-    columnPlacementCounts.resize(nonogramGrid[0].size());
-}
 
 struct SearchState {
     int current_pos;
