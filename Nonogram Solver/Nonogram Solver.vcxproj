@@ -137,6 +137,10 @@
     <ClCompile Include="Index\CellIndex\ColumnIndex.cpp" />
     <ClCompile Include="Index\CellIndex\ColumnIndex.h" />
     <ClCompile Include="Board\BoardLength\ColumnLength.cpp" />
+    <ClCompile Include="NonogramBoard\NonogramBoard.cpp" />
+    <ClCompile Include="Placement\PlacementCountList\ColumnPlacementCountList.cpp" />
+    <ClCompile Include="Placement\PlacementCountList\PlacementCountList.cpp" />
+    <ClCompile Include="Placement\PlacementCountList\RowPlacementCountList.cpp" />
     <ClCompile Include="Placement\Placement\ColumnPlacement.cpp" />
     <ClCompile Include="Index\Coordinate\Coordinate.cpp" />
     <ClCompile Include="Hint\HintLine\HintLine.cpp" />
@@ -168,6 +172,10 @@
     <ClInclude Include="Cell\CellLocation\CellLocation.h" />
     <ClInclude Include="Hint\HintLineList\ColumnHintLineList.h" />
     <ClInclude Include="Board\BoardLength\ColumnLength.h" />
+    <ClInclude Include="NonogramBoard\NonogramBoard.h" />
+    <ClInclude Include="Placement\PlacementCountList\ColumnPlacementCountList.h" />
+    <ClInclude Include="Placement\PlacementCountList\PlacementCountList.h" />
+    <ClInclude Include="Placement\PlacementCountList\RowPlacementCountList.h" />
     <ClInclude Include="Placement\Placement\ColumnPlacement.h" />
     <ClInclude Include="Index\Coordinate\Coordinate.h" />
     <ClInclude Include="Hint\HintLine\HintLine.h" />

@@ -1,6 +1,5 @@
 #include "TestData/Repository/TestDataRepository.h"
 #include "Hint/HintNumber/HintNumber.h"
-
 #include <sstream>
 #include <cassert>
 
@@ -76,33 +75,35 @@ ColumnHintLineList TestDataRepository::getColumnHintLineList(TestDataType type) 
 std::string TestDataRepository::GetRowString(TestDataType type) {
     switch (type) {
     case TestDataRepository::EASY:
-        GetEasyRowString();
+        return GetEasyRowString();
         break;
     case TestDataRepository::LAMBDA:
-        GetLambdaRowString();
+        return GetLambdaRowString();
         break;
     case TestDataRepository::LARGE:
-        GetLargeRowString();
+        return GetLargeRowString();
         break;
     default:
         assert(false);
         break;
     }
+    return "";
 }
 
 std::string TestDataRepository::GetColumnString(TestDataType type) {
     switch (type) {
     case TestDataRepository::EASY:
-        GetEasyColumnString();
+        return GetEasyColumnString();
         break;
     case TestDataRepository::LAMBDA:
-        GetLambdaColumnString();
+        return GetLambdaColumnString();
         break;
     case TestDataRepository::LARGE:
-        GetLargeColumnString();
+        return GetLargeColumnString();
         break;
     default:
         assert(false);
         break;
     }
+    return "";
 }
