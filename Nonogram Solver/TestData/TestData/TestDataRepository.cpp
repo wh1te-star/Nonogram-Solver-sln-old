@@ -74,13 +74,13 @@ ColumnHintLineList TestDataRepository::getColumnHintLineList(TestDataType type) 
 
 std::string TestDataRepository::GetRowString(TestDataType type) {
     switch (type) {
-    case TestDataRepository::EASY:
+    case EASY:
         return GetEasyRowString();
         break;
-    case TestDataRepository::LAMBDA:
+    case LAMBDA:
         return GetLambdaRowString();
         break;
-    case TestDataRepository::LARGE:
+    case LARGE:
         return GetLargeRowString();
         break;
     default:
@@ -92,13 +92,13 @@ std::string TestDataRepository::GetRowString(TestDataType type) {
 
 std::string TestDataRepository::GetColumnString(TestDataType type) {
     switch (type) {
-    case TestDataRepository::EASY:
+    case EASY:
         return GetEasyColumnString();
         break;
-    case TestDataRepository::LAMBDA:
+    case LAMBDA:
         return GetLambdaColumnString();
         break;
-    case TestDataRepository::LARGE:
+    case LARGE:
         return GetLargeColumnString();
         break;
     default:
