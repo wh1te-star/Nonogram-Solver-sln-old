@@ -161,10 +161,11 @@
     <ClCompile Include="Index\CellIndex\RowIndex.cpp" />
     <ClCompile Include="Board\BoardLength\RowLength.cpp" />
     <ClCompile Include="Placement\Placement\RowPlacement.cpp" />
+    <ClCompile Include="Rendering\RenderingSystem\RenderingSystem.cpp" />
     <ClCompile Include="TestData\TestData\TestDataEasy.cpp" />
     <ClCompile Include="TestData\TestData\TestDataLambda.cpp" />
     <ClCompile Include="TestData\TestData\TestDataLarge.cpp" />
-    <ClCompile Include="TestData\TestData\TestDataRepository.cpp" />
+    <ClCompile Include="TestData\Repository\TestDataRepository.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board\BoardLength\BoardLength.h" />
@@ -198,6 +199,7 @@
     <ClInclude Include="Index\CellIndex\RowIndex.h" />
     <ClInclude Include="Board\BoardLength\RowLength.h" />
     <ClInclude Include="Placement\Placement\RowPlacement.h" />
+    <ClInclude Include="Rendering\RenderingSystem\RenderingSystem.h" />
     <ClInclude Include="TestData\Repository\TestDataRepository.h" />
   </ItemGroup>
   <ItemGroup>
