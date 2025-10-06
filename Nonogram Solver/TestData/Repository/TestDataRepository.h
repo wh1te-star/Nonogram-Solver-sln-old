@@ -1,7 +1,6 @@
 #ifndef ROWPLACEMENT_H
 #define ROWPLACEMENT_H
 
-
 #include <string>
 #include <vector>
 #include "Hint/HintNumber/HintNumber.h"
@@ -12,19 +11,23 @@ class TestDataRepository {
 public:
     enum TestDataType { EASY, LAMBDA, LARGE };
 
-	std::vector<std::vector<HintNumber>> parseHints(const std::string& hintString);
-	RowHintLineList getRowHintLineList(TestDataType type);
-	ColumnHintLineList getColumnHintLineList(TestDataType type);
+private:
+    TestDataRepository() = delete;
 
-    std::string GetRowString(TestDataType type);
-    std::string GetColumnString(TestDataType type);
-    std::string GetEasyRowString();
-    std::string GetEasyColumnString();
-    std::string GetLambdaRowString();
-    std::string GetLambdaColumnString();
-    std::string GetLargeRowString();
-    std::string GetLargeColumnString();
+    static std::string GetRowString(TestDataType type);
+    static std::string GetColumnString(TestDataType type);
+    static std::string GetEasyRowString();
+    static std::string GetEasyColumnString();
+    static std::string GetLambdaRowString();
+    static std::string GetLambdaColumnString();
+    static std::string GetLargeRowString();
+    static std::string GetLargeColumnString();
+    
+    static std::vector<std::vector<HintNumber>> parseHints(const std::string& hintString);
+
+public:
+    static RowHintLineList getRowHintLineList(TestDataType type);
+    static ColumnHintLineList getColumnHintLineList(TestDataType type);
 };
-
 
 #endif
