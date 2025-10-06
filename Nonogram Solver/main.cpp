@@ -44,26 +44,6 @@ PROCESS_STATE processState = PROCESS_NONE;
 int processingRow = -1;
 int processingColumn = -1;
 
-ImFont* fontSize10 = nullptr;
-ImFont* fontSize15 = nullptr;
-ImFont* fontSize20 = nullptr;
-ImFont* fontSize25 = nullptr;
-ImFont* fontSize30 = nullptr;
-ImFont* fontSize35 = nullptr;
-ImFont* fontSize40 = nullptr;
-ImFont* fontSize45 = nullptr;
-ImFont* fontSize50 = nullptr;
-ImFont* fontSize55 = nullptr;
-ImFont* fontSize60 = nullptr;
-ImFont* fontSize65 = nullptr;
-ImFont* fontSize70 = nullptr;
-
-const ImWchar glyph_ranges_numbers[] = {
-    0x0030, 0x0039, // 0-9
-    0x0020, 0x0020, // Space
-    0x002D, 0x002D, // Minus
-    0,
-};
 
 struct SearchState {
     int current_pos;
@@ -442,29 +422,7 @@ void render_nonogram_table() {
 
                 std::string label = "";
                 if (rowIndex < tableRowHeaderCount || columnIndex < tableColumnHeaderCount) {
-                    if (cell_size >= 120.0f) {
-                        ImGui::PushFont(fontSize60);
-                    } else if (cell_size >= 110.0f) {
-                        ImGui::PushFont(fontSize55);
-                    } else if (cell_size >= 100.0f) {
-                        ImGui::PushFont(fontSize50);
-                    } else if (cell_size >= 90.0f) {
-                        ImGui::PushFont(fontSize45);
-                    } else if (cell_size >= 80.0f) {
-                        ImGui::PushFont(fontSize40);
-                    } else if(cell_size >= 70.0f) {
-                        ImGui::PushFont(fontSize35);
-                    } else if(cell_size >= 60.0f) {
-                        ImGui::PushFont(fontSize30);
-                    } else if(cell_size >= 50.0f) {
-                        ImGui::PushFont(fontSize25);
-                    } else if(cell_size >= 40.0f) {
-                        ImGui::PushFont(fontSize20);
-                    } else if(cell_size >= 20.0f) {
-                        ImGui::PushFont(fontSize15);
-                    } else {
-                        ImGui::PushFont(fontSize10);
-                    }
+					ImGui::PushFont(FontData.getFontByCellSize(cell_size));
 
                     if (rowIndex >= tableRowHeaderCount) {
 						int rowHintIndex = rowIndex - tableRowHeaderCount;
@@ -615,26 +573,8 @@ int main() {
 	}
 
 	renderingSystem.renderingLoop();
+
 	renderingSystem.finalize();
-
-    /*
-    fontSize10 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 10.0f, &font_cfg, glyph_ranges_numbers);
-    fontSize15 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 15.0f, &font_cfg, glyph_ranges_numbers);
-    fontSize20 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 20.0f, &font_cfg, glyph_ranges_numbers);
-    fontSize25 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 25.0f, &font_cfg, glyph_ranges_numbers);
-    fontSize30 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 30.0f, &font_cfg, glyph_ranges_numbers);
-    fontSize35 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 35.0f, &font_cfg, glyph_ranges_numbers);
-    fontSize40 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 40.0f, &font_cfg, glyph_ranges_numbers);
-    fontSize45 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 45.0f, &font_cfg, glyph_ranges_numbers);
-    fontSize50 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 50.0f, &font_cfg, glyph_ranges_numbers);
-    fontSize55 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 55.0f, &font_cfg, glyph_ranges_numbers);
-    fontSize60 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 60.0f, &font_cfg, glyph_ranges_numbers);
-    fontSize65 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 65.0f, &font_cfg, glyph_ranges_numbers);
-    fontSize70 = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/Arial.ttf", 70.0f, &font_cfg, glyph_ranges_numbers);
-    */
-
-
-
 
     return 0;
 }

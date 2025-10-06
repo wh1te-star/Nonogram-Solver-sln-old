@@ -8,9 +8,6 @@
 
 class RenderingSystem {
 private:
-	const double update_interval = 0.1;
-	double last_update_time;
-
 	GLFWwindow* window;
 	ImGuiIO* io;
 

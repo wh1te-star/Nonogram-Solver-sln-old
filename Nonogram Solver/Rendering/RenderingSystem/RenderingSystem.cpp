@@ -7,10 +7,10 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "imgui_internal.h"
+#include "Rendering/FontData/FontData.h"
 
 
 RenderingSystem::RenderingSystem() :
-	last_update_time(0.0),
 	window(nullptr), 
 	io(nullptr) 
 {}
@@ -53,7 +53,7 @@ int RenderingSystem::initialize() {
     //nonogramGrid.resize(rowHintNumbers.size(), std::vector<CellState>(columnHintNumbers.size(), UNKNOWN));
     srand(static_cast<unsigned int>(time(0)));
 
-    last_update_time = glfwGetTime();
+	FontData::initFontData();
 
 	return 0;
 }
@@ -64,19 +64,16 @@ void RenderingSystem::renderingLoop() {
 	while (!glfwWindowShouldClose(window)) {
 		glfwPollEvents();
 
-		double current_time = glfwGetTime();
-		if (current_time - last_update_time >= update_interval) {
-			//frameUpdate();
-			last_update_time = current_time;
-		}
-
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
 
-		ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_NoTitleBar |
-			ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize |
-			ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBringToFrontOnFocus |
+		ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDocking |
+			ImGuiWindowFlags_NoTitleBar |
+			ImGuiWindowFlags_NoCollapse |
+			ImGuiWindowFlags_NoResize |
+			ImGuiWindowFlags_NoMove |
+			ImGuiWindowFlags_NoBringToFrontOnFocus |
 			ImGuiWindowFlags_NoNavFocus;
 
 		const ImGuiViewport* viewport = ImGui::GetMainViewport();
