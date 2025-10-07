@@ -127,7 +127,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Board\BacktrackBoard\BacktrackBoard.cpp" />
     <ClCompile Include="Board\BoardLength\BoardLength.cpp" />
+    <ClCompile Include="Board\NonogramBoard\NonogramBoard.cpp" />
     <ClCompile Include="Cell\Cell\Cell.cpp" />
     <ClCompile Include="Cell\Cell\Cell.h" />
     <ClCompile Include="Cell\CellColor\CellColor.h" />
@@ -137,7 +139,6 @@
     <ClCompile Include="Index\CellIndex\ColumnIndex.cpp" />
     <ClCompile Include="Index\CellIndex\ColumnIndex.h" />
     <ClCompile Include="Board\BoardLength\ColumnLength.cpp" />
-    <ClCompile Include="NonogramBoard\NonogramBoard.cpp" />
     <ClCompile Include="Placement\PlacementCountList\ColumnPlacementCountList.cpp" />
     <ClCompile Include="Placement\PlacementCountList\PlacementCountList.cpp" />
     <ClCompile Include="Placement\PlacementCountList\RowPlacementCountList.cpp" />
@@ -169,12 +170,13 @@
     <ClCompile Include="TestData\Repository\TestDataRepository.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Board\BacktrackBoard\BacktrackBoard.h" />
     <ClInclude Include="Board\BoardLength\BoardLength.h" />
+    <ClInclude Include="Board\NonogramBoard\NonogramBoard.h" />
     <ClInclude Include="Index\CellIndex\CellIndex.h" />
     <ClInclude Include="Cell\CellLocation\CellLocation.h" />
     <ClInclude Include="Hint\HintLineList\ColumnHintLineList.h" />
     <ClInclude Include="Board\BoardLength\ColumnLength.h" />
-    <ClInclude Include="NonogramBoard\NonogramBoard.h" />
     <ClInclude Include="Placement\PlacementCountList\ColumnPlacementCountList.h" />
     <ClInclude Include="Placement\PlacementCountList\PlacementCountList.h" />
     <ClInclude Include="Placement\PlacementCountList\RowPlacementCountList.h" />

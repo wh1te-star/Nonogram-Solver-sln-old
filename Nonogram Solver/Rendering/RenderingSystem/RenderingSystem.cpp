@@ -1,6 +1,5 @@
 #include "Rendering/RenderingSystem/RenderingSystem.h"
 
-#include <ctime>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "imgui.h"
@@ -40,18 +39,8 @@ int RenderingSystem::initialize() {
     io->ConfigFlags |= ImGuiConfigFlags_DockingEnable;
     io->ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
     
-    ImFontConfig font_cfg;
-    font_cfg.OversampleH = 1;
-    font_cfg.OversampleV = 1;
-    font_cfg.PixelSnapH = true;
-
     ImGui_ImplGlfw_InitForOpenGL(window, true);
     ImGui_ImplOpenGL3_Init("#version 330");
-
-	//initializeHints();
-
-    //nonogramGrid.resize(rowHintNumbers.size(), std::vector<CellState>(columnHintNumbers.size(), UNKNOWN));
-    srand(static_cast<unsigned int>(time(0)));
 
 	FontData::initFontData();
 
