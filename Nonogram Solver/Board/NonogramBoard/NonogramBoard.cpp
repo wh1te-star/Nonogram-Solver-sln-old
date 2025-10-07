@@ -9,3 +9,23 @@ NonogramBoard::NonogramBoard(
     rowHintLineList(std::move(rowHintLineList)),
     columnHintLineList(std::move(columnHintLineList)) {}
 
+Board NonogramBoard::getBoard() const {
+	return board;
+}
+
+RowLength NonogramBoard::getRowCount() const {
+	return board.getRowLength();
+}
+
+ColumnLength NonogramBoard::getColumnCount() const {
+	return board.getColumnLength();
+}
+
+RowHintLineList NonogramBoard::getRowHintLineList() const {
+	return rowHintLineList;
+}
+
+ColumnHintLineList NonogramBoard::getColumnHintLineList() const {
+	return columnHintLineList;
+}
+

@@ -30,6 +30,14 @@ const std::vector<Cell>& Board::operator[](RowIndex rowIndex) const {
     return board[rowIndex.getIndex()];
 }
 
+RowLength Board::getRowLength() const {
+	return rowLength;
+}
+
+ColumnLength Board::getColumnLength() const {
+	return columnLength;
+}
+
 ColumnIndex Board::leftMostColumnIndex() const {
 	return ColumnIndex(0);
 }

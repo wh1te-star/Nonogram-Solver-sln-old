@@ -3,8 +3,8 @@
 
 
 #include <vector>
-#include "Board/BoardLength/ColumnLength.h"
 #include "Board/BoardLength/RowLength.h"
+#include "Board/BoardLength/ColumnLength.h"
 #include "Cell/Cell/Cell.h"
 #include "Cell/CellColor/CellColor.h"
 #include "Index/Coordinate/Coordinate.h"
@@ -26,6 +26,9 @@ public:
 	std::vector<Cell>& operator[](RowIndex rowIndex);
 	const std::vector<Cell>& operator[](RowIndex rowIndex) const;
 
+	RowLength getRowLength() const;
+	ColumnLength getColumnLength() const;
+	
 	ColumnIndex leftMostColumnIndex() const;
 	ColumnIndex rightMostColumnIndex() const;
 	RowIndex topMostRowIndex() const;

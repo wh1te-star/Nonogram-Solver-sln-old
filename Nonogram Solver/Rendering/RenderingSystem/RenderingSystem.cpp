@@ -7,6 +7,8 @@
 #include "imgui_impl_opengl3.h"
 #include "imgui_internal.h"
 #include "Rendering/FontData/FontData.h"
+#include "Rendering/TableRenderer/TableRenderer.h"
+#include "TestData/Repository/TestDataRepository.h"
 
 
 RenderingSystem::RenderingSystem() :
@@ -107,9 +109,15 @@ void RenderingSystem::renderingLoop() {
 		}
 		ImGui::End();
 
-		ImGui::Begin("Nonogram Board", NULL, ImGuiWindowFlags_None);
-		//render_nonogram_table();
-		ImGui::End();
+		RowHintLineList rowHints = TestDataRepository::getRowHintLineList(TestDataRepository::EASY);
+		ColumnHintLineList columnHint = TestDataRepository::getColumnHintLineList(TestDataRepository::EASY);
+		BacktrackBoard backtrackBoard = BacktrackBoard(
+			NonogramBoard(Board(RowLength(15), ColumnLength(15)), rowHints, columnHint),
+			RowPlacementCountList({PlacementCount(1), PlacementCount(3), PlacementCount(1), PlacementCount(3), PlacementCount(1) }),
+			ColumnPlacementCountList({PlacementCount(1), PlacementCount(3), PlacementCount(1), PlacementCount(3), PlacementCount(1) })
+		);
+		TableRenderer tableRenderer = TableRenderer(backtrackBoard);
+		tableRenderer.render();
 
 		ImGui::Render();
 		ImGui::EndFrame();
