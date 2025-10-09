@@ -7,6 +7,8 @@
 class ColumnHintLineList : public HintLineList {
 public:
     explicit ColumnHintLineList(std::vector<HintLine> hintLineList);
+
+	RowLength getMaxHintLineLength() const;
 };
 
 

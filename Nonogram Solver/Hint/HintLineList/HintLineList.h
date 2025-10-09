@@ -3,7 +3,7 @@
 
 
 #include <vector>
-#include "Hint/HintLine/HintLine.h"
+#include "Board/BoardLength/BoardLength.h"
 
 class HintLineList {
 private:
@@ -12,6 +12,7 @@ protected:
 	std::vector<HintLine> hintLineList;
 
     explicit HintLineList(std::vector<HintLine> hintLineList);
+	int getMaxItemCount() const;
 
 public:
     virtual ~HintLineList() = default;
@@ -19,7 +20,6 @@ public:
     bool operator!=(const HintLineList& other) const;
 
     std::vector<HintLine> getHintLineList() const;
-    int getMaxHintLineLength();
 };
 
 #endif

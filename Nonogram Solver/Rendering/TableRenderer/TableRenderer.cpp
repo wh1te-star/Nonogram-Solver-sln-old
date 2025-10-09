@@ -7,6 +7,7 @@
 #include "imgui_impl_opengl3.h"
 #include "imgui_internal.h"
 #include "Board/BacktrackBoard/BacktrackBoard.h"
+#include "Rendering/FontData/FontData.h"
 #include <string>
 
 
@@ -17,24 +18,31 @@ TableRenderer::TableRenderer(
 void TableRenderer::render() {
 	ImGui::Begin("Nonogram Board", NULL, ImGuiWindowFlags_None);
 
-    /*
+
 	const NonogramBoard& nonogramBoard = backtrackBoard.getNonogramBoard();
 
-	const Board& nonogramGrid = nonogramBoard.getBoard();
-	const RowHintLineList& rowHintLines = nonogramBoard.getRowHintLineList();
-	const ColumnHintLineList& columnHintLines = nonogramBoard.getColumnHintLineList();
+	const Board& board = nonogramBoard.getBoard();
+	const RowHintLineList& rowHintLineList = nonogramBoard.getRowHintLineList();
+	const ColumnHintLineList& columnHintLineList = nonogramBoard.getColumnHintLineList();
 	const RowPlacementCountList& rowPlacementCountList = backtrackBoard.getRowPlacementCountList();
 	const ColumnPlacementCountList& columnPlacementCountList = backtrackBoard.getColumnPlacementCountList();
 
-	const RowLength boardRowLength = nonogramBoard.getRowLength();
+    const RowLength boardRowLength = board.getRowLength();
+    const ColumnLength boardColumnLength = board.getColumnLength();
+    const RowLength columnHintLength = columnHintLineList.getMaxHintLineLength();
+    const ColumnLength rowHintLength = rowHintLineList.getMaxHintLineLength();
+    const RowLength rowPlacementCountLength = RowLength(1);
+    const ColumnLength columnPlacementCountLength = ColumnLength(1);
+	const RowLength totalRowLength = boardRowLength + columnHintLength + rowPlacementCountLength;
+	const ColumnLength totalColumnLength = boardColumnLength + rowHintLength + columnPlacementCountLength;
 
     ImVec2 container_size = ImGui::GetContentRegionAvail();
     
-    float min_container_dim = ImMin(container_size.x / columnTotalCount, container_size.y / rowTotalCount);
+    float min_container_dim = ImMin(container_size.x / totalColumnLength.getLength(), container_size.y / totalRowLength.getLength());
     float cell_size = round(min_container_dim);
 
-    float table_width = cell_size * columnTotalCount;
-    float table_height = cell_size * rowTotalCount;
+	float table_width = cell_size * totalColumnLength.getLength();
+	float table_height = cell_size * totalRowLength.getLength();
 
     float cursor_x = (container_size.x - table_width) * 0.5f;
     float cursor_y = (container_size.y - table_height) * 0.5f;
@@ -44,15 +52,15 @@ void TableRenderer::render() {
 
     ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2(0, 0));
 
-    if (ImGui::BeginTable("NonogramGrid", columnTotalCount, ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_NoBordersInBody)) {
+    if (ImGui::BeginTable("NonogramGrid", totalColumnLength.getLength(), ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_NoBordersInBody)) {
 
-        for (int i = 0; i < columnTotalCount; ++i) {
+        for (int i = 0; i < totalColumnLength.getLength(); ++i) {
             ImGui::TableSetupColumn("##", ImGuiTableColumnFlags_WidthFixed, cell_size);
         }
 
-        for (int rowIndex = 0; rowIndex < rowTotalCount; rowIndex++) {
+        for (int rowIndex = 0; rowIndex < totalRowLength.getLength(); rowIndex++) {
             ImGui::TableNextRow(ImGuiTableRowFlags_None, cell_size);
-            for (int columnIndex = 0; columnIndex < columnTotalCount; columnIndex++) {
+            for (int columnIndex = 0; columnIndex < totalColumnLength.getLength(); columnIndex++) {
                 ImGui::TableSetColumnIndex(columnIndex);
                 
                 ImVec2 button_size = ImVec2(cell_size, cell_size);
@@ -79,7 +87,7 @@ void TableRenderer::render() {
 
                 std::string label = "";
                 if (rowIndex < tableRowHeaderCount || columnIndex < tableColumnHeaderCount) {
-					ImGui::PushFont(FontData.getFontByCellSize(cell_size));
+					ImGui::PushFont(FontData::getFontByCellSize(cell_size));
 
                     if (rowIndex >= tableRowHeaderCount) {
 						int rowHintIndex = rowIndex - tableRowHeaderCount;
@@ -123,76 +131,7 @@ void TableRenderer::render() {
         ImGui::EndTable();
     }
     ImGui::PopStyleVar();
-    */
 
-    ImVec2 container_size = ImGui::GetContentRegionAvail();
-    
-    float min_container_dim = ImMin(container_size.x / 15, container_size.y / 15);
-    float cell_size = round(min_container_dim);
-
-    float table_width = cell_size * 15;
-    float table_height = cell_size * 15;
-
-    float cursor_x = (container_size.x - table_width) * 0.5f;
-    float cursor_y = (container_size.y - table_height) * 0.5f;
-
-    if (cursor_x > 0) ImGui::SetCursorPosX(cursor_x);
-    if (cursor_y > 0) ImGui::SetCursorPosY(cursor_y);
-
-    ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2(0, 0));
-
-    if (ImGui::BeginTable("NonogramGrid", 15, ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_NoBordersInBody)) {
-
-        for (int i = 0; i < 15; ++i) {
-            ImGui::TableSetupColumn("##", ImGuiTableColumnFlags_WidthFixed, cell_size);
-        }
-
-        for (int rowIndex = 0; rowIndex < 15; rowIndex++) {
-            ImGui::TableNextRow(ImGuiTableRowFlags_None, cell_size);
-            for (int columnIndex = 0; columnIndex < 15; columnIndex++) {
-                ImGui::TableSetColumnIndex(columnIndex);
-                
-                ImVec2 button_size = ImVec2(cell_size, cell_size);
-				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.9f, 0.9f, 0.9f, 1.0f));
-                ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.4f, 0.4f, 0.4f, 1.0f));
-
-                ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.3f, 0.3f, 0.3f, 1.0f));
-
-                ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.0f);
-
-                std::string label = "10";
-                ImGui::Button(label.c_str(), button_size);
-                
-                /*
-                if (rowIndex < tableRowHeaderCount || columnIndex < tableColumnHeaderCount) {
-                    ImGui::PopFont();
-                }
-                */
-                ImGui::PopStyleVar();
-                ImGui::PopStyleColor(3);
-
-                ImDrawList* draw_list = ImGui::GetWindowDrawList();
-                ImVec2 p_min = ImGui::GetItemRectMin();
-                ImVec2 p_max = ImGui::GetItemRectMax();
-
-                float columnThickness = 1.0f;
-                float rowThickness = 1.0f;
-
-                /*
-                if (columnIndex == tableColumnHeaderCount - 1) columnThickness = 6.0f;
-                if (columnIndex >= tableColumnHeaderCount && (columnIndex - tableColumnHeaderCount) % 5 == 4) columnThickness = 3.0f;
-                
-                if (rowIndex == tableRowHeaderCount - 1) rowThickness = 6.0f;
-                if (rowIndex >= tableRowHeaderCount && (rowIndex - tableRowHeaderCount) % 5 == 4) rowThickness = 3.0f;
-                */
-
-                draw_list->AddLine(ImVec2(p_max.x, p_min.y), ImVec2(p_max.x, p_max.y), IM_COL32(0, 0, 0, 255), columnThickness);
-                draw_list->AddLine(ImVec2(p_min.x, p_max.y), ImVec2(p_max.x, p_max.y), IM_COL32(0, 0, 0, 255), rowThickness);
-            }
-        }
-        ImGui::EndTable();
-    }
-    ImGui::PopStyleVar();
 
 	ImGui::End();
 }
