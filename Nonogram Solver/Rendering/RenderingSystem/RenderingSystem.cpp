@@ -113,8 +113,8 @@ void RenderingSystem::renderingLoop() {
 		ColumnHintLineList columnHint = TestDataRepository::getColumnHintLineList(TestDataRepository::EASY);
 		BacktrackBoard backtrackBoard = BacktrackBoard(
 			NonogramBoard(Board(RowLength(15), ColumnLength(15)), rowHints, columnHint),
-			RowPlacementCountList({PlacementCount(1), PlacementCount(3), PlacementCount(1), PlacementCount(3), PlacementCount(1) }),
-			ColumnPlacementCountList({PlacementCount(1), PlacementCount(3), PlacementCount(1), PlacementCount(3), PlacementCount(1) })
+			RowPlacementCountList({PlacementCount(1), PlacementCount(3), PlacementCount(1), PlacementCount(3), PlacementCount(1),PlacementCount(1), PlacementCount(3), PlacementCount(1), PlacementCount(3), PlacementCount(1),  PlacementCount(1), PlacementCount(3), PlacementCount(1), PlacementCount(3), PlacementCount(1) }),
+			ColumnPlacementCountList({PlacementCount(1), PlacementCount(3), PlacementCount(1), PlacementCount(3), PlacementCount(1), PlacementCount(1), PlacementCount(3), PlacementCount(1), PlacementCount(3), PlacementCount(1), PlacementCount(1), PlacementCount(3), PlacementCount(1), PlacementCount(3), PlacementCount(1) })
 		);
 		TableRenderer tableRenderer = TableRenderer(backtrackBoard);
 		tableRenderer.render();

@@ -4,6 +4,7 @@
 
 #include <vector>
 #include "Board/BoardLength/BoardLength.h"
+#include "Hint/HintLine/HintLine.h"
 
 class HintLineList {
 private:

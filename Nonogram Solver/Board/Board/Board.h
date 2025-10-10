@@ -23,11 +23,10 @@ public:
 
 	bool operator==(const Board& other) const;
 	bool operator!=(const Board& other) const;
-	std::vector<Cell>& operator[](RowIndex rowIndex);
-	const std::vector<Cell>& operator[](RowIndex rowIndex) const;
 
 	RowLength getRowLength() const;
 	ColumnLength getColumnLength() const;
+	Cell getCell(Coordinate coordinate) const;
 	
 	ColumnIndex leftMostColumnIndex() const;
 	ColumnIndex rightMostColumnIndex() const;

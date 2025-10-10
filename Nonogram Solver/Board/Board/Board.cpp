@@ -22,20 +22,19 @@ bool Board::operator!=(const Board& other) const {
 	return !(*this == other);
 }
 
-std::vector<Cell>& Board::operator[](RowIndex rowIndex) {
-    return board[rowIndex.getIndex()];
-}
-
-const std::vector<Cell>& Board::operator[](RowIndex rowIndex) const {
-    return board[rowIndex.getIndex()];
-}
-
 RowLength Board::getRowLength() const {
 	return rowLength;
 }
 
 ColumnLength Board::getColumnLength() const {
 	return columnLength;
+}
+
+Cell Board::getCell(Coordinate coordinate) const {
+	assert(isInRange(coordinate));
+	RowIndex rowIndex = coordinate.getRowIndex();
+	ColumnIndex columnIndex = coordinate.getColumnIndex();
+	return board[rowIndex.getIndex()][columnIndex.getIndex()];
 }
 
 ColumnIndex Board::leftMostColumnIndex() const {
@@ -86,7 +85,7 @@ void Board::applyPlacement(Coordinate coordinate, Placement& placement) {
 	);
 
 	for(CellLocation cellLocation : placement.getCellLocationList()) {
-		colorCell(cellLocation.getCoordinate(), cellLocation.getCell().get());
+		colorCell(cellLocation.getCoordinate(), cellLocation.getCell().getColor());
 	}
 }
 

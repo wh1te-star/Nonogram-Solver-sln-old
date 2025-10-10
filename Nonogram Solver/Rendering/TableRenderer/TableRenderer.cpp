@@ -58,23 +58,30 @@ void TableRenderer::render() {
             ImGui::TableSetupColumn("##", ImGuiTableColumnFlags_WidthFixed, cell_size);
         }
 
-        for (int rowIndex = 0; rowIndex < totalRowLength.getLength(); rowIndex++) {
+        for (int rowIndexInt = 0; rowIndexInt < totalRowLength.getLength(); rowIndexInt++) {
+			RowIndex rowIndex = RowIndex(rowIndexInt);
             ImGui::TableNextRow(ImGuiTableRowFlags_None, cell_size);
-            for (int columnIndex = 0; columnIndex < totalColumnLength.getLength(); columnIndex++) {
-                ImGui::TableSetColumnIndex(columnIndex);
+            for (int columnIndexInt = 0; columnIndexInt < totalColumnLength.getLength(); columnIndexInt++) {
+				ColumnIndex columnIndex = ColumnIndex(columnIndexInt);
+                ImGui::TableSetColumnIndex(columnIndexInt);
                 
                 ImVec2 button_size = ImVec2(cell_size, cell_size);
+
+                bool isRowHintArea = rowIndex < rowHintLength;
+                bool isColumnHintArea = columnIndex < columnHintLength;
                 
-                if(rowIndex < tableRowHeaderCount && columnIndex < tableColumnHeaderCount) {
+                if(isRowHintArea && isColumnHintArea) {
                     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.5f, 0.5f, 0.5f, 1.0f));
-                } else if (rowIndex < tableRowHeaderCount) {
+                } else if (isRowHintArea) {
 					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.6f, 0.9f, 1.0f));
-                } else if (columnIndex < tableColumnHeaderCount) {
+                } else if (isColumnHintArea) {
 					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.6f, 0.6f, 1.0f));
                 } else {
-                    if(nonogramGrid[rowIndex - tableRowHeaderCount][columnIndex - tableColumnHeaderCount] == BLACK) {
+					Coordinate coordinate = Coordinate(rowIndex - columnHintLength, columnIndex - rowHintLength);
+					CellColor cellColor = board.getCell(coordinate).getColor();
+                    if(cellColor == Black) {
                         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.2f, 0.2f, 1.0f));
-                    } else if(nonogramGrid[rowIndex - tableRowHeaderCount][columnIndex - tableColumnHeaderCount] == WHITE) {
+                    } else if(cellColor == White) {
                         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
                     } else {
                         ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.9f, 0.9f, 0.9f, 1.0f));
@@ -86,28 +93,32 @@ void TableRenderer::render() {
                 ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.0f);
 
                 std::string label = "";
-                if (rowIndex < tableRowHeaderCount || columnIndex < tableColumnHeaderCount) {
+                if (isRowHintArea || isColumnHintArea) {
 					ImGui::PushFont(FontData::getFontByCellSize(cell_size));
 
-                    if (rowIndex >= tableRowHeaderCount) {
-						int rowHintIndex = rowIndex - tableRowHeaderCount;
-						int columnHintIndex = tableColumnHeaderCount - columnIndex - 1;
-                        if(columnHintIndex < rowHintNumbers[rowHintIndex].size()) {
-                            label = std::to_string(rowHintNumbers[rowHintIndex][columnHintIndex]);
+                    if (isColumnHintArea && !isRowHintArea) {
+                        RowIndex rowHintIndex = rowIndex - columnHintLength;
+						HintLine hintLine = rowHintLineList[rowHintIndex];
+
+                        ColumnIndex columnHintIndex = ColumnIndex(rowHintLength.getLength() - columnIndex.getIndex() - 1);
+                        if(columnHintIndex < ColumnLength((int)hintLine.size())) {
+                            label = std::to_string(hintLine[columnHintIndex].getNumber());
 						}
                     }
 
-                    if (columnIndex >= tableColumnHeaderCount) {
-						int columnHintIndex = columnIndex - tableColumnHeaderCount;
-                        int rowHintIndex = columnHintNumbers[columnHintIndex].size() - (tableRowHeaderCount - rowIndex - 1) - 1;
-                        if(rowHintIndex < columnHintNumbers[columnHintIndex].size()) {
-                            label = std::to_string(columnHintNumbers[columnHintIndex][rowHintIndex]);
+                    if (isRowHintArea && !isColumnHintArea) {
+                        ColumnIndex columnHintIndex = columnIndex - rowHintLength;
+						HintLine hintLine = columnHintLineList[columnHintIndex];
+
+                        RowIndex rowHintIndex = RowIndex(hintLine.size() - (columnHintLength.getLength() - rowIndex.getIndex() - 1) - 1);
+                        if(rowHintIndex < RowLength((int)hintLine.size())) {
+                            label = std::to_string(hintLine[rowHintIndex].getNumber());
 						}
                     }
                 }
                 ImGui::Button(label.c_str(), button_size);
                 
-                if (rowIndex < tableRowHeaderCount || columnIndex < tableColumnHeaderCount) {
+                if (isRowHintArea || isColumnHintArea) {
                     ImGui::PopFont();
                 }
                 ImGui::PopStyleVar();
@@ -117,6 +128,7 @@ void TableRenderer::render() {
                 ImVec2 p_min = ImGui::GetItemRectMin();
                 ImVec2 p_max = ImGui::GetItemRectMax();
 
+                /*
                 float columnThickness = 1.0f;
                 if (columnIndex == tableColumnHeaderCount - 1) columnThickness = 6.0f;
                 if (columnIndex >= tableColumnHeaderCount && (columnIndex - tableColumnHeaderCount) % 5 == 4) columnThickness = 3.0f;
@@ -126,6 +138,7 @@ void TableRenderer::render() {
                 if (rowIndex == tableRowHeaderCount - 1) rowThickness = 6.0f;
                 if (rowIndex >= tableRowHeaderCount && (rowIndex - tableRowHeaderCount) % 5 == 4) rowThickness = 3.0f;
                 draw_list->AddLine(ImVec2(p_min.x, p_max.y), ImVec2(p_max.x, p_max.y), IM_COL32(0, 0, 0, 255), rowThickness);
+                */
             }
         }
         ImGui::EndTable();

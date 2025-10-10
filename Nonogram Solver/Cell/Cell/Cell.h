@@ -12,7 +12,7 @@ public:
     explicit Cell();
     explicit Cell(CellColor color);
 
-    CellColor get() const;
+    CellColor getColor() const;
 
     bool operator==(const Cell& other) const;
     bool operator!=(const Cell& other) const;

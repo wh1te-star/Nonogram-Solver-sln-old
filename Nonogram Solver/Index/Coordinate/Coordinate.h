@@ -4,6 +4,8 @@
 
 #include "Index/CellIndex/RowIndex.h"
 #include "Index/CellIndex/ColumnIndex.h"
+#include "Board/BoardLength/RowLength.h"
+#include "Board/BoardLength/ColumnLength.h"
 
 class Coordinate {
 private:
@@ -20,6 +22,7 @@ public:
     ColumnIndex getColumnIndex() const;
 
     Coordinate move(int rowShift, int columnShift) const;
+    Coordinate move(RowLength rowShift, ColumnLength columnShift) const;
 };
 
 #endif

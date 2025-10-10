@@ -11,6 +11,10 @@ bool HintLine::operator!=(const HintLine& other) const {
 	return !(*this == other);
 }
 
+HintNumber HintLine::operator[](CellIndex index) const {
+	return numbers[index.getIndex()];
+}
+
 size_t HintLine::size() const {
 	return numbers.size();
 }

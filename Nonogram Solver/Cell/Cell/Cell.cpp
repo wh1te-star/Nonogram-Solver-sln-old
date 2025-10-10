@@ -5,7 +5,7 @@ Cell::Cell() : color(None) {}
 
 Cell::Cell(CellColor color) : color(color) {}
 
-CellColor Cell::get() const {
+CellColor Cell::getColor() const {
     return color;
 }
 
