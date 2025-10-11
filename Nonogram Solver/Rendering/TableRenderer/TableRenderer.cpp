@@ -52,6 +52,13 @@ void TableRenderer::render() {
     if (cursor_x > 0) ImGui::SetCursorPosX(cursor_x);
     if (cursor_y > 0) ImGui::SetCursorPosY(cursor_y);
 
+	ImVec4 outOfBoardVec4 = ImVec4(0.5f, 0.5f, 0.5f, 1.0f);
+	ImVec4 rowHintColorVec4 = ImVec4(0.8f, 0.8f, 0.9f, 1.0f);
+	ImVec4 columnHintColorVec4 = ImVec4(0.8f, 0.9f, 0.8f, 1.0f);
+    ImVec4 blackVec4 = ImVec4(0.2f, 0.2f, 0.2f, 1.0f);
+	ImVec4 whiteVec4 = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
+    ImVec4 emptyVec4 = ImVec4(0.9f, 0.9f, 0.9f, 1.0f);
+
     ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2(0, 0));
 
     if (ImGui::BeginTable("NonogramGrid", totalColumnLength.getLength(), ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_NoBordersInBody)) {
@@ -72,20 +79,20 @@ void TableRenderer::render() {
                 bool isColumnHintArea = rowIndex < columnHintLength;
                 bool isRowHintArea = columnIndex < rowHintLength;
                 if(isRowHintArea && isColumnHintArea) {
-                    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.5f, 0.5f, 0.5f, 1.0f));
+                    ImGui::PushStyleColor(ImGuiCol_Button, outOfBoardVec4);
                 } else if (isRowHintArea) {
-					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.6f, 0.9f, 1.0f));
+					ImGui::PushStyleColor(ImGuiCol_Button, rowHintColorVec4);
                 } else if (isColumnHintArea) {
-					ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.6f, 0.6f, 0.6f, 1.0f));
+					ImGui::PushStyleColor(ImGuiCol_Button, columnHintColorVec4);
                 } else {
 					Coordinate coordinate = Coordinate(rowIndex - columnHintLength, columnIndex - rowHintLength);
 					CellColor cellColor = board.getCell(coordinate).getColor();
                     if(cellColor == Black) {
-                        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.2f, 0.2f, 1.0f));
+                        ImGui::PushStyleColor(ImGuiCol_Button, blackVec4);
                     } else if(cellColor == White) {
-                        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
+                        ImGui::PushStyleColor(ImGuiCol_Button, whiteVec4);
                     } else {
-                        ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.9f, 0.9f, 0.9f, 1.0f));
+                        ImGui::PushStyleColor(ImGuiCol_Button, emptyVec4);
                     }
                 }
                 ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.4f, 0.4f, 0.4f, 1.0f));
@@ -95,6 +102,7 @@ void TableRenderer::render() {
 
                 std::string label = "";
                 if (isRowHintArea || isColumnHintArea) {
+					ImGui::PushStyleColor(ImGuiCol_Text, blackVec4);
 					ImGui::PushFont(FontData::getFontByCellSize(cell_size));
 
                     if (isRowHintArea && !isColumnHintArea) {
@@ -123,6 +131,7 @@ void TableRenderer::render() {
                 
                 if (isRowHintArea || isColumnHintArea) {
                     ImGui::PopFont();
+					ImGui::PopStyleColor(1);
                 }
                 ImGui::PopStyleVar();
                 ImGui::PopStyleColor(3);
