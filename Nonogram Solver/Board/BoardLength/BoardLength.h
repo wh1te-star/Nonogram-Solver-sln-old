@@ -8,14 +8,6 @@ protected:
 
 public:
     int getLength() const;
-    
-    bool operator==(const BoardLength& other) const;
-    bool operator!=(const BoardLength& other) const;
-    bool operator<(const BoardLength& other) const;
-    bool operator<=(const BoardLength& other) const;
-    bool operator>(const BoardLength& other) const;
-    bool operator>=(const BoardLength& other) const;
-
 };
 
 #endif

@@ -3,7 +3,7 @@
 
 
 #include "Index/CellIndex/CellIndex.h"
-#include "Board/BoardLength/ColumnLength.h"
+class ColumnLength;
 
 class ColumnIndex : public CellIndex {
 public:
@@ -11,6 +11,17 @@ public:
 
     ColumnIndex operator+(ColumnLength shift) const;
     ColumnIndex operator-(ColumnLength shift) const;
+
+    bool operator==(const ColumnIndex& other) const;
+    bool operator!=(const ColumnIndex& other) const;
+    bool operator<(const ColumnIndex& other) const;
+    bool operator<=(const ColumnIndex& other) const;
+    bool operator>(const ColumnIndex& other) const;
+    bool operator>=(const ColumnIndex& other) const;
+    bool operator<(const ColumnLength& other) const;
+    bool operator<=(const ColumnLength& other) const;
+    bool operator>(const ColumnLength& other) const;
+    bool operator>=(const ColumnLength& other) const;
 };
 
 #endif

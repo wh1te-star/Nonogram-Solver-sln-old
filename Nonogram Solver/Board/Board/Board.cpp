@@ -37,29 +37,13 @@ Cell Board::getCell(Coordinate coordinate) const {
 	return board[rowIndex.getIndex()][columnIndex.getIndex()];
 }
 
-ColumnIndex Board::leftMostColumnIndex() const {
-	return ColumnIndex(0);
-}
-
-ColumnIndex Board::rightMostColumnIndex() const {
-	return ColumnIndex(columnLength.getLength() - 1);
-}
-
-RowIndex Board::topMostRowIndex() const {
-	return RowIndex(0);
-}
-
-RowIndex Board::bottomMostRowIndex() const {
-	return RowIndex(rowLength.getLength() - 1);
-}
-
 bool Board::isInRange(Coordinate coordinate) const {
 	RowIndex rowIndex = coordinate.getRowIndex();
 	ColumnIndex columnIndex = coordinate.getColumnIndex();
-	if (columnIndex < leftMostColumnIndex() || rightMostColumnIndex() < columnIndex) {
+	if (columnIndex < ColumnLength(0) || columnLength < columnIndex) {
 		return false;
 	}
-	if(rowIndex < topMostRowIndex() || bottomMostRowIndex() < rowIndex) {
+	if(rowIndex < RowLength(0) || rowLength < rowIndex) {
 		return false;
 	}
 	return true;

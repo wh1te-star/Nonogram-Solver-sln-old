@@ -28,10 +28,6 @@ public:
 	ColumnLength getColumnLength() const;
 	Cell getCell(Coordinate coordinate) const;
 	
-	ColumnIndex leftMostColumnIndex() const;
-	ColumnIndex rightMostColumnIndex() const;
-	RowIndex topMostRowIndex() const;
-	RowIndex bottomMostRowIndex() const;
 	bool isInRange(Coordinate coordinate) const;
 	void colorCell(Coordinate coordinate, CellColor cellColor);
 	void applyPlacement(Coordinate coordinate, Placement& placement);

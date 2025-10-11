@@ -12,3 +12,43 @@ RowIndex RowIndex::operator+(RowLength shift) const {
 RowIndex RowIndex::operator-(RowLength shift) const {
     return RowIndex(index - shift.getLength());
 }
+
+bool RowIndex::operator==(const RowIndex& other) const {
+	return index == other.index;
+}
+
+bool RowIndex::operator!=(const RowIndex& other) const {
+	return index != other.index;
+}
+
+bool RowIndex::operator<(const RowIndex& other) const {
+	return index < other.index;
+}
+
+bool RowIndex::operator<=(const RowIndex& other) const {
+	return index <= other.index;
+}
+
+bool RowIndex::operator>(const RowIndex& other) const {
+	return index > other.index;
+}
+
+bool RowIndex::operator>=(const RowIndex& other) const {
+	return index >= other.index;
+}
+bool RowIndex::operator<(const RowLength& other) const {
+	return index < other.getLength();
+}
+
+bool RowIndex::operator<=(const RowLength& other) const {
+	return index <= other.getLength();
+}
+
+bool RowIndex::operator>(const RowLength& other) const {
+	return index > other.getLength();
+}
+
+bool RowIndex::operator>=(const RowLength& other) const {
+	return index >= other.getLength();
+}
+

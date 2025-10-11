@@ -11,18 +11,6 @@ protected:
 
 public:
     int getIndex() const;
-    
-    bool operator==(const CellIndex& other) const;
-    bool operator!=(const CellIndex& other) const;
-    bool operator<(const CellIndex& other) const;
-    bool operator<=(const CellIndex& other) const;
-    bool operator>(const CellIndex& other) const;
-    bool operator>=(const CellIndex& other) const;
-    bool operator<(const BoardLength& other) const;
-    bool operator<=(const BoardLength& other) const;
-    bool operator>(const BoardLength& other) const;
-    bool operator>=(const BoardLength& other) const;
-
 };
 
 #endif
