@@ -131,17 +131,23 @@ void TableRenderer::render() {
                 ImVec2 p_min = ImGui::GetItemRectMin();
                 ImVec2 p_max = ImGui::GetItemRectMax();
 
-                /*
                 float columnThickness = 1.0f;
-                if (columnIndex == tableColumnHeaderCount - 1) columnThickness = 6.0f;
-                if (columnIndex >= tableColumnHeaderCount && (columnIndex - tableColumnHeaderCount) % 5 == 4) columnThickness = 3.0f;
+                if (columnIndex.getIndex() == rowHintLength.getLength() - 1) {
+                    columnThickness = 6.0f;
+                }
+                if (columnIndex.getIndex() >= rowHintLength.getLength() && (columnIndex.getIndex() - rowHintLength.getLength()) % 5 == 4) {
+                    columnThickness = 3.0f;
+                }
                 draw_list->AddLine(ImVec2(p_max.x, p_min.y), ImVec2(p_max.x, p_max.y), IM_COL32(0, 0, 0, 255), columnThickness);
                 
                 float rowThickness = 1.0f;
-                if (rowIndex == tableRowHeaderCount - 1) rowThickness = 6.0f;
-                if (rowIndex >= tableRowHeaderCount && (rowIndex - tableRowHeaderCount) % 5 == 4) rowThickness = 3.0f;
+                if (rowIndex.getIndex() == columnHintLength.getLength() - 1) {
+                    rowThickness = 6.0f;
+                }
+                if (rowIndex.getIndex() >= columnHintLength.getLength() && (rowIndex.getIndex() - columnHintLength.getLength()) % 5 == 4) {
+                    rowThickness = 3.0f;
+                }
                 draw_list->AddLine(ImVec2(p_min.x, p_max.y), ImVec2(p_max.x, p_max.y), IM_COL32(0, 0, 0, 255), rowThickness);
-                */
             }
         }
         ImGui::EndTable();
