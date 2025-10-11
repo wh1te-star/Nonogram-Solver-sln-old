@@ -140,6 +140,7 @@
     <ClCompile Include="Index\CellIndex\ColumnIndex.cpp" />
     <ClCompile Include="Index\CellIndex\ColumnIndex.h" />
     <ClCompile Include="Board\BoardLength\ColumnLength.cpp" />
+    <ClCompile Include="Notifier\RenderNotifier.cpp" />
     <ClCompile Include="Placement\PlacementCountList\ColumnPlacementCountList.cpp" />
     <ClCompile Include="Placement\PlacementCountList\PlacementCountList.cpp" />
     <ClCompile Include="Placement\PlacementCountList\RowPlacementCountList.cpp" />
@@ -180,6 +181,7 @@
     <ClInclude Include="Cell\CellLocation\CellLocation.h" />
     <ClInclude Include="Hint\HintLineList\ColumnHintLineList.h" />
     <ClInclude Include="Board\BoardLength\ColumnLength.h" />
+    <ClInclude Include="Notifier\RenderNotifier.h" />
     <ClInclude Include="Placement\PlacementCountList\ColumnPlacementCountList.h" />
     <ClInclude Include="Placement\PlacementCountList\PlacementCountList.h" />
     <ClInclude Include="Placement\PlacementCountList\RowPlacementCountList.h" />
