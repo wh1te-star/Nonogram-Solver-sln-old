@@ -2,7 +2,11 @@
 #define TABLERENDERER_H
 
 
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
+#include "imgui.h"
 #include "Board/BacktrackBoard/BacktrackBoard.h"
+#include <string>
 
 class TableRenderer {
 private:
@@ -22,6 +26,37 @@ public:
 	void render();
 
 private:
+	CellType determineCellType(
+		RowIndex rowIndex,
+		ColumnIndex columnIndex,
+		RowLength columnHintLength,
+		ColumnLength rowHintLength,
+		RowLength boardRowLength,
+		ColumnLength boardColumnLength
+	);
+
+	void setupCellStyle(
+		RowIndex rowIndex,
+		ColumnIndex columnIndex,
+		RowLength columnHintLength,
+		ColumnLength rowHintLength,
+		Board board,
+		CellType cellType
+	);
+
+	std::string setLabel(
+		RowIndex rowIndex,
+		ColumnIndex columnIndex,
+		CellType cellType,
+		RowLength columnHintLength,
+		ColumnLength rowHintLength,
+		RowHintLineList rowHintLineList,
+		ColumnHintLineList columnHintLineList,
+		RowPlacementCountList rowPlacementCountList,
+		ColumnPlacementCountList columnPlacementCountList,
+		float cell_size
+	);
+
 	void drawGridLine(
 		RowIndex rowIndex,
 		ColumnIndex columnIndex,

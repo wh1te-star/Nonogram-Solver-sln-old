@@ -40,13 +40,6 @@ void TableRenderer::render() {
 	const RowLength totalRowLength = columnHintLength + boardRowLength + columnPlacementCountLength;
 	const ColumnLength totalColumnLength = rowHintLength + boardColumnLength + rowPlacementCountLength;
 
-	const ImVec4 outOfBoardVec4 = ImVec4(0.5f, 0.5f, 0.5f, 1.0f);
-	const ImVec4 rowHintColorVec4 = ImVec4(0.8f, 0.8f, 0.9f, 1.0f);
-	const ImVec4 columnHintColorVec4 = ImVec4(0.8f, 0.9f, 0.8f, 1.0f);
-	const ImVec4 blackVec4 = ImVec4(0.2f, 0.2f, 0.2f, 1.0f);
-	const ImVec4 whiteVec4 = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
-	const ImVec4 emptyVec4 = ImVec4(0.9f, 0.9f, 0.9f, 1.0f);
-
 	ImVec2 container_size = ImGui::GetContentRegionAvail();
 
 	float min_container_dim = ImMin(container_size.x / totalColumnLength.getLength(), container_size.y / totalRowLength.getLength());
@@ -78,96 +71,29 @@ void TableRenderer::render() {
 
 				ImVec2 button_size = ImVec2(cell_size, cell_size);
 
-				CellType cellType = OUT_OF_BOARD;
-				if (rowHintLength <= columnIndex && columnIndex < rowHintLength + boardColumnLength) {
-					if (rowIndex < columnHintLength) {
-						cellType = COLUMN_HINT;
-					}
-					else if (rowIndex < columnHintLength + boardRowLength) {
-						cellType = BOARD_CELL;
-					}
-					else {
-						cellType = COLUMN_PLACEMENT_COUNT;
-					}
-				}
-				if (columnHintLength <= rowIndex && rowIndex < columnHintLength + boardRowLength) {
-					if (columnIndex < rowHintLength) {
-						cellType = ROW_HINT;
-					}
-					else if (columnIndex < rowHintLength + boardColumnLength) {
-						cellType = BOARD_CELL;
-					}
-					else {
-						cellType = ROW_PLACEMENT_COUNT;
-					}
-				}
+				CellType cellType = determineCellType(rowIndex, columnIndex, columnHintLength, rowHintLength, boardRowLength, boardColumnLength);
 
+				setupCellStyle(
+					rowIndex,
+					columnIndex,
+					columnHintLength,
+					rowHintLength,
+					board,
+					cellType
+				);
 
-				if (cellType == OUT_OF_BOARD) {
-					ImGui::PushStyleColor(ImGuiCol_Button, outOfBoardVec4);
-				}
-				else if (cellType == ROW_PLACEMENT_COUNT || cellType == ROW_HINT) {
-					ImGui::PushStyleColor(ImGuiCol_Button, rowHintColorVec4);
-				}
-				else if (cellType == COLUMN_PLACEMENT_COUNT || cellType == COLUMN_HINT) {
-					ImGui::PushStyleColor(ImGuiCol_Button, columnHintColorVec4);
-				}
-				else {
-					Coordinate coordinate = Coordinate(rowIndex - columnHintLength, columnIndex - rowHintLength);
-					CellColor cellColor = board.getCell(coordinate).getColor();
-					if (cellColor == Black) {
-						ImGui::PushStyleColor(ImGuiCol_Button, blackVec4);
-					}
-					else if (cellColor == White) {
-						ImGui::PushStyleColor(ImGuiCol_Button, whiteVec4);
-					}
-					else {
-						ImGui::PushStyleColor(ImGuiCol_Button, emptyVec4);
-					}
-				}
-				ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.4f, 0.4f, 0.4f, 1.0f));
-				ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.3f, 0.3f, 0.3f, 1.0f));
-				ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.0f);
-
-				std::string label = "";
-				if (cellType == ROW_PLACEMENT_COUNT || cellType == ROW_HINT || cellType == COLUMN_PLACEMENT_COUNT || cellType == COLUMN_HINT) {
-					ImGui::PushStyleColor(ImGuiCol_Text, blackVec4);
-					ImGui::PushFont(FontData::getFontByCellSize(cell_size));
-
-					if (cellType == ROW_HINT) {
-						RowIndex HintLineIndex = rowIndex - columnHintLength;
-						HintLine hintLine = rowHintLineList[HintLineIndex];
-
-						ColumnIndex HintNumberIndex = ColumnIndex(columnIndex.getIndex() + hintLine.size() - rowHintLength.getLength());
-						if (HintNumberIndex >= ColumnIndex(0)) {
-							assert(HintNumberIndex < ColumnLength((int)hintLine.size()));
-							label = std::to_string(hintLine[HintNumberIndex].getNumber());
-						}
-					}
-
-					if (cellType == COLUMN_HINT) {
-						ColumnIndex HintLineIndex = columnIndex - rowHintLength;
-						HintLine hintLine = columnHintLineList[HintLineIndex];
-
-						RowIndex HintNumberIndex = RowIndex(rowIndex.getIndex() + hintLine.size() - columnHintLength.getLength());
-						if (HintNumberIndex >= RowIndex(0)) {
-							assert(HintNumberIndex < RowLength((int)hintLine.size()));
-							label = std::to_string(hintLine[HintNumberIndex].getNumber());
-						}
-					}
-
-					if(cellType == ROW_PLACEMENT_COUNT) {
-						RowIndex placementCountIndex = rowIndex - columnHintLength;
-						PlacementCount placementCount = rowPlacementCountList[placementCountIndex];
-						label = std::to_string(placementCount.getCount());
-					}
-
-					if(cellType == COLUMN_PLACEMENT_COUNT) {
-						ColumnIndex placementCountIndex = columnIndex - rowHintLength;
-						PlacementCount placementCount = columnPlacementCountList[placementCountIndex];
-						label = std::to_string(placementCount.getCount());
-					}
-				}
+				std::string label = setLabel(
+					rowIndex,
+					columnIndex,
+					cellType,
+					columnHintLength,
+					rowHintLength,
+					rowHintLineList,
+					columnHintLineList,
+					rowPlacementCountList,
+					columnPlacementCountList,
+					cell_size
+				);
 				ImGui::Button(label.c_str(), button_size);
 
 				if (cellType == ROW_PLACEMENT_COUNT || cellType == ROW_HINT || cellType == COLUMN_PLACEMENT_COUNT || cellType == COLUMN_HINT) {
@@ -186,6 +112,136 @@ void TableRenderer::render() {
 
 		ImGui::End();
 	}
+}
+
+TableRenderer::CellType TableRenderer::determineCellType(
+	RowIndex rowIndex,
+	ColumnIndex columnIndex,
+	RowLength columnHintLength,
+	ColumnLength rowHintLength,
+	RowLength boardRowLength,
+	ColumnLength boardColumnLength
+) { 
+	if (rowHintLength <= columnIndex && columnIndex < rowHintLength + boardColumnLength) {
+		if (rowIndex < columnHintLength) {
+			return COLUMN_HINT;
+		}
+		else if (rowIndex < columnHintLength + boardRowLength) {
+			return BOARD_CELL;
+		}
+		else {
+			return COLUMN_PLACEMENT_COUNT;
+		}
+	}
+	if (columnHintLength <= rowIndex && rowIndex < columnHintLength + boardRowLength) {
+		if (columnIndex < rowHintLength) {
+			return ROW_HINT;
+		}
+		else if (columnIndex < rowHintLength + boardColumnLength) {
+			return BOARD_CELL;
+		}
+		else {
+			return ROW_PLACEMENT_COUNT;
+		}
+	}
+	return OUT_OF_BOARD;
+}
+
+void TableRenderer::setupCellStyle(
+	RowIndex rowIndex,
+	ColumnIndex columnIndex,
+	RowLength columnHintLength,
+	ColumnLength rowHintLength,
+	Board board,
+	CellType cellType
+) {
+	const ImVec4 outOfBoardVec4 = ImVec4(0.5f, 0.5f, 0.5f, 1.0f);
+	const ImVec4 rowHintColorVec4 = ImVec4(0.8f, 0.8f, 0.9f, 1.0f);
+	const ImVec4 columnHintColorVec4 = ImVec4(0.8f, 0.9f, 0.8f, 1.0f);
+	const ImVec4 blackVec4 = ImVec4(0.2f, 0.2f, 0.2f, 1.0f);
+	const ImVec4 whiteVec4 = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
+	const ImVec4 emptyVec4 = ImVec4(0.9f, 0.9f, 0.9f, 1.0f);
+
+	if (cellType == OUT_OF_BOARD) {
+		ImGui::PushStyleColor(ImGuiCol_Button, outOfBoardVec4);
+	}
+	else if (cellType == ROW_PLACEMENT_COUNT || cellType == ROW_HINT) {
+		ImGui::PushStyleColor(ImGuiCol_Button, rowHintColorVec4);
+	}
+	else if (cellType == COLUMN_PLACEMENT_COUNT || cellType == COLUMN_HINT) {
+		ImGui::PushStyleColor(ImGuiCol_Button, columnHintColorVec4);
+	}
+	else {
+		Coordinate coordinate = Coordinate(rowIndex - columnHintLength, columnIndex - rowHintLength);
+		CellColor cellColor = board.getCell(coordinate).getColor();
+		if (cellColor == Black) {
+			ImGui::PushStyleColor(ImGuiCol_Button, blackVec4);
+		}
+		else if (cellColor == White) {
+			ImGui::PushStyleColor(ImGuiCol_Button, whiteVec4);
+		}
+		else {
+			ImGui::PushStyleColor(ImGuiCol_Button, emptyVec4);
+		}
+	}
+	ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.4f, 0.4f, 0.4f, 1.0f));
+	ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.3f, 0.3f, 0.3f, 1.0f));
+	ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 0.0f);
+}
+
+std::string TableRenderer::setLabel(
+	RowIndex rowIndex,
+	ColumnIndex columnIndex,
+	CellType cellType,
+	RowLength columnHintLength,
+	ColumnLength rowHintLength,
+	RowHintLineList rowHintLineList,
+	ColumnHintLineList columnHintLineList,
+	RowPlacementCountList rowPlacementCountList,
+	ColumnPlacementCountList columnPlacementCountList,
+	float cell_size
+) {
+	ImVec4 fontColorVec4 = ImVec4(0.2f, 0.2f, 0.2f, 1.0f);
+	if (cellType == ROW_PLACEMENT_COUNT || cellType == ROW_HINT || cellType == COLUMN_PLACEMENT_COUNT || cellType == COLUMN_HINT) {
+		ImGui::PushStyleColor(ImGuiCol_Text, fontColorVec4);
+		ImGui::PushFont(FontData::getFontByCellSize(cell_size));
+
+		if (cellType == ROW_HINT) {
+			RowIndex HintLineIndex = rowIndex - columnHintLength;
+			HintLine hintLine = rowHintLineList[HintLineIndex];
+
+			ColumnIndex HintNumberIndex = ColumnIndex(columnIndex.getIndex() + hintLine.size() - rowHintLength.getLength());
+			if (HintNumberIndex >= ColumnIndex(0)) {
+				assert(HintNumberIndex < ColumnLength((int)hintLine.size()));
+				return std::to_string(hintLine[HintNumberIndex].getNumber());
+			}
+		}
+
+		if (cellType == COLUMN_HINT) {
+			ColumnIndex HintLineIndex = columnIndex - rowHintLength;
+			HintLine hintLine = columnHintLineList[HintLineIndex];
+
+			RowIndex HintNumberIndex = RowIndex(rowIndex.getIndex() + hintLine.size() - columnHintLength.getLength());
+			if (HintNumberIndex >= RowIndex(0)) {
+				assert(HintNumberIndex < RowLength((int)hintLine.size()));
+				return std::to_string(hintLine[HintNumberIndex].getNumber());
+			}
+		}
+
+		if (cellType == ROW_PLACEMENT_COUNT) {
+			RowIndex placementCountIndex = rowIndex - columnHintLength;
+			PlacementCount placementCount = rowPlacementCountList[placementCountIndex];
+			return std::to_string(placementCount.getCount());
+		}
+
+		if (cellType == COLUMN_PLACEMENT_COUNT) {
+			ColumnIndex placementCountIndex = columnIndex - rowHintLength;
+			PlacementCount placementCount = columnPlacementCountList[placementCountIndex];
+			return std::to_string(placementCount.getCount());
+		}
+	}
+
+	return "";
 }
 
 void TableRenderer::drawGridLine(
