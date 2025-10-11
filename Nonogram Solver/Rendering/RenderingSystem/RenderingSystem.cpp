@@ -73,10 +73,11 @@ void RenderingSystem::renderingLoop() {
 			PlacementCount(26), PlacementCount(27), PlacementCount(28), PlacementCount(29), PlacementCount(30),
 		})
 	);
-	TableRenderer tableRenderer = TableRenderer(backtrackBoard);
 
 	BacktrackAlgorithm algorithm(backtrackBoard);
 	std::thread worker_thread(&BacktrackAlgorithm::run, &algorithm);
+
+	int count = 0;
 
 	while (!glfwWindowShouldClose(window)) {
 		glfwPollEvents();
@@ -135,6 +136,7 @@ void RenderingSystem::renderingLoop() {
 		}
 		ImGui::End();
 
+		TableRenderer tableRenderer = TableRenderer(backtrackBoard);
 		tableRenderer.render();
 
 		ImGui::Render();
@@ -156,6 +158,12 @@ void RenderingSystem::renderingLoop() {
 		glfwSwapBuffers(window);
 
 		printf("loop");
+		Board& board = backtrackBoard.getNonogramBoard().getBoard();
+		board.setCell(
+			Coordinate(RowIndex(count/10), ColumnIndex(count%10)),
+			Cell(CellColor::Black)
+		);
+		count = (count + 1) % 200;
 	}
 
 	algorithm.request_stop();

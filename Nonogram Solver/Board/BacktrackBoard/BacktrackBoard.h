@@ -19,7 +19,7 @@ public:
 		ColumnPlacementCountList columnPlacementCountList
 	);
 
-	NonogramBoard getNonogramBoard() const;
+	NonogramBoard& getNonogramBoard();
 	RowPlacementCountList getRowPlacementCountList() const;
 	ColumnPlacementCountList getColumnPlacementCountList() const;
 };

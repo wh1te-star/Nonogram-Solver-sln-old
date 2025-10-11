@@ -37,6 +37,13 @@ Cell Board::getCell(Coordinate coordinate) const {
 	return board[rowIndex.getIndex()][columnIndex.getIndex()];
 }
 
+void Board::setCell(Coordinate coordinate, Cell cell) {
+	assert(isInRange(coordinate));
+	RowIndex rowIndex = coordinate.getRowIndex();
+	ColumnIndex columnIndex = coordinate.getColumnIndex();
+	board[rowIndex.getIndex()][columnIndex.getIndex()] = cell;
+}
+
 bool Board::isInRange(Coordinate coordinate) const {
 	RowIndex rowIndex = coordinate.getRowIndex();
 	ColumnIndex columnIndex = coordinate.getColumnIndex();

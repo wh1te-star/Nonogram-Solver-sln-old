@@ -27,6 +27,7 @@ public:
 	RowLength getRowLength() const;
 	ColumnLength getColumnLength() const;
 	Cell getCell(Coordinate coordinate) const;
+	void setCell(Coordinate coordinate, Cell cell);
 	
 	bool isInRange(Coordinate coordinate) const;
 	void colorCell(Coordinate coordinate, CellColor cellColor);

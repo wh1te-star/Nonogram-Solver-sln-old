@@ -23,9 +23,9 @@ void TableRenderer::render() {
 	ImGui::Begin("Nonogram Board", NULL, ImGuiWindowFlags_None);
 
 
-	const NonogramBoard& nonogramBoard = backtrackBoard.getNonogramBoard();
+	NonogramBoard& nonogramBoard = backtrackBoard.getNonogramBoard();
 
-	const Board& board = nonogramBoard.getBoard();
+	Board& board = nonogramBoard.getBoard();
 	const RowHintLineList& rowHintLineList = nonogramBoard.getRowHintLineList();
 	const ColumnHintLineList& columnHintLineList = nonogramBoard.getColumnHintLineList();
 	const RowPlacementCountList& rowPlacementCountList = backtrackBoard.getRowPlacementCountList();

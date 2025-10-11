@@ -9,7 +9,7 @@ NonogramBoard::NonogramBoard(
     rowHintLineList(std::move(rowHintLineList)),
     columnHintLineList(std::move(columnHintLineList)) {}
 
-Board NonogramBoard::getBoard() const {
+Board& NonogramBoard::getBoard() {
 	return board;
 }
 
