@@ -3,10 +3,13 @@
 
 
 #include "Placement/PlacementCountList/PlacementCountList.h"
+#include "Index/CellIndex/ColumnIndex.h"
 
 class ColumnPlacementCountList : public PlacementCountList {
 public:
     explicit ColumnPlacementCountList(std::vector<PlacementCount> placementCountList);
+
+    PlacementCount operator[](ColumnIndex index) const;
 };
 
 

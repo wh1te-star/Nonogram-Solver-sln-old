@@ -114,8 +114,20 @@ void RenderingSystem::renderingLoop() {
 		BacktrackBoard backtrackBoard = BacktrackBoard(
 			//NonogramBoard(Board(RowLength(rowHintLineList.getMaxHintLineLength().getLength()), ColumnLength(columnHintLineList.getMaxHintLineLength().getLength())), rowHintLineList, columnHintLineList),
 			NonogramBoard(Board(RowLength(20), ColumnLength(30)), rowHintLineList, columnHintLineList),
-			RowPlacementCountList({PlacementCount(1), PlacementCount(3), PlacementCount(1), PlacementCount(3), PlacementCount(1),PlacementCount(1), PlacementCount(3), PlacementCount(1), PlacementCount(3), PlacementCount(1),  PlacementCount(1), PlacementCount(3), PlacementCount(1), PlacementCount(3), PlacementCount(1) }),
-			ColumnPlacementCountList({PlacementCount(1), PlacementCount(3), PlacementCount(1), PlacementCount(3), PlacementCount(1), PlacementCount(1), PlacementCount(3), PlacementCount(1), PlacementCount(3), PlacementCount(1), PlacementCount(1), PlacementCount(3), PlacementCount(1), PlacementCount(3), PlacementCount(1) })
+			RowPlacementCountList({
+				PlacementCount(1), PlacementCount(2), PlacementCount(3), PlacementCount(4), PlacementCount(5), 
+				PlacementCount(6), PlacementCount(7), PlacementCount(8), PlacementCount(9), PlacementCount(10), 
+				PlacementCount(11), PlacementCount(12), PlacementCount(13), PlacementCount(14), PlacementCount(15), 
+				PlacementCount(16), PlacementCount(17), PlacementCount(18), PlacementCount(19), PlacementCount(20), 
+			}),
+			ColumnPlacementCountList({
+				PlacementCount(1), PlacementCount(2), PlacementCount(3), PlacementCount(4), PlacementCount(5), 
+				PlacementCount(6), PlacementCount(7), PlacementCount(8), PlacementCount(9), PlacementCount(10), 
+				PlacementCount(11), PlacementCount(12), PlacementCount(13), PlacementCount(14), PlacementCount(15), 
+				PlacementCount(16), PlacementCount(17), PlacementCount(18), PlacementCount(19), PlacementCount(20), 
+				PlacementCount(21), PlacementCount(22), PlacementCount(23), PlacementCount(24), PlacementCount(25), 
+				PlacementCount(26), PlacementCount(27), PlacementCount(28), PlacementCount(29), PlacementCount(30), 
+			})
 		);
 		TableRenderer tableRenderer = TableRenderer(backtrackBoard);
 		tableRenderer.render();
