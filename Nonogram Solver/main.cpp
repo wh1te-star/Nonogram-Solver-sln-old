@@ -14,19 +14,6 @@
 #include "Rendering/RenderingSystem/RenderingSystem.h"
 
 /*
-std::vector<std::vector<int>> columnHintNumbers;
-std::vector<std::vector<int>> rowHintNumbers;
-
-int tableRowHeaderCount;
-int tableColumnHeaderCount;
-
-int rowPlacementCells = 1;
-int columnPlacementCountCells = 1;
-std::vector<int> rowPlacementCounts;
-std::vector<int> columnPlacementCounts;
-
-Board nonogramGrid;
-
 enum PROCESS_STATE {
     PROCESS_NONE,
     PROCESS_ROW_SIDE_INIT,

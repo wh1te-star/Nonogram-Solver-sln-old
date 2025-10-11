@@ -3,12 +3,14 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "imgui.h"
+#include <thread>
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "imgui_internal.h"
 #include "Rendering/FontData/FontData.h"
 #include "Rendering/TableRenderer/TableRenderer.h"
 #include "TestData/Repository/TestDataRepository.h"
+#include "Algorithm/BacktrackAlgorithm.h"
 
 
 RenderingSystem::RenderingSystem() :
@@ -51,6 +53,30 @@ int RenderingSystem::initialize() {
 
 void RenderingSystem::renderingLoop() {
 	bool first_time = true;
+
+	RowHintLineList rowHintLineList = TestDataRepository::getRowHintLineList(TestDataRepository::LARGE);
+	ColumnHintLineList columnHintLineList = TestDataRepository::getColumnHintLineList(TestDataRepository::LARGE);
+	BacktrackBoard backtrackBoard = BacktrackBoard(
+		NonogramBoard(Board(RowLength(20), ColumnLength(30)), rowHintLineList, columnHintLineList),
+		RowPlacementCountList({
+			PlacementCount(1), PlacementCount(2), PlacementCount(3), PlacementCount(4), PlacementCount(5),
+			PlacementCount(6), PlacementCount(7), PlacementCount(8), PlacementCount(9), PlacementCount(10),
+			PlacementCount(11), PlacementCount(12), PlacementCount(13), PlacementCount(14), PlacementCount(15),
+			PlacementCount(16), PlacementCount(17), PlacementCount(18), PlacementCount(19), PlacementCount(20),
+			}),
+		ColumnPlacementCountList({
+			PlacementCount(1), PlacementCount(2), PlacementCount(3), PlacementCount(4), PlacementCount(5),
+			PlacementCount(6), PlacementCount(7), PlacementCount(8), PlacementCount(9), PlacementCount(10),
+			PlacementCount(11), PlacementCount(12), PlacementCount(13), PlacementCount(14), PlacementCount(15),
+			PlacementCount(16), PlacementCount(17), PlacementCount(18), PlacementCount(19), PlacementCount(20),
+			PlacementCount(21), PlacementCount(22), PlacementCount(23), PlacementCount(24), PlacementCount(25),
+			PlacementCount(26), PlacementCount(27), PlacementCount(28), PlacementCount(29), PlacementCount(30),
+		})
+	);
+	TableRenderer tableRenderer = TableRenderer(backtrackBoard);
+
+	BacktrackAlgorithm algorithm(backtrackBoard);
+	std::thread worker_thread(&BacktrackAlgorithm::run, &algorithm);
 
 	while (!glfwWindowShouldClose(window)) {
 		glfwPollEvents();
@@ -109,27 +135,6 @@ void RenderingSystem::renderingLoop() {
 		}
 		ImGui::End();
 
-		RowHintLineList rowHintLineList = TestDataRepository::getRowHintLineList(TestDataRepository::LARGE);
-		ColumnHintLineList columnHintLineList = TestDataRepository::getColumnHintLineList(TestDataRepository::LARGE);
-		BacktrackBoard backtrackBoard = BacktrackBoard(
-			//NonogramBoard(Board(RowLength(rowHintLineList.getMaxHintLineLength().getLength()), ColumnLength(columnHintLineList.getMaxHintLineLength().getLength())), rowHintLineList, columnHintLineList),
-			NonogramBoard(Board(RowLength(20), ColumnLength(30)), rowHintLineList, columnHintLineList),
-			RowPlacementCountList({
-				PlacementCount(1), PlacementCount(2), PlacementCount(3), PlacementCount(4), PlacementCount(5), 
-				PlacementCount(6), PlacementCount(7), PlacementCount(8), PlacementCount(9), PlacementCount(10), 
-				PlacementCount(11), PlacementCount(12), PlacementCount(13), PlacementCount(14), PlacementCount(15), 
-				PlacementCount(16), PlacementCount(17), PlacementCount(18), PlacementCount(19), PlacementCount(20), 
-			}),
-			ColumnPlacementCountList({
-				PlacementCount(1), PlacementCount(2), PlacementCount(3), PlacementCount(4), PlacementCount(5), 
-				PlacementCount(6), PlacementCount(7), PlacementCount(8), PlacementCount(9), PlacementCount(10), 
-				PlacementCount(11), PlacementCount(12), PlacementCount(13), PlacementCount(14), PlacementCount(15), 
-				PlacementCount(16), PlacementCount(17), PlacementCount(18), PlacementCount(19), PlacementCount(20), 
-				PlacementCount(21), PlacementCount(22), PlacementCount(23), PlacementCount(24), PlacementCount(25), 
-				PlacementCount(26), PlacementCount(27), PlacementCount(28), PlacementCount(29), PlacementCount(30), 
-			})
-		);
-		TableRenderer tableRenderer = TableRenderer(backtrackBoard);
 		tableRenderer.render();
 
 		ImGui::Render();
@@ -149,7 +154,12 @@ void RenderingSystem::renderingLoop() {
 		glClear(GL_COLOR_BUFFER_BIT);
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 		glfwSwapBuffers(window);
+
+		printf("loop");
 	}
+
+	algorithm.request_stop();
+	worker_thread.join();
 }
 
 void RenderingSystem::finalize() {

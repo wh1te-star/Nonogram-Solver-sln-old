@@ -127,6 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Algorithm\BacktrackAlgorithm.cpp" />
     <ClCompile Include="Board\BacktrackBoard\BacktrackBoard.cpp" />
     <ClCompile Include="Board\BoardLength\BoardLength.cpp" />
     <ClCompile Include="Board\NonogramBoard\NonogramBoard.cpp" />
@@ -171,6 +172,7 @@
     <ClCompile Include="TestData\Repository\TestDataRepository.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Algorithm\BacktrackAlgorithm.h" />
     <ClInclude Include="Board\BacktrackBoard\BacktrackBoard.h" />
     <ClInclude Include="Board\BoardLength\BoardLength.h" />
     <ClInclude Include="Board\NonogramBoard\NonogramBoard.h" />

@@ -94,7 +94,8 @@ void TableRenderer::render() {
 					columnPlacementCountList,
 					cell_size
 				);
-				ImGui::Button(label.c_str(), button_size);
+				std::string unique_label = label + "##Cell" + std::to_string(rowIndexInt) + "_" + std::to_string(columnIndexInt);
+				ImGui::Button(unique_label.c_str(), button_size);
 
 				if (cellType == ROW_PLACEMENT_COUNT || cellType == ROW_HINT || cellType == COLUMN_PLACEMENT_COUNT || cellType == COLUMN_HINT) {
 					ImGui::PopFont();
