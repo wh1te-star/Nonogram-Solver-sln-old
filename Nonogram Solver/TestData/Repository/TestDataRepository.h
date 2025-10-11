@@ -14,14 +14,14 @@ public:
 private:
     TestDataRepository() = delete;
 
-    static std::string GetRowString(TestDataType type);
-    static std::string GetColumnString(TestDataType type);
-    static std::string GetEasyRowString();
-    static std::string GetEasyColumnString();
-    static std::string GetLambdaRowString();
-    static std::string GetLambdaColumnString();
-    static std::string GetLargeRowString();
-    static std::string GetLargeColumnString();
+    static std::string GetColumnHintString(TestDataType type);
+    static std::string GetRowHintString(TestDataType type);
+    static std::string GetEasyRowHintString();
+    static std::string GetEasyColumnHintString();
+    static std::string GetLambdaRowHintString();
+    static std::string GetLambdaColumnHintString();
+    static std::string GetLargeRowHintString();
+    static std::string GetLargeColumnHintString();
     
     static std::vector<std::vector<HintNumber>> parseHints(const std::string& hintString);
 

@@ -9,21 +9,23 @@ std::vector<std::vector<HintNumber>> TestDataRepository::parseHints(const std::s
     std::stringstream ss(hintString);
     std::string line;
 
+    const char* whitespace = " \t\n\r\f\v";
+
     while (std::getline(ss, line)) {
-        line.erase(0, line.find_first_not_of(" \t\n\r\f\v"));
-        line.erase(line.find_last_not_of(" \t\n\r\f\v") + 1);
+        line.erase(0, line.find_first_not_of(whitespace));
+        line.erase(line.find_last_not_of(whitespace) + 1);
 
         if (line.empty()) {
             continue;
         }
 
         std::vector<HintNumber> row;
-        std::stringstream line_ss(line);
+        std::stringstream line_ss(line + ',');
         std::string cell;
 
         while (std::getline(line_ss, cell, ',')) {
-            cell.erase(0, cell.find_first_not_of(" \t\n\r\f\v"));
-            cell.erase(cell.find_last_not_of(" \t\n\r\f\v") + 1);
+            cell.erase(0, cell.find_first_not_of(whitespace));
+            cell.erase(cell.find_last_not_of(whitespace) + 1);
 
             if (cell.empty()) {
                 row.emplace_back(0); 
@@ -37,7 +39,7 @@ std::vector<std::vector<HintNumber>> TestDataRepository::parseHints(const std::s
 }
 
 RowHintLineList TestDataRepository::getRowHintLineList(TestDataType type) {
-	std::string rowHintNumbersString = GetRowString(type);
+	std::string rowHintNumbersString = GetRowHintString(type);
     std::vector<std::vector<HintNumber>> tempRowHintNumbers = parseHints(rowHintNumbersString);
 
     std::vector<HintLine> hintLineListVector;
@@ -55,7 +57,7 @@ RowHintLineList TestDataRepository::getRowHintLineList(TestDataType type) {
 }
 
 ColumnHintLineList TestDataRepository::getColumnHintLineList(TestDataType type) {
-	std::string columnHintNumbersString = GetColumnString(type);
+	std::string columnHintNumbersString = GetColumnHintString(type);
 	std::vector<std::vector<HintNumber>> tempColumnHintNumbers = parseHints(columnHintNumbersString);
 
     std::vector<HintLine> hintLineListVector;
@@ -72,16 +74,16 @@ ColumnHintLineList TestDataRepository::getColumnHintLineList(TestDataType type) 
 	return columnHintLineList;
 }
 
-std::string TestDataRepository::GetRowString(TestDataType type) {
+std::string TestDataRepository::GetRowHintString(TestDataType type) {
     switch (type) {
     case EASY:
-        return GetEasyRowString();
+        return GetEasyRowHintString();
         break;
     case LAMBDA:
-        return GetLambdaRowString();
+        return GetLambdaRowHintString();
         break;
     case LARGE:
-        return GetLargeRowString();
+        return GetLargeRowHintString();
         break;
     default:
         assert(false);
@@ -90,16 +92,16 @@ std::string TestDataRepository::GetRowString(TestDataType type) {
     return "";
 }
 
-std::string TestDataRepository::GetColumnString(TestDataType type) {
+std::string TestDataRepository::GetColumnHintString(TestDataType type) {
     switch (type) {
     case EASY:
-        return GetEasyColumnString();
+        return GetEasyColumnHintString();
         break;
     case LAMBDA:
-        return GetLambdaColumnString();
+        return GetLambdaColumnHintString();
         break;
     case LARGE:
-        return GetLargeColumnString();
+        return GetLargeColumnHintString();
         break;
     default:
         assert(false);
@@ -107,3 +109,4 @@ std::string TestDataRepository::GetColumnString(TestDataType type) {
     }
     return "";
 }
+

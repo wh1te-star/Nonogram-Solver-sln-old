@@ -33,8 +33,10 @@ void TableRenderer::render() {
     const ColumnLength rowHintLength = rowHintLineList.getMaxHintLineLength();
     const RowLength rowPlacementCountLength = RowLength(1);
     const ColumnLength columnPlacementCountLength = ColumnLength(1);
-	const RowLength totalRowLength = boardRowLength + columnHintLength + rowPlacementCountLength;
-	const ColumnLength totalColumnLength = boardColumnLength + rowHintLength + columnPlacementCountLength;
+	//const RowLength totalRowLength = boardRowLength + columnHintLength + rowPlacementCountLength;
+	//const ColumnLength totalColumnLength = boardColumnLength + rowHintLength + columnPlacementCountLength;
+    const RowLength totalRowLength = boardRowLength + columnHintLength;
+    const ColumnLength totalColumnLength = boardColumnLength + rowHintLength;
 
     ImVec2 container_size = ImGui::GetContentRegionAvail();
     
@@ -67,9 +69,8 @@ void TableRenderer::render() {
                 
                 ImVec2 button_size = ImVec2(cell_size, cell_size);
 
-                bool isRowHintArea = rowIndex < rowHintLength;
-                bool isColumnHintArea = columnIndex < columnHintLength;
-                
+                bool isColumnHintArea = rowIndex < columnHintLength;
+                bool isRowHintArea = columnIndex < rowHintLength;
                 if(isRowHintArea && isColumnHintArea) {
                     ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.5f, 0.5f, 0.5f, 1.0f));
                 } else if (isRowHintArea) {
@@ -96,23 +97,25 @@ void TableRenderer::render() {
                 if (isRowHintArea || isColumnHintArea) {
 					ImGui::PushFont(FontData::getFontByCellSize(cell_size));
 
-                    if (isColumnHintArea && !isRowHintArea) {
-                        RowIndex rowHintIndex = rowIndex - columnHintLength;
-						HintLine hintLine = rowHintLineList[rowHintIndex];
+                    if (isRowHintArea && !isColumnHintArea) {
+                        RowIndex HintLineIndex = rowIndex - columnHintLength;
+						HintLine hintLine = rowHintLineList[HintLineIndex];
 
-                        ColumnIndex columnHintIndex = ColumnIndex(rowHintLength.getLength() - columnIndex.getIndex() - 1);
-                        if(columnHintIndex < ColumnLength((int)hintLine.size())) {
-                            label = std::to_string(hintLine[columnHintIndex].getNumber());
+                        ColumnIndex HintNumberIndex = ColumnIndex(columnIndex.getIndex() + hintLine.size() - rowHintLength.getLength());
+                        if(HintNumberIndex >= ColumnIndex(0)) {
+                            assert(HintNumberIndex < ColumnLength((int)hintLine.size()));
+                            label = std::to_string(hintLine[HintNumberIndex].getNumber());
 						}
                     }
 
-                    if (isRowHintArea && !isColumnHintArea) {
-                        ColumnIndex columnHintIndex = columnIndex - rowHintLength;
-						HintLine hintLine = columnHintLineList[columnHintIndex];
+                    if (isColumnHintArea && !isRowHintArea) {
+                        ColumnIndex HintLineIndex = columnIndex - rowHintLength;
+						HintLine hintLine = columnHintLineList[HintLineIndex];
 
-                        RowIndex rowHintIndex = RowIndex(hintLine.size() - (columnHintLength.getLength() - rowIndex.getIndex() - 1) - 1);
-                        if(rowHintIndex < RowLength((int)hintLine.size())) {
-                            label = std::to_string(hintLine[rowHintIndex].getNumber());
+                        RowIndex HintNumberIndex = RowIndex(rowIndex.getIndex() + hintLine.size() - columnHintLength.getLength());
+                        if(HintNumberIndex >= RowIndex(0)) {
+                            assert(HintNumberIndex < RowLength((int)hintLine.size()));
+                            label = std::to_string(hintLine[HintNumberIndex].getNumber());
 						}
                     }
                 }

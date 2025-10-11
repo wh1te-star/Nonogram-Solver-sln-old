@@ -1,6 +1,6 @@
 #include "TestData/Repository/TestDataRepository.h"
 
-std::string TestDataRepository::GetLargeRowString(){
+std::string TestDataRepository::GetLargeColumnHintString(){
 	return R"###(
 		  ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,  1,   ,   ,   ,   ,   ,   ,   ,   ,   
 		  ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,   ,  2,   ,  2,   ,   ,   ,   ,   ,   ,   ,   ,   
@@ -13,7 +13,7 @@ std::string TestDataRepository::GetLargeRowString(){
 	)###";
 }
 
-std::string TestDataRepository::GetLargeColumnString(){
+std::string TestDataRepository::GetLargeRowHintString(){
 	return R"###(
 		  ,   ,   ,   ,   ,   ,   ,   ,   ,  8
 		  ,   ,   ,   ,   , 14,  2,  1,  1,  2

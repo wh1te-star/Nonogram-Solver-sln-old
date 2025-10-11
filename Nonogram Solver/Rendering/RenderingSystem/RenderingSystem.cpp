@@ -109,10 +109,11 @@ void RenderingSystem::renderingLoop() {
 		}
 		ImGui::End();
 
-		RowHintLineList rowHints = TestDataRepository::getRowHintLineList(TestDataRepository::EASY);
-		ColumnHintLineList columnHint = TestDataRepository::getColumnHintLineList(TestDataRepository::EASY);
+		RowHintLineList rowHintLineList = TestDataRepository::getRowHintLineList(TestDataRepository::LARGE);
+		ColumnHintLineList columnHintLineList = TestDataRepository::getColumnHintLineList(TestDataRepository::LARGE);
 		BacktrackBoard backtrackBoard = BacktrackBoard(
-			NonogramBoard(Board(RowLength(15), ColumnLength(15)), rowHints, columnHint),
+			//NonogramBoard(Board(RowLength(rowHintLineList.getMaxHintLineLength().getLength()), ColumnLength(columnHintLineList.getMaxHintLineLength().getLength())), rowHintLineList, columnHintLineList),
+			NonogramBoard(Board(RowLength(20), ColumnLength(30)), rowHintLineList, columnHintLineList),
 			RowPlacementCountList({PlacementCount(1), PlacementCount(3), PlacementCount(1), PlacementCount(3), PlacementCount(1),PlacementCount(1), PlacementCount(3), PlacementCount(1), PlacementCount(3), PlacementCount(1),  PlacementCount(1), PlacementCount(3), PlacementCount(1), PlacementCount(3), PlacementCount(1) }),
 			ColumnPlacementCountList({PlacementCount(1), PlacementCount(3), PlacementCount(1), PlacementCount(3), PlacementCount(1), PlacementCount(1), PlacementCount(3), PlacementCount(1), PlacementCount(3), PlacementCount(1), PlacementCount(1), PlacementCount(3), PlacementCount(1), PlacementCount(3), PlacementCount(1) })
 		);
