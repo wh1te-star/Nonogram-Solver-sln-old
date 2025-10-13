@@ -5,7 +5,7 @@
 #include <vector>
 #include "Board/BoardLength/RowLength.h"
 #include "Board/BoardLength/ColumnLength.h"
-#include "Cell/Cell/Cell.h"
+#include "Cell/CellVector2D/CellVector2D.h"
 #include "Cell/CellColor/CellColor.h"
 #include "Index/Coordinate/Coordinate.h"
 #include "Index/CellIndex/ColumnIndex.h"
@@ -16,22 +16,27 @@ class Board {
 private:
 	RowLength rowLength;
 	ColumnLength columnLength;
-	std::vector<std::vector<Cell>> board;
+	CellVector2D board;
 
 public:
 	Board(RowLength rowLength, ColumnLength columnLength);
 
+public:
 	bool operator==(const Board& other) const;
 	bool operator!=(const Board& other) const;
 
-	RowLength getRowLength() const;
-	ColumnLength getColumnLength() const;
-	Cell getCell(Coordinate coordinate) const;
-	void setCell(Coordinate coordinate, Cell cell);
+public:
+	const RowLength& getRowLength() const;
+	const ColumnLength& getColumnLength() const;
+	const CellVector2D& getBoard() const;
 	
-	bool isInRange(Coordinate coordinate) const;
-	void colorCell(Coordinate coordinate, CellColor cellColor);
-	void applyPlacement(Coordinate coordinate, Placement& placement);
+public:
+	bool isInRange(const Coordinate& coordinate) const;
+
+public:
+	void applyCell(const Coordinate& coordinate, const CellColor& cellColor);
+	void applyPlacement(const Coordinate& coordinate, const Placement& placement);
+	void applyBoard(const Coordinate& coordinate, const Board& board);
 };
 
 

@@ -22,11 +22,11 @@ public:
 		ColumnHintLineList columnHintLineList
 	);
 
-	Board& getBoard();
-	RowLength getRowCount() const;
-	ColumnLength getColumnCount() const;
-	RowHintLineList getRowHintLineList() const;
-	ColumnHintLineList getColumnHintLineList() const;
+	Board& getBoard() const;
+	RowLength& getRowCount() const;
+	ColumnLength& getColumnCount() const;
+	RowHintLineList& getRowHintLineList() const;
+	ColumnHintLineList& getColumnHintLineList() const;
 };
 
 #endif

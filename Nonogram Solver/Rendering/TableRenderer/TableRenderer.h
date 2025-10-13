@@ -19,11 +19,9 @@ private:
 		OUT_OF_BOARD
 	};
 
-	BacktrackBoard backtrackBoard;
-
 public:
-	TableRenderer(BacktrackBoard backtrackBoard);
-	void render();
+	TableRenderer();
+	void render(BacktrackBoard backtrackBoard) const;
 
 private:
 	CellType determineCellType(
@@ -33,7 +31,7 @@ private:
 		ColumnLength rowHintLength,
 		RowLength boardRowLength,
 		ColumnLength boardColumnLength
-	);
+	) const;
 
 	void setupCellStyle(
 		RowIndex rowIndex,
@@ -42,7 +40,7 @@ private:
 		ColumnLength rowHintLength,
 		Board board,
 		CellType cellType
-	);
+	) const;
 
 	std::string setLabel(
 		RowIndex rowIndex,
@@ -55,7 +53,7 @@ private:
 		RowPlacementCountList rowPlacementCountList,
 		ColumnPlacementCountList columnPlacementCountList,
 		float cell_size
-	);
+	) const;
 
 	void drawGridLine(
 		RowIndex rowIndex,
@@ -64,7 +62,7 @@ private:
 		ColumnLength rowHintLength,
 		RowLength columnPlacementCountLength,
 		ColumnLength rowPlacementCountLength
-	);
+	) const;
 };
 
 

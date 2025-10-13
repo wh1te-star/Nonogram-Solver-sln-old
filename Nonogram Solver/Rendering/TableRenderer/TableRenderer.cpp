@@ -15,17 +15,15 @@
 #include <string>
 
 
-TableRenderer::TableRenderer(
-	BacktrackBoard backtrackBoard
-) : backtrackBoard(std::move(backtrackBoard)) {}
+TableRenderer::TableRenderer(){}
 
-void TableRenderer::render() {
+void TableRenderer::render(BacktrackBoard backtrackBoard) const {
 	ImGui::Begin("Nonogram Board", NULL, ImGuiWindowFlags_None);
 
 
 	NonogramBoard& nonogramBoard = backtrackBoard.getNonogramBoard();
 
-	Board& board = nonogramBoard.getBoard();
+	const Board& board = nonogramBoard.getBoard();
 	const RowHintLineList& rowHintLineList = nonogramBoard.getRowHintLineList();
 	const ColumnHintLineList& columnHintLineList = nonogramBoard.getColumnHintLineList();
 	const RowPlacementCountList& rowPlacementCountList = backtrackBoard.getRowPlacementCountList();
@@ -122,7 +120,7 @@ TableRenderer::CellType TableRenderer::determineCellType(
 	ColumnLength rowHintLength,
 	RowLength boardRowLength,
 	ColumnLength boardColumnLength
-) { 
+) const { 
 	if (rowHintLength <= columnIndex && columnIndex < rowHintLength + boardColumnLength) {
 		if (rowIndex < columnHintLength) {
 			return COLUMN_HINT;
@@ -155,7 +153,7 @@ void TableRenderer::setupCellStyle(
 	ColumnLength rowHintLength,
 	Board board,
 	CellType cellType
-) {
+) const {
 	const ImVec4 outOfBoardVec4 = ImVec4(0.5f, 0.5f, 0.5f, 1.0f);
 	const ImVec4 rowHintColorVec4 = ImVec4(0.8f, 0.8f, 0.9f, 1.0f);
 	const ImVec4 columnHintColorVec4 = ImVec4(0.8f, 0.9f, 0.8f, 1.0f);
@@ -201,7 +199,7 @@ std::string TableRenderer::setLabel(
 	RowPlacementCountList rowPlacementCountList,
 	ColumnPlacementCountList columnPlacementCountList,
 	float cell_size
-) {
+) const {
 	ImVec4 fontColorVec4 = ImVec4(0.2f, 0.2f, 0.2f, 1.0f);
 	if (cellType == ROW_PLACEMENT_COUNT || cellType == ROW_HINT || cellType == COLUMN_PLACEMENT_COUNT || cellType == COLUMN_HINT) {
 		ImGui::PushStyleColor(ImGuiCol_Text, fontColorVec4);
@@ -252,7 +250,7 @@ void TableRenderer::drawGridLine(
 	ColumnLength rowHintLength,
 	RowLength boardRowLength,
 	ColumnLength boardColumnLength
-) {
+) const {
 	ImDrawList* draw_list = ImGui::GetWindowDrawList();
 	ImVec2 p_min = ImGui::GetItemRectMin();
 	ImVec2 p_max = ImGui::GetItemRectMax();

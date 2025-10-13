@@ -9,7 +9,7 @@ BacktrackBoard::BacktrackBoard(
     rowPlacementCountList(std::move(rowPlacementCountList)),
     columnPlacementCountList(std::move(columnPlacementCountList)) {}
 
-NonogramBoard& BacktrackBoard::getNonogramBoard(){
+NonogramBoard& BacktrackBoard::getNonogramBoard() const {
 	return nonogramBoard;
 }
 

@@ -11,6 +11,7 @@
 #include "Rendering/TableRenderer/TableRenderer.h"
 #include "TestData/Repository/TestDataRepository.h"
 #include "Algorithm/BacktrackAlgorithm.h"
+#include "Notifier/RenderNotifier.h"
 
 
 RenderingSystem::RenderingSystem() :
@@ -73,6 +74,8 @@ void RenderingSystem::renderingLoop() {
 			PlacementCount(26), PlacementCount(27), PlacementCount(28), PlacementCount(29), PlacementCount(30),
 		})
 	);
+	SharedBacktrackBoard renderNotifier = SharedBacktrackBoard();
+	renderNotifier.setRenderBoard(backtrackBoard);
 
 	BacktrackAlgorithm algorithm(backtrackBoard);
 	std::thread worker_thread(&BacktrackAlgorithm::run, &algorithm);

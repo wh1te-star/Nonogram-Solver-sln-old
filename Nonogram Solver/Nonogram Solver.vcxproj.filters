@@ -45,23 +45,11 @@
     <ClCompile Include="Board\Board\Board.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Index\CellIndex\RowIndex.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Index\CellIndex\ColumnIndex.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Index\CellIndex\ColumnIndex.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Placement\Placement\Placement.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Cell\Cell\Cell.h">
       <Filter>ヘッダー ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Index\Coordinate\Coordinate.cpp">
-      <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Board\BoardLength\RowLength.cpp">
       <Filter>ソース ファイル</Filter>
@@ -70,9 +58,6 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Cell\Cell\Cell.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Index\CellIndex\CellIndex.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Board\BoardLength\BoardLength.cpp">
@@ -147,30 +132,33 @@
     <ClCompile Include="Algorithm\BacktrackAlgorithm.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Notifier\RenderNotifier.cpp">
+    <ClCompile Include="Shared\SharedBacktractBoard.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Index\CellIndex\CellIndex.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Index\CellIndex\ColumnIndex.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Index\CellIndex\RowIndex.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Index\Coordinate\Coordinate.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Index\CellIndex\RowIndex.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Placement\Placement\Placement.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Board\Board\Board.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Index\Coordinate\Coordinate.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Board\BoardLength\RowLength.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Board\BoardLength\ColumnLength.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Index\CellIndex\CellIndex.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Board\BoardLength\BoardLength.h">
@@ -263,7 +251,22 @@
     <ClInclude Include="Algorithm\BacktrackAlgorithm.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Notifier\RenderNotifier.h">
+    <ClInclude Include="Shared\SharedBacktractBoard.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Index\CellIndex\CellIndex.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Index\CellIndex\ColumnIndex.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Index\CellIndex\RowIndex.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Index\Coordinate\Coordinate.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Cell\CellVector2D\CellVector2D.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

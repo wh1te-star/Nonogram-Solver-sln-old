@@ -1,3 +1,5 @@
+#include "Board/Board/Board.h"
+
 #include <typeinfo>
 #include <cassert>
 #include "Board.h"
@@ -10,8 +12,15 @@
 #include "Placement/Placement/RowPlacement.h"
 
 Board::Board(RowLength rowLength, ColumnLength columnLength)
-	: rowLength(rowLength), columnLength(columnLength) {
-	board.resize(rowLength.getLength(), std::vector<Cell>(columnLength.getLength(), Cell()));
+	: rowLength(std::move(rowLength)),
+	columnLength(std::move(columnLength)) {
+	board.resize(
+		rowLength.getLength(),
+		std::vector<Cell>(
+			columnLength.getLength(),
+			Cell()
+		)
+	);
 }
 
 bool Board::operator==(const Board& other) const {
@@ -22,32 +31,22 @@ bool Board::operator!=(const Board& other) const {
 	return !(*this == other);
 }
 
-RowLength Board::getRowLength() const {
+const RowLength& Board::getRowLength() const {
 	return rowLength;
 }
 
-ColumnLength Board::getColumnLength() const {
+const ColumnLength& Board::getColumnLength() const {
 	return columnLength;
 }
 
-Cell Board::getCell(Coordinate coordinate) const {
-	assert(isInRange(coordinate));
-	RowIndex rowIndex = coordinate.getRowIndex();
-	ColumnIndex columnIndex = coordinate.getColumnIndex();
-	return board[rowIndex.getIndex()][columnIndex.getIndex()];
+const CellVector2D& Board::getBoard() const {
+	return board;
 }
 
-void Board::setCell(Coordinate coordinate, Cell cell) {
-	assert(isInRange(coordinate));
+bool Board::isInRange(const Coordinate& coordinate) const {
 	RowIndex rowIndex = coordinate.getRowIndex();
 	ColumnIndex columnIndex = coordinate.getColumnIndex();
-	board[rowIndex.getIndex()][columnIndex.getIndex()] = cell;
-}
-
-bool Board::isInRange(Coordinate coordinate) const {
-	RowIndex rowIndex = coordinate.getRowIndex();
-	ColumnIndex columnIndex = coordinate.getColumnIndex();
-	if (columnIndex < ColumnLength(0) || columnLength < columnIndex) {
+	if (columnIndex < ColumnLength(0) || columnLength <= columnIndex) {
 		return false;
 	}
 	if(rowIndex < RowLength(0) || rowLength < rowIndex) {
@@ -56,7 +55,7 @@ bool Board::isInRange(Coordinate coordinate) const {
 	return true;
 }
 
-void Board::colorCell(Coordinate coordinate, CellColor cellColor) {
+void Board::applyCell(const Coordinate& coordinate, const CellColor& cellColor) {
 	if(!isInRange(coordinate)) {
 		return;
 	}
@@ -69,14 +68,30 @@ void Board::colorCell(Coordinate coordinate, CellColor cellColor) {
 	}
 }
 
-void Board::applyPlacement(Coordinate coordinate, Placement& placement) {
+void Board::applyPlacement(const Coordinate& coordinate, const Placement& placement) {
 	assert(
 		typeid(placement) == typeid(RowPlacement) ||
 		typeid(placement) == typeid(ColumnPlacement)
 	);
 
-	for(CellLocation cellLocation : placement.getCellLocationList()) {
-		colorCell(cellLocation.getCoordinate(), cellLocation.getCell().getColor());
+	for(const CellLocation& cellLocation : placement.getCellLocationList()) {
+		applyCell(cellLocation.getCoordinate(), cellLocation.getCell().getColor());
 	}
 }
 
+void Board::applyBoard(const Coordinate& coordinate, const Board& board) {
+	RowIndex startRowIndex = coordinate.getRowIndex();
+	ColumnIndex startColumnIndex = coordinate.getColumnIndex();
+	RowLength boardRowLength = board.getRowLength();
+	ColumnLength boardColumnLength = board.getColumnLength();
+	for(int i = 0; i < boardRowLength.getLength(); i++) {
+		for(int j = 0; j < boardColumnLength.getLength(); j++) {
+			Coordinate cellCoordinate(
+				startRowIndex + RowIndex(i),
+				startColumnIndex + ColumnIndex(j)
+			);
+			Cell cell = board.getBoard()[i][j];
+			applyCell(cellCoordinate, cell.getColor());
+		}
+	}
+}
