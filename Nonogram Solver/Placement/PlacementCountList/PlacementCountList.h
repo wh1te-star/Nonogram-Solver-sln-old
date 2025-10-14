@@ -6,19 +6,20 @@
 #include "Placement/PlacementCount/PlacementCount.h"
 
 class PlacementCountList {
-private:
-
 protected:
 	std::vector<PlacementCount> placementCountList;
 
+protected:
     explicit PlacementCountList(std::vector<PlacementCount> placementCountList);
-
 public:
     virtual ~PlacementCountList() = default;
+
+public:
+    const std::vector<PlacementCount>& getPlacementCountList() const;
+
+public:
     bool operator==(const PlacementCountList& other) const;
     bool operator!=(const PlacementCountList& other) const;
-
-    std::vector<PlacementCount> getPlacementCountList() const;
 };
 
 #endif

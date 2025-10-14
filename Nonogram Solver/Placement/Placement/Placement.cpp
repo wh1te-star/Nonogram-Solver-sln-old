@@ -2,11 +2,15 @@
 #include "Cell/Cell/Cell.h"
 #include "Index/Coordinate/Coordinate.h"
 
-Placement::Placement(Coordinate coordinate, std::vector<Cell> placement) :
-    coordinate(coordinate), placement(placement) {}
+Placement::Placement(std::vector<Cell> placement) :
+    placement(placement) {}
+
+const std::vector<Cell>& Placement::getPlacement() const {
+    return placement;
+}
 
 bool Placement::operator==(const Placement& other) const {
-	return coordinate == other.coordinate && placement == other.placement;
+	return placement == other.placement;
 }
 
 bool Placement::operator!=(const Placement& other) const {

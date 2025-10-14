@@ -6,11 +6,11 @@
 
 class CellIndex {
 protected:
-    int index;
+    const int index;
     explicit CellIndex(int index);
 
 public:
-    int getIndex() const;
+    const int& getIndex() const;
 };
 
 #endif

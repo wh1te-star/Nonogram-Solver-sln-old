@@ -9,6 +9,7 @@ class ColumnPlacementCountList : public PlacementCountList {
 public:
     explicit ColumnPlacementCountList(std::vector<PlacementCount> placementCountList);
 
+public:
     PlacementCount operator[](ColumnIndex index) const;
 };
 

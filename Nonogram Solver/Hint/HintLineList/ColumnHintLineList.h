@@ -10,9 +10,11 @@ class ColumnHintLineList : public HintLineList {
 public:
     explicit ColumnHintLineList(std::vector<HintLine> hintLineList);
 
-	RowLength getMaxHintLineLength() const;
-
+public:
 	HintLine operator[](ColumnIndex columnIndex) const;
+
+public:
+	RowLength getMaxHintLineLength() const;
 };
 
 

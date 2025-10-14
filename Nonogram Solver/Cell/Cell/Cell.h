@@ -6,18 +6,21 @@
 
 class Cell {
 private:
-    CellColor color;
+    const CellColor color;
 
 public:
     explicit Cell();
     explicit Cell(CellColor color);
 
-    CellColor getColor() const;
+public:
+    const CellColor& getColor() const;
 
+public:
     bool operator==(const Cell& other) const;
     bool operator!=(const Cell& other) const;
 
-	bool canColor(CellColor newColor) const;
+public:
+	bool canColor(const CellColor& newColor) const;
 };
 
 #endif

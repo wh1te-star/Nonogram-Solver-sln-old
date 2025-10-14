@@ -4,13 +4,15 @@
 
 class PlacementCount {
 private:
-    int count;
+    const int count;
 
 public:
 	explicit PlacementCount(int count);
 
-    int getCount() const;
+public:
+    const int& getCount() const;
 
+public:
     bool operator==(const PlacementCount& other) const;
     bool operator!=(const PlacementCount& other) const;
 };

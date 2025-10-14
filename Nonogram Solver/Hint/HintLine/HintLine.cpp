@@ -3,6 +3,10 @@
 
 HintLine::HintLine(std::vector<HintNumber> numbers) : numbers(numbers) {}
 
+const std::vector<HintNumber>& HintLine::getNumbers() const {
+	return numbers;
+}
+
 bool HintLine::operator==(const HintLine& other) const {
 	return numbers == other.numbers;
 }
@@ -17,8 +21,4 @@ HintNumber HintLine::operator[](CellIndex index) const {
 
 size_t HintLine::size() const {
 	return numbers.size();
-}
-
-std::vector<HintNumber> HintLine::getNumbers() const {
-	return numbers;
 }

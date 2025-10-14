@@ -9,9 +9,9 @@ class RowIndex : public CellIndex {
 public:
     explicit RowIndex(int index);
 
+public:
     RowIndex operator+(RowLength shift) const;
     RowIndex operator-(RowLength shift) const;
-
     bool operator==(const RowIndex& other) const;
     bool operator!=(const RowIndex& other) const;
     bool operator<(const RowIndex& other) const;

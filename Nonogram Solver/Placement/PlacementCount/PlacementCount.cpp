@@ -2,7 +2,7 @@
 
 PlacementCount::PlacementCount(int count) : count(count) {}
 
-int PlacementCount::getCount() const {
+const int& PlacementCount::getCount() const {
     return count;
 }
 

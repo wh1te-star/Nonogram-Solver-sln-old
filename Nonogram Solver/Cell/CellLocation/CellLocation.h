@@ -7,17 +7,19 @@
 
 class CellLocation {
 private:
-	Coordinate coordinate;
-	Cell cell;
+	const Coordinate coordinate;
+	const Cell cell;
 
 public:
     explicit CellLocation(Coordinate coordinate, Cell cell);
 
+public:
+    const Coordinate& getCoordinate() const;
+    const Cell& getCell() const;
+
+public:
     bool operator==(const CellLocation& other) const;
     bool operator!=(const CellLocation& other) const;
-
-    Coordinate getCoordinate() const;
-    Cell getCell() const;
 };
 
 #endif

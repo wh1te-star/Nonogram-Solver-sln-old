@@ -6,10 +6,11 @@
 ColumnHintLineList::ColumnHintLineList(std::vector<HintLine> hintLineList) :
 	HintLineList(hintLineList) {}
 
+HintLine ColumnHintLineList::operator[](ColumnIndex columnIndex) const {
+	return hintLineList[columnIndex.getIndex()];
+}
+
 RowLength ColumnHintLineList::getMaxHintLineLength() const {
 	return RowLength(getMaxItemCount());
 }
 
-HintLine ColumnHintLineList::operator[](ColumnIndex columnIndex) const {
-	return hintLineList[columnIndex.getIndex()];
-}

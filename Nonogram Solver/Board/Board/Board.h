@@ -22,19 +22,19 @@ public:
 	Board(RowLength rowLength, ColumnLength columnLength);
 
 public:
-	bool operator==(const Board& other) const;
-	bool operator!=(const Board& other) const;
-
-public:
 	const RowLength& getRowLength() const;
 	const ColumnLength& getColumnLength() const;
 	const CellVector2D& getBoard() const;
 	
 public:
+	bool operator==(const Board& other) const;
+	bool operator!=(const Board& other) const;
+
+public:
 	bool isInRange(const Coordinate& coordinate) const;
 
 public:
-	void applyCell(const Coordinate& coordinate, const CellColor& cellColor);
+	void applyCell(const Coordinate& coordinate, const Cell& cellColor);
 	void applyPlacement(const Coordinate& coordinate, const Placement& placement);
 	void applyBoard(const Coordinate& coordinate, const Board& board);
 };

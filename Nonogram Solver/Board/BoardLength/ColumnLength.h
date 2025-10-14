@@ -8,9 +8,9 @@ class ColumnLength : public BoardLength {
 public:
     explicit ColumnLength(int length);
 
+public:
     ColumnLength operator+(ColumnLength length) const;
     ColumnLength operator-(ColumnLength length) const;
-
     bool operator==(const ColumnLength& other) const;
     bool operator!=(const ColumnLength& other) const;
     bool operator<(const ColumnLength& other) const;

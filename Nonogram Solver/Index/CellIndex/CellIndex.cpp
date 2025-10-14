@@ -5,6 +5,6 @@
 
 CellIndex::CellIndex(int index) : index(index) {}
 
-int CellIndex::getIndex() const {
+const int& CellIndex::getIndex() const {
 	return index;
 }

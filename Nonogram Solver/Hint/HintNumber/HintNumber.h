@@ -4,12 +4,12 @@
 
 class HintNumber {
 private:
-	int number;
+	const int number;
 
 public:
     explicit HintNumber(int number);
 
-    int getNumber() const;
+    const int& getNumber() const;
 
     bool operator==(const HintNumber& other) const;
     bool operator!=(const HintNumber& other) const;

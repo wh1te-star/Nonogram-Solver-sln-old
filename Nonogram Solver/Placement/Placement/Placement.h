@@ -11,17 +11,18 @@ class Placement {
 private:
 
 protected:
-    Coordinate coordinate;
-    std::vector<Cell> placement;
-
-    explicit Placement(Coordinate coordinate, std::vector<Cell> placement);
+    const std::vector<Cell> placement;
 
 public:
+    explicit Placement(std::vector<Cell> placement);
     virtual ~Placement() = default;
+
+public:
+	const std::vector<Cell>& getPlacement() const;
+
+public:
     bool operator==(const Placement& other) const;
     bool operator!=(const Placement& other) const;
-
-    virtual std::vector<CellLocation> getCellLocationList() = 0;
 };
 
 #endif

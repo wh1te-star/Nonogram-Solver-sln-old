@@ -9,9 +9,9 @@ class RowLength : public BoardLength {
 public:
     explicit RowLength(int length);
 
+public:
     RowLength operator+(RowLength length) const;
     RowLength operator-(RowLength length) const;
-
     bool operator==(const RowLength& other) const;
     bool operator!=(const RowLength& other) const;
     bool operator<(const RowLength& other) const;

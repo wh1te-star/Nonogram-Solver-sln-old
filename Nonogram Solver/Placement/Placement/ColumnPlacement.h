@@ -7,8 +7,7 @@
 
 class ColumnPlacement : public Placement {
 public:
-    explicit ColumnPlacement(Coordinate coordinate, std::vector<Cell> placement);
-    std::vector<CellLocation> getCellLocationList() override;
+    explicit ColumnPlacement(std::vector<Cell> placement);
 };
 
 

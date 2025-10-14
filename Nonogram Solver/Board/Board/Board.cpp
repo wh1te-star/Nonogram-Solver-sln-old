@@ -23,14 +23,6 @@ Board::Board(RowLength rowLength, ColumnLength columnLength)
 	);
 }
 
-bool Board::operator==(const Board& other) const {
-	return board == other.board;
-}
-
-bool Board::operator!=(const Board& other) const {
-	return !(*this == other);
-}
-
 const RowLength& Board::getRowLength() const {
 	return rowLength;
 }
@@ -43,29 +35,40 @@ const CellVector2D& Board::getBoard() const {
 	return board;
 }
 
+bool Board::operator==(const Board& other) const {
+	return board == other.board;
+}
+
+bool Board::operator!=(const Board& other) const {
+	return !(*this == other);
+}
+
 bool Board::isInRange(const Coordinate& coordinate) const {
 	RowIndex rowIndex = coordinate.getRowIndex();
 	ColumnIndex columnIndex = coordinate.getColumnIndex();
 	if (columnIndex < ColumnLength(0) || columnLength <= columnIndex) {
 		return false;
 	}
-	if(rowIndex < RowLength(0) || rowLength < rowIndex) {
+	if(rowIndex < RowLength(0) || rowLength <= rowIndex) {
 		return false;
 	}
 	return true;
 }
 
-void Board::applyCell(const Coordinate& coordinate, const CellColor& cellColor) {
-	if(!isInRange(coordinate)) {
-		return;
-	}
+void Board::applyCell(const Coordinate& coordinate, const Cell& cell) {
+    if(!isInRange(coordinate)) {
+        return;
+    }
 
-	RowIndex rowIndex = coordinate.getRowIndex();
-	ColumnIndex columnIndex = coordinate.getColumnIndex();
-	Cell& cell = board[rowIndex.getIndex()][columnIndex.getIndex()];
-	if (cell.canColor(cellColor)) {
-		cell = Cell(cellColor);
-	}
+    RowIndex rowIndex = coordinate.getRowIndex();
+    ColumnIndex columnIndex = coordinate.getColumnIndex();
+    std::vector<Cell>& row = board[rowIndex.getIndex()]; 
+    Cell& targetCell = row[columnIndex.getIndex()]; 
+    if (targetCell.canColor(cell.getColor())) {
+		auto it = row.begin() + columnIndex.getIndex();
+		row.erase(it);
+		row.insert(it, cell);
+    }
 }
 
 void Board::applyPlacement(const Coordinate& coordinate, const Placement& placement) {
@@ -75,7 +78,7 @@ void Board::applyPlacement(const Coordinate& coordinate, const Placement& placem
 	);
 
 	for(const CellLocation& cellLocation : placement.getCellLocationList()) {
-		applyCell(cellLocation.getCoordinate(), cellLocation.getCell().getColor());
+		applyCell(cellLocation.getCoordinate(), cellLocation.getCell());
 	}
 }
 

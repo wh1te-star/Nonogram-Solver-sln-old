@@ -8,16 +8,21 @@
 
 class HintLine {
 private:
-	std::vector<HintNumber> numbers;
+	const std::vector<HintNumber> numbers;
 
 public:
 	HintLine(std::vector<HintNumber> numbers);
+
+public:
+	const std::vector<HintNumber>& getNumbers() const;
+
+public:
 	bool operator==(const HintLine& other) const;
 	bool operator!=(const HintLine& other) const;
 	HintNumber operator[](CellIndex index) const;
 
+public:
 	size_t size() const;
-	std::vector<HintNumber> getNumbers() const;
 };
 
 

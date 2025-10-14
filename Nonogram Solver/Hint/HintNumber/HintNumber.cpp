@@ -2,7 +2,7 @@
 
 HintNumber::HintNumber(int number) : number(number) {}
 
-int HintNumber::getNumber() const {
+const int& HintNumber::getNumber() const {
     return number;
 }
 

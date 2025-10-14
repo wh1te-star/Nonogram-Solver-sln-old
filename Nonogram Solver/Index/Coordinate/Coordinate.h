@@ -9,18 +9,21 @@
 
 class Coordinate {
 private:
-    RowIndex rowIndex;
-    ColumnIndex columnIndex;
+    const RowIndex rowIndex;
+    const ColumnIndex columnIndex;
 
 public:
     explicit Coordinate(RowIndex rowIndex, ColumnIndex columnIndex);
 
+public:
+    const RowIndex& getRowIndex() const;
+    const ColumnIndex& getColumnIndex() const;
+
+public:
     bool operator==(const Coordinate& other) const;
     bool operator!=(const Coordinate& other) const;
 
-    RowIndex getRowIndex() const;
-    ColumnIndex getColumnIndex() const;
-
+public:
     Coordinate move(int rowShift, int columnShift) const;
     Coordinate move(RowLength rowShift, ColumnLength columnShift) const;
 };
