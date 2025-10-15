@@ -8,14 +8,12 @@
 SharedBacktrackBoard::SharedBacktrackBoard(BacktrackBoard backtrackBoard)
 	: backtrackBoard(backtrackBoard) {}
 
+const BacktrackBoard& SharedBacktrackBoard::getBacktrackBoard() const {
+	return backtrackBoard;
+}
+
 void SharedBacktrackBoard::applyPlacement(Coordinate coordinate, Placement &placement) {
 	std::lock_guard<std::mutex> lock(mtx);
 
-	backtrackBoard.getNonogramBoard().getBoard().applyPlacement(coordinate, placement);
-}
-
-void SharedBacktrackBoard::render(const TableRenderer& tableRenderer) const {
-	std::lock_guard<std::mutex> lock(mtx);
-	
-	tableRenderer.render(backtrackBoard);
+	//backtrackBoard.applyPlacement(coordinate, placement);
 }

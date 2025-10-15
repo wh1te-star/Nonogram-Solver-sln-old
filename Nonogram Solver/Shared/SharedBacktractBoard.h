@@ -14,8 +14,11 @@ private:
 public:
 	SharedBacktrackBoard(BacktrackBoard backtrackBoard);
 
+public:
+    const BacktrackBoard& getBacktrackBoard() const;
+
+public:
     void applyPlacement(Coordinate coordinate, Placement &placement);
-	void render(const TableRenderer& tableRenderer) const;
 };
 
 

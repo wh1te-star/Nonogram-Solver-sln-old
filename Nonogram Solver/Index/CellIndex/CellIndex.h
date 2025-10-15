@@ -6,7 +6,7 @@
 
 class CellIndex {
 protected:
-    const int index;
+    int index;
     explicit CellIndex(int index);
 
 public:

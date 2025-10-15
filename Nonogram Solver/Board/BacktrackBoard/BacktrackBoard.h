@@ -19,9 +19,10 @@ public:
 		ColumnPlacementCountList columnPlacementCountList
 	);
 
-	NonogramBoard getNonogramBoard() const;
-	RowPlacementCountList getRowPlacementCountList() const;
-	ColumnPlacementCountList getColumnPlacementCountList() const;
+public:
+	const NonogramBoard& getNonogramBoard() const;
+	const RowPlacementCountList& getRowPlacementCountList() const;
+	const ColumnPlacementCountList& getColumnPlacementCountList() const;
 };
 
 #endif

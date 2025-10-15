@@ -6,6 +6,7 @@
 #include <GLFW/glfw3.h>
 #include "imgui.h"
 #include "Board/BacktrackBoard/BacktrackBoard.h"
+#include "Shared/SharedBacktractBoard.h"
 #include <string>
 
 class TableRenderer {
@@ -21,7 +22,7 @@ private:
 
 public:
 	TableRenderer();
-	void render(BacktrackBoard backtrackBoard) const;
+	void render(SharedBacktrackBoard sharedBacktrackBoard) const;
 
 private:
 	CellType determineCellType(

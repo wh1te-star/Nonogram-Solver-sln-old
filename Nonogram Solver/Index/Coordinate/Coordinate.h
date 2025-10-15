@@ -9,8 +9,8 @@
 
 class Coordinate {
 private:
-    const RowIndex rowIndex;
-    const ColumnIndex columnIndex;
+    RowIndex rowIndex;
+    ColumnIndex columnIndex;
 
 public:
     explicit Coordinate(RowIndex rowIndex, ColumnIndex columnIndex);

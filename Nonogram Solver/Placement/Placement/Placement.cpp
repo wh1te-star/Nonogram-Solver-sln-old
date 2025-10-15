@@ -16,3 +16,4 @@ bool Placement::operator==(const Placement& other) const {
 bool Placement::operator!=(const Placement& other) const {
     return !(*this == other);
 }
+

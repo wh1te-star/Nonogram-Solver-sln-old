@@ -55,6 +55,13 @@ bool Board::isInRange(const Coordinate& coordinate) const {
 	return true;
 }
 
+const Cell& Board::getCell(const Coordinate& coordinate) const {
+	assert(isInRange(coordinate));
+	RowIndex rowIndex = coordinate.getRowIndex();
+	ColumnIndex columnIndex = coordinate.getColumnIndex();
+	return board[rowIndex.getIndex()][columnIndex.getIndex()];
+}
+
 void Board::applyCell(const Coordinate& coordinate, const Cell& cell) {
     if(!isInRange(coordinate)) {
         return;
@@ -62,13 +69,7 @@ void Board::applyCell(const Coordinate& coordinate, const Cell& cell) {
 
     RowIndex rowIndex = coordinate.getRowIndex();
     ColumnIndex columnIndex = coordinate.getColumnIndex();
-    std::vector<Cell>& row = board[rowIndex.getIndex()]; 
-    Cell& targetCell = row[columnIndex.getIndex()]; 
-    if (targetCell.canColor(cell.getColor())) {
-		auto it = row.begin() + columnIndex.getIndex();
-		row.erase(it);
-		row.insert(it, cell);
-    }
+	board[rowIndex.getIndex()][columnIndex.getIndex()] = cell;
 }
 
 void Board::applyPlacement(const Coordinate& coordinate, const Placement& placement) {
@@ -77,24 +78,7 @@ void Board::applyPlacement(const Coordinate& coordinate, const Placement& placem
 		typeid(placement) == typeid(ColumnPlacement)
 	);
 
-	for(const CellLocation& cellLocation : placement.getCellLocationList()) {
+	for(const CellLocation& cellLocation : placement.getCellLocationList(coordinate)) {
 		applyCell(cellLocation.getCoordinate(), cellLocation.getCell());
-	}
-}
-
-void Board::applyBoard(const Coordinate& coordinate, const Board& board) {
-	RowIndex startRowIndex = coordinate.getRowIndex();
-	ColumnIndex startColumnIndex = coordinate.getColumnIndex();
-	RowLength boardRowLength = board.getRowLength();
-	ColumnLength boardColumnLength = board.getColumnLength();
-	for(int i = 0; i < boardRowLength.getLength(); i++) {
-		for(int j = 0; j < boardColumnLength.getLength(); j++) {
-			Coordinate cellCoordinate(
-				startRowIndex + RowIndex(i),
-				startColumnIndex + ColumnIndex(j)
-			);
-			Cell cell = board.getBoard()[i][j];
-			applyCell(cellCoordinate, cell.getColor());
-		}
 	}
 }

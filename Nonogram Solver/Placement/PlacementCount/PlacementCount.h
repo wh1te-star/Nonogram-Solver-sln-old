@@ -4,7 +4,7 @@
 
 class PlacementCount {
 private:
-    const int count;
+    int count;
 
 public:
 	explicit PlacementCount(int count);

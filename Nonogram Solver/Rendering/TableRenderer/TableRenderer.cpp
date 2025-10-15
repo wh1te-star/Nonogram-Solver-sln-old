@@ -13,15 +13,17 @@
 #include "Board/BoardLength/RowLength.h"
 #include "Board/BoardLength/ColumnLength.h"
 #include <string>
+#include "Shared/SharedBacktractBoard.h"
 
 
 TableRenderer::TableRenderer(){}
 
-void TableRenderer::render(BacktrackBoard backtrackBoard) const {
+void TableRenderer::render(SharedBacktrackBoard sharedBacktrackBoard) const {
 	ImGui::Begin("Nonogram Board", NULL, ImGuiWindowFlags_None);
 
 
-	NonogramBoard& nonogramBoard = backtrackBoard.getNonogramBoard();
+	const BacktrackBoard& backtrackBoard = sharedBacktrackBoard.getBacktrackBoard();
+	const NonogramBoard& nonogramBoard = backtrackBoard.getNonogramBoard();
 
 	const Board& board = nonogramBoard.getBoard();
 	const RowHintLineList& rowHintLineList = nonogramBoard.getRowHintLineList();

@@ -6,7 +6,7 @@
 
 class Cell {
 private:
-    const CellColor color;
+    CellColor color;
 
 public:
     explicit Cell();

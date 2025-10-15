@@ -7,8 +7,8 @@
 
 class CellLocation {
 private:
-	const Coordinate coordinate;
-	const Cell cell;
+	Coordinate coordinate;
+	Cell cell;
 
 public:
     explicit CellLocation(Coordinate coordinate, Cell cell);

@@ -8,7 +8,7 @@
 
 class HintLine {
 private:
-	const std::vector<HintNumber> numbers;
+	std::vector<HintNumber> numbers;
 
 public:
 	HintLine(std::vector<HintNumber> numbers);

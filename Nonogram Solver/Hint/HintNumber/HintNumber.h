@@ -4,7 +4,7 @@
 
 class HintNumber {
 private:
-	const int number;
+	int number;
 
 public:
     explicit HintNumber(int number);

@@ -11,7 +11,7 @@
 #include "Rendering/TableRenderer/TableRenderer.h"
 #include "TestData/Repository/TestDataRepository.h"
 #include "Algorithm/BacktrackAlgorithm.h"
-#include "Notifier/RenderNotifier.h"
+#include "Shared/SharedBacktractBoard.h"
 
 
 RenderingSystem::RenderingSystem() :
@@ -74,8 +74,8 @@ void RenderingSystem::renderingLoop() {
 			PlacementCount(26), PlacementCount(27), PlacementCount(28), PlacementCount(29), PlacementCount(30),
 		})
 	);
-	SharedBacktrackBoard renderNotifier = SharedBacktrackBoard();
-	renderNotifier.setRenderBoard(backtrackBoard);
+	SharedBacktrackBoard sharedBacktrackBoard = SharedBacktrackBoard(backtrackBoard);
+	TableRenderer tableRenderer = TableRenderer();
 
 	BacktrackAlgorithm algorithm(backtrackBoard);
 	std::thread worker_thread(&BacktrackAlgorithm::run, &algorithm);
@@ -139,8 +139,7 @@ void RenderingSystem::renderingLoop() {
 		}
 		ImGui::End();
 
-		TableRenderer tableRenderer = TableRenderer(backtrackBoard);
-		tableRenderer.render();
+		tableRenderer.render(sharedBacktrackBoard);
 
 		ImGui::Render();
 		ImGui::EndFrame();
@@ -159,14 +158,6 @@ void RenderingSystem::renderingLoop() {
 		glClear(GL_COLOR_BUFFER_BIT);
 		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 		glfwSwapBuffers(window);
-
-		printf("loop");
-		Board& board = backtrackBoard.getNonogramBoard().getBoard();
-		board.setCell(
-			Coordinate(RowIndex(count/10), ColumnIndex(count%10)),
-			Cell(CellColor::Black)
-		);
-		count = (count + 1) % 200;
 	}
 
 	algorithm.request_stop();

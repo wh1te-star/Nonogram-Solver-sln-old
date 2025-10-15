@@ -32,11 +32,11 @@ public:
 
 public:
 	bool isInRange(const Coordinate& coordinate) const;
+	const Cell& getCell(const Coordinate& coordinate) const;
 
 public:
 	void applyCell(const Coordinate& coordinate, const Cell& cellColor);
 	void applyPlacement(const Coordinate& coordinate, const Placement& placement);
-	void applyBoard(const Coordinate& coordinate, const Board& board);
 };
 
 

@@ -11,7 +11,7 @@ class Placement {
 private:
 
 protected:
-    const std::vector<Cell> placement;
+    std::vector<Cell> placement;
 
 public:
     explicit Placement(std::vector<Cell> placement);
@@ -23,6 +23,9 @@ public:
 public:
     bool operator==(const Placement& other) const;
     bool operator!=(const Placement& other) const;
+
+public:
+    virtual const std::vector<CellLocation> getCellLocationList(const Coordinate& coordinate) const = 0;
 };
 
 #endif

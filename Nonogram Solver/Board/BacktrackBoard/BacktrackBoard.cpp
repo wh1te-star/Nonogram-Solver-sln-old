@@ -9,15 +9,15 @@ BacktrackBoard::BacktrackBoard(
     rowPlacementCountList(std::move(rowPlacementCountList)),
     columnPlacementCountList(std::move(columnPlacementCountList)) {}
 
-NonogramBoard& BacktrackBoard::getNonogramBoard() const {
+const NonogramBoard& BacktrackBoard::getNonogramBoard() const {
 	return nonogramBoard;
 }
 
-RowPlacementCountList BacktrackBoard::getRowPlacementCountList() const {
+const RowPlacementCountList& BacktrackBoard::getRowPlacementCountList() const {
 	return rowPlacementCountList;
 }
 
-ColumnPlacementCountList BacktrackBoard::getColumnPlacementCountList() const {
+const ColumnPlacementCountList& BacktrackBoard::getColumnPlacementCountList() const {
 	return columnPlacementCountList;
 }
 
