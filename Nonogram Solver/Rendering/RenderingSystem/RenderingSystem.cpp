@@ -77,7 +77,7 @@ void RenderingSystem::renderingLoop() {
 	SharedBacktrackBoard sharedBacktrackBoard = SharedBacktrackBoard(backtrackBoard);
 	TableRenderer tableRenderer = TableRenderer();
 
-	BacktrackAlgorithm algorithm(backtrackBoard);
+	BacktrackAlgorithm algorithm(sharedBacktrackBoard);
 	std::thread worker_thread(&BacktrackAlgorithm::run, &algorithm);
 
 	int count = 0;

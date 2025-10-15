@@ -5,8 +5,8 @@
 #include <chrono>
 
 
-BacktrackAlgorithm::BacktrackAlgorithm(BacktrackBoard backtrackBoard)
-	: backtrackBoard(backtrackBoard) {}
+BacktrackAlgorithm::BacktrackAlgorithm(SharedBacktrackBoard& sharedBacktrackBoard)
+	: sharedBacktrackBoard(sharedBacktrackBoard) {}
 
 void BacktrackAlgorithm::run() {
 	int i = 0;

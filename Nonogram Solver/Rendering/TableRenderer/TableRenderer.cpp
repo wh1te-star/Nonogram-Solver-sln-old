@@ -18,7 +18,7 @@
 
 TableRenderer::TableRenderer(){}
 
-void TableRenderer::render(SharedBacktrackBoard sharedBacktrackBoard) const {
+void TableRenderer::render(const SharedBacktrackBoard& sharedBacktrackBoard) const {
 	ImGui::Begin("Nonogram Board", NULL, ImGuiWindowFlags_None);
 
 

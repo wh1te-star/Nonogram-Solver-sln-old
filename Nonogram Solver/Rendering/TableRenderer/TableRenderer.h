@@ -5,9 +5,17 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "imgui.h"
-#include "Board/BacktrackBoard/BacktrackBoard.h"
-#include "Shared/SharedBacktractBoard.h"
 #include <string>
+#include "Board/Board/Board.h"
+#include "Index/CellIndex/RowIndex.h"
+#include "Index/CellIndex/ColumnIndex.h"
+#include "Board/BoardLength/RowLength.h"
+#include "Board/BoardLength/ColumnLength.h"
+#include "Hint/HintLineList/RowHintLineList.h"
+#include "Hint/HintLineList/ColumnHintLineList.h"
+#include "Placement/PlacementCountList/RowPlacementCountList.h"
+#include "Placement/PlacementCountList/ColumnPlacementCountList.h"
+class SharedBacktrackBoard;
 
 class TableRenderer {
 private:
@@ -22,7 +30,7 @@ private:
 
 public:
 	TableRenderer();
-	void render(SharedBacktrackBoard sharedBacktrackBoard) const;
+	void render(const SharedBacktrackBoard& sharedBacktrackBoard) const;
 
 private:
 	CellType determineCellType(

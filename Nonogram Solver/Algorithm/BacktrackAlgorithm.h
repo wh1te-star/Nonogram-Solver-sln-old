@@ -4,15 +4,15 @@
 
 #include <atomic>
 #include <thread>
-#include "Board/BacktrackBoard/BacktrackBoard.h"
+#include "Shared/SharedBacktractBoard.h"
 
 class BacktrackAlgorithm {
 private:
-	BacktrackBoard backtrackBoard;
+	SharedBacktrackBoard& sharedBacktrackBoard;
     std::atomic<bool> should_terminate{ false };
 
 public:
-    explicit BacktrackAlgorithm(BacktrackBoard backtrackBoard);
+    explicit BacktrackAlgorithm(SharedBacktrackBoard& sharedBacktrackBoard);
 
 	void run();
 
