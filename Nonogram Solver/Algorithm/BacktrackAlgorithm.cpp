@@ -11,8 +11,16 @@ BacktrackAlgorithm::BacktrackAlgorithm(SharedBacktrackBoard& sharedBacktrackBoar
 void BacktrackAlgorithm::run() {
 	int i = 0;
 	while (!should_terminate) {
-		printf("count: %d\n", i);
+		sharedBacktrackBoard.applyCell(
+			Coordinate(
+				RowIndex(i % 5),
+				ColumnIndex(i % 5)
+			),
+			Cell(CellColor::Black)
+		);
 		std::this_thread::sleep_for(std::chrono::milliseconds(2500));
+
+		i++;
 	}
 }
 

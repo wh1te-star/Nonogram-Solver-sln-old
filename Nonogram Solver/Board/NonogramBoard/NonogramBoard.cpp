@@ -29,3 +29,10 @@ const ColumnHintLineList& NonogramBoard::getColumnHintLineList() const {
 	return columnHintLineList;
 }
 
+void NonogramBoard::applyCell(const Coordinate& coordinate, const Cell& cell) {
+	board.applyCell(coordinate, cell);
+}
+
+void NonogramBoard::applyPlacement(const Coordinate& coordinate, const Placement& placement) {
+	board.applyPlacement(coordinate, placement);
+}

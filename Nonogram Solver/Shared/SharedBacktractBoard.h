@@ -18,7 +18,8 @@ public:
     const BacktrackBoard& getBacktrackBoard() const;
 
 public:
-    void applyPlacement(Coordinate coordinate, Placement &placement);
+	void applyCell(const Coordinate& coordinate, const Cell& cellColor);
+	void applyPlacement(const Coordinate& coordinate, const Placement& placement);
 };
 
 

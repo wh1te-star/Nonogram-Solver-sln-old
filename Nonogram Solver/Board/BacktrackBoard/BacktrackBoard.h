@@ -23,6 +23,10 @@ public:
 	const NonogramBoard& getNonogramBoard() const;
 	const RowPlacementCountList& getRowPlacementCountList() const;
 	const ColumnPlacementCountList& getColumnPlacementCountList() const;
+
+public:
+	void applyCell(const Coordinate& coordinate, const Cell& cell);
+	void applyPlacement(const Coordinate& coordinate, const Placement& placement);
 };
 
 #endif

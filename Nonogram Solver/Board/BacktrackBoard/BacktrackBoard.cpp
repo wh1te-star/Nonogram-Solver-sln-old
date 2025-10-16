@@ -21,4 +21,10 @@ const ColumnPlacementCountList& BacktrackBoard::getColumnPlacementCountList() co
 	return columnPlacementCountList;
 }
 
+void BacktrackBoard::applyCell(const Coordinate& coordinate, const Cell& cell) {
+	nonogramBoard.applyCell(coordinate, cell);
+}
 
+void BacktrackBoard::applyPlacement(const Coordinate& coordinate, const Placement& placement) {
+	nonogramBoard.applyPlacement(coordinate, placement);
+}

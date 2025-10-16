@@ -35,7 +35,7 @@ public:
 	const Cell& getCell(const Coordinate& coordinate) const;
 
 public:
-	void applyCell(const Coordinate& coordinate, const Cell& cellColor);
+	void applyCell(const Coordinate& coordinate, const Cell& cell);
 	void applyPlacement(const Coordinate& coordinate, const Placement& placement);
 };
 

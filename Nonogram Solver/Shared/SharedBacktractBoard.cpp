@@ -12,8 +12,14 @@ const BacktrackBoard& SharedBacktrackBoard::getBacktrackBoard() const {
 	return backtrackBoard;
 }
 
-void SharedBacktrackBoard::applyPlacement(Coordinate coordinate, Placement &placement) {
+void SharedBacktrackBoard::applyCell(const Coordinate& coordinate, const Cell& cell) {
 	std::lock_guard<std::mutex> lock(mtx);
 
-	//backtrackBoard.applyPlacement(coordinate, placement);
+	backtrackBoard.applyCell(coordinate, cell);
+}
+
+void SharedBacktrackBoard::applyPlacement(const Coordinate& coordinate, const Placement& placement) {
+	std::lock_guard<std::mutex> lock(mtx);
+
+	backtrackBoard.applyPlacement(coordinate, placement);
 }

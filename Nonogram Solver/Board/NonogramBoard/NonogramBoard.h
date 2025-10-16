@@ -28,6 +28,10 @@ public:
 	const ColumnLength& getColumnCount() const;
 	const RowHintLineList& getRowHintLineList() const;
 	const ColumnHintLineList& getColumnHintLineList() const;
+
+public:
+	void applyCell(const Coordinate& coordinate, const Cell& cell);
+	void applyPlacement(const Coordinate& coordinate, const Placement& placement);
 };
 
 #endif
