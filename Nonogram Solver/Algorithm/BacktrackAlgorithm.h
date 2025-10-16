@@ -9,12 +9,19 @@
 class BacktrackAlgorithm {
 private:
 	SharedBacktrackBoard& sharedBacktrackBoard;
-    std::atomic<bool> should_terminate{ false };
+    std::atomic<bool> terminate{ false };
 
 public:
     explicit BacktrackAlgorithm(SharedBacktrackBoard& sharedBacktrackBoard);
 
 	void run();
+
+	void recursiveSolve(int count, int max);
+
+    long long countPlacements(
+		const Placement& placement,
+		const HintLine& hintLine
+	);
 
     void request_stop();
 };
