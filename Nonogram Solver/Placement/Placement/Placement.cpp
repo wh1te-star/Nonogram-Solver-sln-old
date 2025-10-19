@@ -17,3 +17,11 @@ bool Placement::operator!=(const Placement& other) const {
     return !(*this == other);
 }
 
+Cell Placement::operator[](const CellIndex& index) const {
+    return placement[index.getIndex()];
+}
+
+const int Placement::size() const {
+    return placement.size();
+}
+

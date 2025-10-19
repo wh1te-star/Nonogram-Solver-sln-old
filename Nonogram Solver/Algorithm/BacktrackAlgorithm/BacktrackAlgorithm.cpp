@@ -1,4 +1,4 @@
-#include "Algorithm/BacktrackAlgorithm.h"
+#include "Algorithm/BacktrackAlgorithm/BacktrackAlgorithm.h"
 
 #include <atomic>
 #include <thread>
@@ -25,59 +25,61 @@ void BacktrackAlgorithm::recursiveSolve(int count, int max) {
     recursiveSolve(count + 1, max);
 }
 
-/*
-long long countPlacements(
+long long BacktrackAlgorithm::countPlacements(
 	const Placement& placement,
 	const HintLine& hintLine
 ) {
-	int numHints = hintLine.size();
+	int hintsCount = hintLine.size();
+    int totalLength = placement.size();
     
-    std::vector<std::vector<long long>> dp(numHints + 1, std::vector<long long>(totalLength + 1, 0));
+    std::vector<std::vector<long long>> partialCount(hintsCount + 1, std::vector<long long>(totalLength + 1, 0));
 
-    dp[0][0] = 1;
-    for (int j = 1; j <= totalLength; ++j) {
-        if (canPlace(WHITE, determinedStates[j-1])) {
-            dp[0][j] = 1;
+    partialCount[0][0] = 1;
+    for (int index = 1; index <= totalLength; index++) {
+		Cell cell = placement[CellIndex(index - 1)];
+        if(cell.canColor(White)) {
+            partialCount[0][index] = 1;
         } else {
             break;
         }
     }
 
-    for (int i = 1; i <= numHints; ++i) {
-        int currentHintLength = hintNumbers[i-1];
+    for (int hintNumberIndex = 1; hintNumberIndex <= hintsCount; hintNumberIndex++) {
+        HintNumber currentHintNumber = hintLine[CellIndex(hintNumberIndex-1)];
         
-        for (int j = 1; j <= totalLength; ++j) {
-            if (canPlace(WHITE, determinedStates[j-1])) {
-                dp[i][j] = dp[i][j-1];
+        for (int boardLength = 1; boardLength <= totalLength; boardLength++) {
+
+            if (canPlace(WHITE, determinedStates[boardLength-1])) {
+                partialCount[hintNumberIndex][boardLength] = partialCount[hintNumberIndex][boardLength-1];
             }
             
-            if (j >= currentHintLength) {
-                bool isSeparated = (j == currentHintLength) || (canPlace(WHITE, determinedStates[j - currentHintLength - 1]));
+            if (boardLength >= currentHintNumber) {
+                bool isSeparated = (boardLength == currentHintNumber) || (canPlace(WHITE, determinedStates[boardLength - currentHintNumber - 1]));
 
                 bool blockFits = true;
-                for (int k = 0; k < currentHintLength; ++k) {
-                    if (!canPlace(BLACK, determinedStates[j - 1 - k])) {
+                for (int k = 0; k < currentHintNumber; ++k) {
+                    if (!canPlace(BLACK, determinedStates[boardLength - 1 - k])) {
                         blockFits = false;
                         break;
                     }
                 }
                 
                 if (isSeparated && blockFits) {
-                    int prevJ = j - currentHintLength - 1;
+                    int prevJ = boardLength - currentHintNumber - 1;
                     if (prevJ < 0) {
-                        // 最初からブロックを置く場合
-                        dp[i][j] += dp[i-1][0];
+                        partialCount[hintNumberIndex][boardLength] += partialCount[hintNumberIndex-1][0];
                     } else {
-                        dp[i][j] += dp[i-1][prevJ];
+                        partialCount[hintNumberIndex][boardLength] += partialCount[hintNumberIndex-1][prevJ];
                     }
                 }
             }
         }
     }
 
-    return dp[numHints][totalLength];
+    return partialCount[hintsCount][totalLength];
 }
 
+/*
 std::vector<int> getLeftmostPositions(
     const std::vector<CellState>& determinedCells,
     const std::vector<int>& hints

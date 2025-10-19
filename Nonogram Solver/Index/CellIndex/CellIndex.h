@@ -7,6 +7,8 @@
 class CellIndex {
 protected:
     int index;
+
+public:
     explicit CellIndex(int index);
 
 public:
