@@ -25,20 +25,26 @@ void BacktrackAlgorithm::recursiveSolve(int count, int max) {
     recursiveSolve(count + 1, max);
 }
 
-long long BacktrackAlgorithm::countPlacements(
+PlacementCount BacktrackAlgorithm::countPlacements(
 	const Placement& placement,
 	const HintLine& hintLine
 ) {
 	int hintsCount = hintLine.size();
     int totalLength = placement.size();
     
-    std::vector<std::vector<long long>> partialCount(hintsCount + 1, std::vector<long long>(totalLength + 1, 0));
+    std::vector<std::vector<PlacementCount>> partialCount(
+        hintsCount + 1,
+        std::vector<PlacementCount>(
+            totalLength + 1,
+            PlacementCount(0)
+        )
+    );
 
-    partialCount[0][0] = 1;
+    partialCount[0][0] = PlacementCount(1);
     for (int index = 1; index <= totalLength; index++) {
 		Cell cell = placement[CellIndex(index - 1)];
         if(cell.canColor(White)) {
-            partialCount[0][index] = 1;
+            partialCount[0][index] = PlacementCount(1);
         } else {
             break;
         }
@@ -49,6 +55,7 @@ long long BacktrackAlgorithm::countPlacements(
         
         for (int boardLength = 1; boardLength <= totalLength; boardLength++) {
 
+			placement[boardLength - 1].canPlace(WHITE);
             if (canPlace(WHITE, determinedStates[boardLength-1])) {
                 partialCount[hintNumberIndex][boardLength] = partialCount[hintNumberIndex][boardLength-1];
             }

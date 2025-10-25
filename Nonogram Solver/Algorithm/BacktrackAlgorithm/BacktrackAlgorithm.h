@@ -18,7 +18,7 @@ public:
 
 	void recursiveSolve(int count, int max);
 
-    long long countPlacements(
+    PlacementCount countPlacements(
 		const Placement& placement,
 		const HintLine& hintLine
 	);
