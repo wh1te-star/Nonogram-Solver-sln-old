@@ -2,8 +2,10 @@
 #define BOARDLENGTH_H
 
 class BoardLength {
-protected:
+private:
     const int length;
+
+public:
     BoardLength(int length);
 
 public:

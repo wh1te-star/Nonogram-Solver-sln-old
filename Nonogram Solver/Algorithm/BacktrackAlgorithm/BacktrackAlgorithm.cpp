@@ -29,132 +29,71 @@ PlacementCount BacktrackAlgorithm::countPlacements(
 	const Placement& placement,
 	const HintLine& hintLine
 ) {
-// Initialize the DP table: Count[HintsUsed][CellsConsidered]
-hintsCount = length(HintLine)
-totalLength = length(Placement)
-Initialize Count[hintsCount + 1][totalLength + 1] to 0
-
-// --- Base Case: Count[0][j] (Placing 0 hints) ---
-Count[0][0] = 1
-
-For CellsConsidered = 1 to totalLength:
-    // 0 hints valid only if the cell can be White (i.e., not 'Black').
-    If Placement[CellsConsidered - 1] is NOT 'Black':
-        Count[0][CellsConsidered] = 1
-    Else:
-        Break // Cannot place 0 hints if a cell is forced Black
-    End If
-End For
-
-// --- Main DP Loop ---
-For HintsUsed = 1 to hintsCount:
-    currentHintSize = HintLine[HintsUsed - 1]
-
-    For CellsConsidered = 1 to totalLength:
-
-        // **Option 1: The last cell is White (Separator).**
-        // If the cell is not forced to be Black, inherit the count from N[i][j-1].
-        If Placement[CellsConsidered - 1] is NOT 'Black':
-            Count[HintsUsed][CellsConsidered] = Count[HintsUsed][CellsConsidered - 1]
-        End If
-
-        // **Option 2: The last cell ends the current Black block.**
-        If CellsConsidered >= currentHintSize:
-            
-            // The length of the line *before* the required separation cell
-            prevCellsConsidered = CellsConsidered - currentHintSize - 1 
-            blockStartIndex = CellsConsidered - currentHintSize
-
-            // Check A: The Black block fits in the Placement
-            blockFits = True
-            For k = blockStartIndex to CellsConsidered - 1:
-                // Cell must be placable as 'Black' (i.e., not 'White')
-                If Placement[k] is 'White':
-                    blockFits = False
-                    Break
-                End If
-            End For
-            
-            // Check B: Proper separation from the previous hint (required in B&W)
-            isSeparated = (prevCellsConsidered < 0) // Block starts at the line beginning
-                      OR (Placement[prevCellsConsidered] is NOT 'Black') // Cell before block can be White
-
-            If blockFits AND isSeparated:
-                // Add the count from the previous hint placed up to the separation point.
-                If prevCellsConsidered < 0:
-                    // Block starts at index 0. We add N[i-1][0].
-                    Count[HintsUsed][CellsConsidered] = Count[HintsUsed][CellsConsidered] + Count[HintsUsed - 1][0]
-                Else:
-                    // Block follows a separator cell. We add N[i-1][prevCellsConsidered].
-                    Count[HintsUsed][CellsConsidered] = Count[HintsUsed][CellsConsidered] + Count[HintsUsed - 1][prevCellsConsidered]
-                End If
-            End If
-        End If
-    End For
-End For
-
-// The final answer is the count for all hints placed in the total length.
-Return Count[hintsCount][totalLength]
-
 	int hintsCount = hintLine.size();
-    int totalLength = placement.size();
-    
-    std::vector<std::vector<PlacementCount>> partialCount(
-        hintsCount + 1,
-        std::vector<PlacementCount>(
-            totalLength + 1,
-            PlacementCount(0)
-        )
-    );
+	int totalLength = placement.size();
 
-    partialCount[0][0] = PlacementCount(1);
-    for (int index = 1; index <= totalLength; index++) {
-		Cell cell = placement[CellIndex(index - 1)];
-        if(cell.canColor(White)) {
-            partialCount[0][index] = PlacementCount(1);
-        } else {
-            break;
-        }
-    }
+	std::vector<std::vector<PlacementCount>> partialCount(
+		hintsCount + 1,
+		std::vector<PlacementCount>(
+			totalLength + 1,
+			PlacementCount(0)
+		)
+	);
 
-    for (int hintNumberIndex = 1; hintNumberIndex <= hintsCount; hintNumberIndex++) {
-        HintNumber currentHintNumber = hintLine[CellIndex(hintNumberIndex-1)];
-        
-        for (int boardLength = 1; boardLength <= totalLength; boardLength++) {
+	partialCount[0][0] = PlacementCount(1);
+	for (int cellIndexInt = 1; cellIndexInt <= totalLength; cellIndexInt++) {
+        CellIndex cellIndex = CellIndex(cellIndexInt - 1);
+		Cell cell = placement[cellIndex];
+		if (cell.canColor(White)) {
+			partialCount[0][cellIndexInt] = PlacementCount(1);
+		}
+		else {
+			break;
+		}
+	}
 
-			placement[boardLength - 1].canPlace(WHITE);
-            if (canPlace(WHITE, determinedStates[boardLength-1])) {
-                partialCount[hintNumberIndex][boardLength] = partialCount[hintNumberIndex][boardLength-1];
-            }
-            
-            if (boardLength >= currentHintNumber) {
-                bool isSeparated = (boardLength == currentHintNumber) || (canPlace(WHITE, determinedStates[boardLength - currentHintNumber - 1]));
+	for (int hintNumberIndexInt = 1; hintNumberIndexInt <= hintsCount; hintNumberIndexInt++) {
+		HintNumber hintNumber = hintLine[hintNumberIndexInt];
 
-                bool blockFits = true;
-                for (int k = 0; k < currentHintNumber; ++k) {
-                    if (!canPlace(BLACK, determinedStates[boardLength - 1 - k])) {
-                        blockFits = false;
-                        break;
-                    }
-                }
-                
-                if (isSeparated && blockFits) {
-                    int prevJ = boardLength - currentHintNumber - 1;
-                    if (prevJ < 0) {
-                        partialCount[hintNumberIndex][boardLength] += partialCount[hintNumberIndex-1][0];
-                    } else {
-                        partialCount[hintNumberIndex][boardLength] += partialCount[hintNumberIndex-1][prevJ];
-                    }
-                }
-            }
-        }
-    }
+		for (int cellIndexInt = 1; cellIndexInt <= totalLength; cellIndexInt++) {
+            CellIndex cellIndex = CellIndex(cellIndexInt);
 
-    return partialCount[hintsCount][totalLength];
+			if (placement[cellIndex - 1].canPlace(White)) {
+				partialCount[hintNumberIndexInt][cellIndexInt] = partialCount[hintNumberIndexInt][cellIndexInt - 1];
+			}
+
+			if (cellIndex >= hintNumber) {
+                CellIndex prevCellIndex = cellIndex - hintNumber - 1;
+                CellIndex blockStart = cellIndex - hintNumber;
+
+                bool isSeparated = (prevCellIndex < CellIndex(0)) || (placement[prevCellIndex].canColor(White));
+
+				bool blockFits = true;
+				for (int blackCellIndexInt = blockStart.getIndex(); blackCellIndexInt < hintNumber; blackCellIndexInt++) {
+					CellIndex blackCellIndex = CellIndex(blackCellIndexInt);
+
+					if (!placement[blackCellIndex].canColor(Black)) {
+						blockFits = false;
+						break;
+					}
+				}
+
+				if (isSeparated && blockFits) {
+					if (prevCellIndex < 0) {
+						partialCount[hintNumberIndexInt][cellIndexInt] += partialCount[hintNumberIndexInt - 1][0];
+					}
+					else {
+						partialCount[hintNumberIndexInt][cellIndexInt] += partialCount[hintNumberIndexInt - 1][prevCellIndex];
+					}
+				}
+			}
+		}
+	}
+
+	return partialCount[hintsCount][totalLength];
 }
 
-/*
-std::vector<int> getLeftmostPositions(
+std::vector<int> BacktrackAlgorithm::getLeftmostPlacement(
     const std::vector<CellState>& determinedCells,
     const std::vector<int>& hints
 ) {
@@ -181,7 +120,7 @@ std::vector<int> getLeftmostPositions(
     return positions;
 }
 
-std::vector<int> getRightmostPositions(
+std::vector<int> BacktrackAlgorithm::getRightmostPositions(
     const std::vector<CellState>& determinedCells,
     const std::vector<int>& hints
 ) {
@@ -339,7 +278,6 @@ std::vector<Placement> BacktrackAlgorithm::FindPlacementsExhaustive(
     std::reverse(solutions.begin(), solutions.end());
     return solutions;
 }
-*/
 
 void BacktrackAlgorithm::request_stop() {
 	terminate = true;

@@ -19,7 +19,7 @@ public:
 public:
 	bool operator==(const HintLine& other) const;
 	bool operator!=(const HintLine& other) const;
-	HintNumber operator[](CellIndex index) const;
+	HintNumber operator[](int index) const;
 
 public:
 	size_t size() const;
