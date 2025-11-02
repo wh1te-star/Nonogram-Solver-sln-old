@@ -130,6 +130,9 @@
     <ClCompile Include="Algorithm\BacktrackAlgorithm\BacktrackAlgorithm.cpp" />
     <ClCompile Include="Board\BacktrackBoard\BacktrackBoard.cpp" />
     <ClCompile Include="Board\BoardLength\BoardLength.cpp" />
+    <ClCompile Include="Board\Line\Column.cpp" />
+    <ClCompile Include="Board\Line\Line.cpp" />
+    <ClCompile Include="Board\Line\Row.cpp" />
     <ClCompile Include="Index\CellIndex\CellIndex.cpp" />
     <ClCompile Include="Index\CellIndex\ColumnIndex.cpp" />
     <ClCompile Include="Index\CellIndex\RowIndex.cpp" />
@@ -175,6 +178,9 @@
     <ClInclude Include="Algorithm\BacktrackAlgorithm\BacktrackAlgorithm.h" />
     <ClInclude Include="Board\BacktrackBoard\BacktrackBoard.h" />
     <ClInclude Include="Board\BoardLength\BoardLength.h" />
+    <ClInclude Include="Board\Line\Column.h" />
+    <ClInclude Include="Board\Line\Line.h" />
+    <ClInclude Include="Board\Line\Row.h" />
     <ClInclude Include="Cell\CellVector2D\CellVector2D.h" />
     <ClInclude Include="Index\CellIndex\CellIndex.h" />
     <ClInclude Include="Index\CellIndex\ColumnIndex.h" />
