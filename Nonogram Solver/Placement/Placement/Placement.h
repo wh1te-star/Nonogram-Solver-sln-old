@@ -25,6 +25,9 @@ public:
     bool operator!=(const Placement& other) const;
 	Cell operator[](const CellIndex& index) const;
 
+private:
+    bool hasNone() const;
+
 public:
 	const int size() const;
     virtual const std::vector<CellLocation> getCellLocationList(const Coordinate& coordinate) const = 0;
