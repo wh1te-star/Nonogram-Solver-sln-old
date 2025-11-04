@@ -214,7 +214,7 @@ std::string TableRenderer::setLabel(
 			ColumnIndex HintNumberIndex = ColumnIndex(columnIndex.getIndex() + hintLine.size() - rowHintLength.getLength());
 			if (HintNumberIndex >= ColumnIndex(0)) {
 				assert(HintNumberIndex < ColumnLength((int)hintLine.size()));
-				return std::to_string(hintLine[HintNumberIndex].getNumber());
+				return std::to_string(hintLine[HintNumberIndex.getIndex()].getNumber());
 			}
 		}
 
@@ -225,7 +225,7 @@ std::string TableRenderer::setLabel(
 			RowIndex HintNumberIndex = RowIndex(rowIndex.getIndex() + hintLine.size() - columnHintLength.getLength());
 			if (HintNumberIndex >= RowIndex(0)) {
 				assert(HintNumberIndex < RowLength((int)hintLine.size()));
-				return std::to_string(hintLine[HintNumberIndex].getNumber());
+				return std::to_string(hintLine[HintNumberIndex.getIndex()].getNumber());
 			}
 		}
 

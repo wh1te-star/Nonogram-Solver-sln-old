@@ -19,7 +19,7 @@ public:
 	void recursiveSolve(int count, int max);
 
     PlacementCount countPlacements(
-		const Placement& placement,
+		const Line& line,
 		const HintLine& hintLine
 	);
 

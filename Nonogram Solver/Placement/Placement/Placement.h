@@ -29,8 +29,8 @@ private:
     bool hasNone() const;
 
 public:
-	const int size() const;
-    virtual const std::vector<CellLocation> getCellLocationList(const Coordinate& coordinate) const = 0;
+	const size_t size() const;
+    const std::vector<CellLocation> getCellLocationList(const Coordinate& coordinate) const;
 };
 
 #endif

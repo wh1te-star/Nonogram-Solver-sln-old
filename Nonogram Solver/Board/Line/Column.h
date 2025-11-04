@@ -1,15 +1,13 @@
-#ifndef COLUMNPLACEMENT_H
-#define COLUMNPLACEMENT_H
+#ifndef COLUMN_H
+#define COLUMN_H
 
 
-#include "Placement/Placement/Placement.h"
+#include "Board/Line/Line.h"
 #include "Index/Coordinate/Coordinate.h"
 
-class ColumnPlacement : public Placement {
+class Column : public Line {
 public:
-    explicit ColumnPlacement(std::vector<Cell> placement);
-
-    const std::vector<CellLocation> getCellLocationList(const Coordinate& coordinate) const override;
+    explicit Column(std::vector<Cell> line);
 };
 
 

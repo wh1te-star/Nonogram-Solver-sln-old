@@ -1,27 +1,40 @@
-#include "Placement/Placement/Placement.h"
+#include "Board/Line/Line.h"
+
 #include "Cell/Cell/Cell.h"
 #include "Index/Coordinate/Coordinate.h"
+#include <cassert>
 
-Placement::Placement(std::vector<Cell> placement) :
-    placement(placement) {}
 
-const std::vector<Cell>& Placement::getPlacement() const {
-    return placement;
+Line::Line(std::vector<Cell> line) :
+    line(line) {}
+
+const std::vector<Cell>& Line::getLine() const {
+    return line;
 }
 
-bool Placement::operator==(const Placement& other) const {
-	return placement == other.placement;
+bool Line::operator==(const Line& other) const {
+	return line == other.line;
 }
 
-bool Placement::operator!=(const Placement& other) const {
+bool Line::operator!=(const Line& other) const {
     return !(*this == other);
 }
 
-Cell Placement::operator[](const CellIndex& index) const {
-    return placement[index.getIndex()];
+Cell Line::operator[](const CellIndex& index) const {
+    return line[index.getIndex()];
 }
 
-const int Placement::size() const {
-    return placement.size();
+const size_t Line::size() const {
+    return line.size();
 }
 
+const std::vector<CellLocation> Line::getCellLocationList(const Coordinate& coordinate) const {
+	std::vector<CellLocation> cellLocationList;
+	int shift = 0;
+	for(Cell cell : line) {
+		Coordinate cellCoordinate = coordinate.move(0, shift);
+		cellLocationList.emplace_back(cellCoordinate, cell);
+		shift++;
+	}
+	return cellLocationList;
+}

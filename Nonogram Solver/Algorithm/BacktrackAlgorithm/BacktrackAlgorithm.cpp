@@ -1,5 +1,6 @@
 #include "Algorithm/BacktrackAlgorithm/BacktrackAlgorithm.h"
 
+#include "Board/Line/Line.h"
 #include <atomic>
 #include <thread>
 #include <chrono>
@@ -26,11 +27,11 @@ void BacktrackAlgorithm::recursiveSolve(int count, int max) {
 }
 
 PlacementCount BacktrackAlgorithm::countPlacements(
-	const Placement& placement,
+	const Line& line,
 	const HintLine& hintLine
 ) {
 	int hintsCount = hintLine.size();
-	int totalLength = placement.size();
+	int totalLength = line.size();
 
 	std::vector<std::vector<PlacementCount>> partialCount(
 		hintsCount + 1,
@@ -43,7 +44,7 @@ PlacementCount BacktrackAlgorithm::countPlacements(
 	partialCount[0][0] = PlacementCount(1);
 	for (int cellIndexInt = 1; cellIndexInt <= totalLength; cellIndexInt++) {
         CellIndex cellIndex = CellIndex(cellIndexInt - 1);
-		Cell cell = placement[cellIndex];
+		Cell cell = line[cellIndex];
 		if (cell.canColor(White)) {
 			partialCount[0][cellIndexInt] = PlacementCount(1);
 		}
@@ -58,7 +59,7 @@ PlacementCount BacktrackAlgorithm::countPlacements(
 		for (int cellIndexInt = 1; cellIndexInt <= totalLength; cellIndexInt++) {
             CellIndex cellIndex = CellIndex(cellIndexInt);
 
-			if (placement[cellIndex - 1].canPlace(White)) {
+			if (line[cellIndex - 1].canPlace(White)) {
 				partialCount[hintNumberIndexInt][cellIndexInt] = partialCount[hintNumberIndexInt][cellIndexInt - 1];
 			}
 
@@ -66,13 +67,13 @@ PlacementCount BacktrackAlgorithm::countPlacements(
                 CellIndex prevCellIndex = cellIndex - hintNumber - 1;
                 CellIndex blockStart = cellIndex - hintNumber;
 
-                bool isSeparated = (prevCellIndex < CellIndex(0)) || (placement[prevCellIndex].canColor(White));
+                bool isSeparated = (prevCellIndex < CellIndex(0)) || (line[prevCellIndex].canColor(White));
 
 				bool blockFits = true;
 				for (int blackCellIndexInt = blockStart.getIndex(); blackCellIndexInt < hintNumber; blackCellIndexInt++) {
 					CellIndex blackCellIndex = CellIndex(blackCellIndexInt);
 
-					if (!placement[blackCellIndex].canColor(Black)) {
+					if (!line[blackCellIndex].canColor(Black)) {
 						blockFits = false;
 						break;
 					}

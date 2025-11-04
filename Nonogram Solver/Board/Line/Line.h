@@ -1,5 +1,5 @@
-#ifndef PLACEMENT_H
-#define PLACEMENT_H
+#ifndef LINE_H
+#define LINE_H
 
 
 #include <vector>
@@ -7,27 +7,27 @@
 #include "Cell/CellLocation/CellLocation.h"
 #include "Index/Coordinate/Coordinate.h"
 
-class Placement {
+class Line {
 private:
 
 protected:
-    std::vector<Cell> placement;
+    std::vector<Cell> line;
 
 public:
-    explicit Placement(std::vector<Cell> placement);
-    virtual ~Placement() = default;
+    explicit Line(std::vector<Cell> line);
+    virtual ~Line() = default;
 
 public:
-	const std::vector<Cell>& getPlacement() const;
+	const std::vector<Cell>& getLine() const;
 
 public:
-    bool operator==(const Placement& other) const;
-    bool operator!=(const Placement& other) const;
+    bool operator==(const Line& other) const;
+    bool operator!=(const Line& other) const;
 	Cell operator[](const CellIndex& index) const;
 
 public:
-	const int size() const;
-    virtual const std::vector<CellLocation> getCellLocationList(const Coordinate& coordinate) const = 0;
+	const size_t size() const;
+    const std::vector<CellLocation> getCellLocationList(const Coordinate& coordinate) const;
 };
 
 #endif

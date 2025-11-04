@@ -37,7 +37,17 @@ bool Placement::hasNone() const {
 	return hasNoneColor;
 }
 
-const int Placement::size() const {
+const size_t Placement::size() const {
     return placement.size();
 }
 
+const std::vector<CellLocation> Placement::getCellLocationList(const Coordinate& coordinate) const {
+	std::vector<CellLocation> cellLocationList;
+	int shift = 0;
+	for(Cell cell : placement) {
+		Coordinate cellCoordinate = coordinate.move(0, shift);
+		cellLocationList.emplace_back(cellCoordinate, cell);
+		shift++;
+	}
+	return cellLocationList;
+}
