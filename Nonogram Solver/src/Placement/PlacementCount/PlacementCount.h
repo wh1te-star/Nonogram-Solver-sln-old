@@ -15,6 +15,8 @@ public:
 public:
     PlacementCount operator+(const PlacementCount& other) const;
     PlacementCount operator-(const PlacementCount& other) const;
+    PlacementCount& operator+=(const PlacementCount& other);
+    PlacementCount& operator-=(const PlacementCount& other);
     bool operator==(const PlacementCount& other) const;
     bool operator!=(const PlacementCount& other) const;
 };

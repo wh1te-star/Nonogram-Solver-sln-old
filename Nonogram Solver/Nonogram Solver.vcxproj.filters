@@ -42,171 +42,171 @@
     <ClCompile Include="libs\GLAD\src\glad.c">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="Board\Board\Board.cpp">
+    <ClCompile Include="src\Board\Board\Board.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Placement\Placement\Placement.cpp">
+    <ClCompile Include="src\Placement\Placement\Placement.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Cell\Cell\Cell.h">
+    <ClCompile Include="src\Cell\Cell\Cell.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Board\BoardLength\RowLength.cpp">
+    <ClCompile Include="src\Board\BoardLength\RowLength.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Board\BoardLength\ColumnLength.cpp">
+    <ClCompile Include="src\Board\BoardLength\ColumnLength.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Cell\Cell\Cell.cpp">
+    <ClCompile Include="src\Cell\Cell\Cell.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Board\BoardLength\BoardLength.cpp">
+    <ClCompile Include="src\Board\BoardLength\BoardLength.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Placement\Placement\RowPlacement.cpp">
+    <ClCompile Include="src\Placement\Placement\RowPlacement.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Placement\Placement\ColumnPlacement.cpp">
+    <ClCompile Include="src\Placement\Placement\ColumnPlacement.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Cell\CellColor\CellColor.h">
+    <ClCompile Include="src\Cell\CellColor\CellColor.h">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Cell\CellLocation\CellLocation.cpp">
+    <ClCompile Include="src\Cell\CellLocation\CellLocation.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Hint\HintLine\HintLine.cpp">
+    <ClCompile Include="src\Hint\HintLine\HintLine.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Hint\HintNumber\HintNumber.cpp">
+    <ClCompile Include="src\Hint\HintNumber\HintNumber.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Hint\HintLineList\HintLineList.cpp">
+    <ClCompile Include="src\Hint\HintLineList\HintLineList.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Hint\HintLineList\RowHintLineList.cpp">
+    <ClCompile Include="src\Hint\HintLineList\RowHintLineList.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Hint\HintLineList\ColumnHintLineList.cpp">
+    <ClCompile Include="src\Hint\HintLineList\ColumnHintLineList.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Placement\PlacementCount\PlacementCount.cpp">
+    <ClCompile Include="src\Placement\PlacementCount\PlacementCount.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="TestData\TestData\TestDataEasy.cpp">
+    <ClCompile Include="src\TestData\TestData\TestDataEasy.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="TestData\Repository\TestDataRepository.cpp">
+    <ClCompile Include="src\TestData\Repository\TestDataRepository.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="TestData\TestData\TestDataLambda.cpp">
+    <ClCompile Include="src\TestData\TestData\TestDataLambda.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="TestData\TestData\TestDataLarge.cpp">
+    <ClCompile Include="src\TestData\TestData\TestDataLarge.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Placement\PlacementCountList\PlacementCountList.cpp">
+    <ClCompile Include="src\Placement\PlacementCountList\PlacementCountList.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Placement\PlacementCountList\ColumnPlacementCountList.cpp">
+    <ClCompile Include="src\Placement\PlacementCountList\ColumnPlacementCountList.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Placement\PlacementCountList\RowPlacementCountList.cpp">
+    <ClCompile Include="src\Placement\PlacementCountList\RowPlacementCountList.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Rendering\RenderingSystem\RenderingSystem.cpp">
+    <ClCompile Include="src\Rendering\RenderingSystem\RenderingSystem.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Rendering\FontData\FontData.cpp">
+    <ClCompile Include="src\Rendering\FontData\FontData.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Board\NonogramBoard\NonogramBoard.cpp">
+    <ClCompile Include="src\Board\NonogramBoard\NonogramBoard.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Board\BacktrackBoard\BacktrackBoard.cpp">
+    <ClCompile Include="src\Board\BacktrackBoard\BacktrackBoard.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Rendering\TableRenderer\TableRenderer.cpp">
+    <ClCompile Include="src\Rendering\TableRenderer\TableRenderer.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Algorithm\BacktrackAlgorithm\BacktrackAlgorithm.cpp">
+    <ClCompile Include="src\Algorithm\BacktrackAlgorithm\BacktrackAlgorithm.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Shared\SharedBacktractBoard.cpp">
+    <ClCompile Include="src\Shared\SharedBacktractBoard.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Index\CellIndex\CellIndex.cpp">
+    <ClCompile Include="src\Index\CellIndex\CellIndex.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Index\CellIndex\ColumnIndex.cpp">
+    <ClCompile Include="src\Index\CellIndex\ColumnIndex.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Index\CellIndex\RowIndex.cpp">
+    <ClCompile Include="src\Index\CellIndex\RowIndex.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Index\Coordinate\Coordinate.cpp">
+    <ClCompile Include="src\Index\Coordinate\Coordinate.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Board\Line\Column.cpp">
+    <ClCompile Include="src\Board\Line\Column.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Board\Line\Line.cpp">
+    <ClCompile Include="src\Board\Line\Line.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Board\Line\Row.cpp">
+    <ClCompile Include="src\Board\Line\Row.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Algorithm\OverlapDeterminationAlgorithm\OverlapDeterminationAlgorithm.cpp">
+    <ClCompile Include="src\Algorithm\OverlapDeterminationAlgorithm\OverlapDeterminationAlgorithm.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Algorithm\ExhaustivePlacementPatternFindAlgorithm\ExhaustivePlacementPatternFindAlgorithm.cpp">
+    <ClCompile Include="src\Algorithm\ExhaustivePlacementPatternFindAlgorithm\ExhaustivePlacementPatternFindAlgorithm.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Algorithm\PlacementPatternCountAlgorithm\PlacementPatternCountAlgorithm.cpp">
+    <ClCompile Include="src\Algorithm\PlacementPatternCountAlgorithm\PlacementPatternCountAlgorithm.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Placement\Placement\Placement.h">
+    <ClInclude Include="src\Placement\Placement\Placement.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Board\Board\Board.h">
+    <ClInclude Include="src\Board\Board\Board.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Board\BoardLength\RowLength.h">
+    <ClInclude Include="src\Board\BoardLength\RowLength.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Board\BoardLength\ColumnLength.h">
+    <ClInclude Include="src\Board\BoardLength\ColumnLength.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Board\BoardLength\BoardLength.h">
+    <ClInclude Include="src\Board\BoardLength\BoardLength.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Placement\Placement\RowPlacement.h">
+    <ClInclude Include="src\Placement\Placement\RowPlacement.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Placement\Placement\ColumnPlacement.h">
+    <ClInclude Include="src\Placement\Placement\ColumnPlacement.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Cell\CellLocation\CellLocation.h">
+    <ClInclude Include="src\Cell\CellLocation\CellLocation.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Hint\HintLine\HintLine.h">
+    <ClInclude Include="src\Hint\HintLine\HintLine.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Hint\HintNumber\HintNumber.h">
+    <ClInclude Include="src\Hint\HintNumber\HintNumber.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Hint\HintLineList\HintLineList.h">
+    <ClInclude Include="src\Hint\HintLineList\HintLineList.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Hint\HintLineList\RowHintLineList.h">
+    <ClInclude Include="src\Hint\HintLineList\RowHintLineList.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Hint\HintLineList\ColumnHintLineList.h">
+    <ClInclude Include="src\Hint\HintLineList\ColumnHintLineList.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Placement\PlacementCount\PlacementCount.h">
+    <ClInclude Include="src\Placement\PlacementCount\PlacementCount.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="imgui\backends\imgui_impl_glfw.h">
@@ -239,70 +239,70 @@
     <ClInclude Include="imgui\imstb_truetype.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="TestData\Repository\TestDataRepository.h">
+    <ClInclude Include="src\TestData\Repository\TestDataRepository.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Placement\PlacementCountList\PlacementCountList.h">
+    <ClInclude Include="src\Placement\PlacementCountList\PlacementCountList.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Placement\PlacementCountList\ColumnPlacementCountList.h">
+    <ClInclude Include="src\Placement\PlacementCountList\ColumnPlacementCountList.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Placement\PlacementCountList\RowPlacementCountList.h">
+    <ClInclude Include="src\Placement\PlacementCountList\RowPlacementCountList.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Rendering\RenderingSystem\RenderingSystem.h">
+    <ClInclude Include="src\Rendering\RenderingSystem\RenderingSystem.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Rendering\FontData\FontData.h">
+    <ClInclude Include="src\Rendering\FontData\FontData.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Board\NonogramBoard\NonogramBoard.h">
+    <ClInclude Include="src\Board\NonogramBoard\NonogramBoard.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Board\BacktrackBoard\BacktrackBoard.h">
+    <ClInclude Include="src\Board\BacktrackBoard\BacktrackBoard.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Rendering\TableRenderer\TableRenderer.h">
+    <ClInclude Include="src\Rendering\TableRenderer\TableRenderer.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Algorithm\BacktrackAlgorithm\BacktrackAlgorithm.h">
+    <ClInclude Include="src\Algorithm\BacktrackAlgorithm\BacktrackAlgorithm.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Shared\SharedBacktractBoard.h">
+    <ClInclude Include="src\Shared\SharedBacktractBoard.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Index\CellIndex\CellIndex.h">
+    <ClInclude Include="src\Index\CellIndex\CellIndex.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Index\CellIndex\ColumnIndex.h">
+    <ClInclude Include="src\Index\CellIndex\ColumnIndex.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Index\CellIndex\RowIndex.h">
+    <ClInclude Include="src\Index\CellIndex\RowIndex.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Index\Coordinate\Coordinate.h">
+    <ClInclude Include="src\Index\Coordinate\Coordinate.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Cell\CellVector2D\CellVector2D.h">
+    <ClInclude Include="src\Cell\CellVector2D\CellVector2D.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Board\Line\Column.h">
+    <ClInclude Include="src\Board\Line\Column.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Board\Line\Line.h">
+    <ClInclude Include="src\Board\Line\Line.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Board\Line\Row.h">
+    <ClInclude Include="src\Board\Line\Row.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Algorithm\PlacementPatternCountAlgorithm\PlacementPatternCountAlgorithm.h">
+    <ClInclude Include="src\Algorithm\PlacementPatternCountAlgorithm\PlacementPatternCountAlgorithm.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Algorithm\OverlapDeterminationAlgorithm\OverlapDeterminationAlgorithm.h">
+    <ClInclude Include="src\Algorithm\OverlapDeterminationAlgorithm\OverlapDeterminationAlgorithm.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Algorithm\ExhaustivePlacementPatternFindAlgorithm\ExhaustivePlacementPatternFindAlgorithm.h">
+    <ClInclude Include="src\Algorithm\ExhaustivePlacementPatternFindAlgorithm\ExhaustivePlacementPatternFindAlgorithm.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

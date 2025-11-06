@@ -8,6 +8,13 @@ PlacementCount PlacementPatternCountAlgorithm::run(
 	const Line& line,
 	const HintLine& hintLine
 ) {
+	return CountPlacement(line, hintLine);
+}
+
+PlacementCount PlacementPatternCountAlgorithm::CountPlacement(
+	const Line& line,
+	const HintLine& hintLine
+) {
 	int hintsCount = hintLine.size();
 	int totalLength = line.size();
 

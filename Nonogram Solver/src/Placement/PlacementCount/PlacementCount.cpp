@@ -14,6 +14,16 @@ PlacementCount PlacementCount::operator-(const PlacementCount& other) const {
     return PlacementCount(count - other.count);
 }
 
+PlacementCount& PlacementCount::operator+=(const PlacementCount& other) {
+    count += other.count;
+    return *this;
+}
+
+PlacementCount& PlacementCount::operator-=(const PlacementCount& other) {
+    count -= other.count;
+    return *this;
+}
+
 bool PlacementCount::operator==(const PlacementCount& other) const {
     return count == other.count;
 }

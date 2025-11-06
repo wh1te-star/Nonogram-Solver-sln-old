@@ -12,6 +12,7 @@ public:
 	static std::vector<Placement> findPlacementsExhaustive(
 		const Placement& placement,
 		const HintLine& hintLine
+		// todo: callback argument
 	);
 };
 

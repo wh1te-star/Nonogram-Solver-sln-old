@@ -12,6 +12,12 @@ public:
 		const Line& line,
 		const HintLine& hintLine
 	);
+
+private:
+	static PlacementCount CountPlacement(
+		const Line& line,
+		const HintLine& hintLine
+	);
 };
 
 
