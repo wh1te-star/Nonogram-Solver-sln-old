@@ -3,6 +3,7 @@
 
 
 #include "Board/BoardLength/BoardLength.h"
+#include "Hint/HintNumber/HintNumber.h"
 
 class CellIndex {
 protected:
@@ -13,6 +14,24 @@ public:
 
 public:
     const int& getIndex() const;
+
+public:
+    CellIndex operator+(int shift) const;
+    CellIndex operator-(int shift) const;
+    CellIndex operator+(BoardLength shift) const;
+    CellIndex operator-(BoardLength shift) const;
+    CellIndex operator+(HintNumber shift) const;
+    CellIndex operator-(HintNumber shift) const;
+    bool operator==(const CellIndex& other) const;
+    bool operator!=(const CellIndex& other) const;
+    bool operator<(const CellIndex& other) const;
+    bool operator<=(const CellIndex& other) const;
+    bool operator>(const CellIndex& other) const;
+    bool operator>=(const CellIndex& other) const;
+    bool operator<(const BoardLength& other) const;
+    bool operator<=(const BoardLength& other) const;
+    bool operator>(const BoardLength& other) const;
+    bool operator>=(const BoardLength& other) const;
 };
 
 #endif

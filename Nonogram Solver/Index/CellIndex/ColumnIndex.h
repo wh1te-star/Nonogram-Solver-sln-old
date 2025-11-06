@@ -10,8 +10,12 @@ public:
     explicit ColumnIndex(int index);
 
 public:
+    ColumnIndex operator+(int shift) const;
+    ColumnIndex operator-(int shift) const;
     ColumnIndex operator+(ColumnLength shift) const;
     ColumnIndex operator-(ColumnLength shift) const;
+    ColumnIndex operator+(HintNumber shift) const;
+    ColumnIndex operator-(HintNumber shift) const;
     bool operator==(const ColumnIndex& other) const;
     bool operator!=(const ColumnIndex& other) const;
     bool operator<(const ColumnIndex& other) const;

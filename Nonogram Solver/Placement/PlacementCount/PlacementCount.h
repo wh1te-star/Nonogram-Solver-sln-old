@@ -13,6 +13,8 @@ public:
     const int& getCount() const;
 
 public:
+    PlacementCount operator+(const PlacementCount& other) const;
+    PlacementCount operator-(const PlacementCount& other) const;
     bool operator==(const PlacementCount& other) const;
     bool operator!=(const PlacementCount& other) const;
 };

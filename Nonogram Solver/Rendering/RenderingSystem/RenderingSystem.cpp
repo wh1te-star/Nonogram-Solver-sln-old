@@ -10,7 +10,7 @@
 #include "Rendering/FontData/FontData.h"
 #include "Rendering/TableRenderer/TableRenderer.h"
 #include "TestData/Repository/TestDataRepository.h"
-#include "Algorithm/BacktrackAlgorithm.h"
+#include "Algorithm/BacktrackAlgorithm/BacktrackAlgorithm.h"
 #include "Shared/SharedBacktractBoard.h"
 
 

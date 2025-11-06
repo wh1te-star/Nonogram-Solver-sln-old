@@ -10,8 +10,12 @@ public:
     explicit RowIndex(int index);
 
 public:
+    RowIndex operator+(int shift) const;
+    RowIndex operator-(int shift) const;
     RowIndex operator+(RowLength shift) const;
     RowIndex operator-(RowLength shift) const;
+    RowIndex operator+(HintNumber shift) const;
+    RowIndex operator-(HintNumber shift) const;
     bool operator==(const RowIndex& other) const;
     bool operator!=(const RowIndex& other) const;
     bool operator<(const RowIndex& other) const;

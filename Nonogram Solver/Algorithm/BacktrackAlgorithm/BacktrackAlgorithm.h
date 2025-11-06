@@ -5,6 +5,8 @@
 #include <atomic>
 #include <thread>
 #include "Shared/SharedBacktractBoard.h"
+#include "Board/Line/Line.h"
+#include "Hint/HintLine/HintLine.h"
 
 class BacktrackAlgorithm {
 private:
@@ -17,13 +19,12 @@ public:
 	void run();
 
 	void recursiveSolve(int count, int max);
+    void request_stop();
 
     PlacementCount countPlacements(
 		const Line& line,
 		const HintLine& hintLine
-	);
-
-    void request_stop();
+	) const;
 };
 
 
