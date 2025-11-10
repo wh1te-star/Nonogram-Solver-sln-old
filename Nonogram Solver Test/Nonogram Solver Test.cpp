@@ -7,25 +7,23 @@
 #include "Hint/HintLine/HintLine.h"
 #include "Cell/Cell/Cell.h"
 
-TEST_CASE("PlacementPatternCountAlgorithm calculates patterns for 5 cells with {1, 2} hints", "[PlacementPatternCount]") {
-    std::vector<Cell> cells = {
-        Cell(White), 
-        Cell(White), 
-        Cell(White), 
-        Cell(White), 
-        Cell(White) 
-    };
-    Line line(cells); 
+TEST_CASE("Very typical small case", "[PlacementPatternCount]") {
+    Line line = Line(std::vector<Cell>{
+        Cell(None), 
+        Cell(None), 
+        Cell(None), 
+        Cell(None), 
+        Cell(None), 
+    }); 
 
-    std::vector<HintNumber> hintNumbers = { 
+    HintLine hintLine = HintLine(std::vector<HintNumber>{ 
         HintNumber(1), 
         HintNumber(2) 
-    };
-    HintLine hintLine(hintNumbers);
+    });
 
     PlacementCount result = PlacementPatternCountAlgorithm::run(line, hintLine);
 
-    REQUIRE(result.getCount() == 6); 
+    REQUIRE(result == PlacementCount(6)); 
 }
 
 /*
