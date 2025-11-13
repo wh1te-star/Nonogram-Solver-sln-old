@@ -18,6 +18,17 @@ private:
 		const Line& line,
 		const HintLine& hintLine
 	);
+
+	static bool isSeparated(
+		const Line& line,
+		const CellIndex& prevCellIndex
+	);
+
+	static bool isBlockFits(
+		const Line& line,
+		const CellIndex& blockStart,
+		const HintNumber& hintNumber
+	);
 };
 
 

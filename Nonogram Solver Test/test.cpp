@@ -6,7 +6,7 @@
 #include "Hint/HintLine/HintLine.h"
 #include "Cell/Cell/Cell.h"
 
-TEST(TestCaseName, TestName) {
+TEST(Algorithm_PlacementCount, VerySimpleCase) {
     Line line = Line(std::vector<Cell>{
         Cell(None),
         Cell(None),
@@ -22,18 +22,24 @@ TEST(TestCaseName, TestName) {
 
     PlacementCount result = PlacementPatternCountAlgorithm::run(line, hintLine);
 
-    EXPECT_TRUE(result == PlacementCount(6));
+    EXPECT_EQ(result.getCount(), 3);
 }
 
-/*
-TEST_CASE("PlacementPatternCountAlgorithm handles single hint {3} on 5 cells", "[PlacementPatternCount]") {
+TEST(Algorithm_PlacementCount, ImpossibleCase) {
+    Line line = Line(std::vector<Cell>{
+        Cell(None),
+        Cell(None),
+        Cell(None),
+        Cell(White),
+        Cell(White),
+    });
 
-    Line line(std::vector<Cell>{Cell(White),Cell(White),Cell(White),Cell(White),Cell(White)});
-    HintLine hintLine(std::vector<HintNumber>{HintNumber(3)});
+    HintLine hintLine = HintLine(std::vector<HintNumber>{
+        HintNumber(1),
+        HintNumber(2)
+    });
 
     PlacementCount result = PlacementPatternCountAlgorithm::run(line, hintLine);
 
-    REQUIRE(result.getCount() == 3);
+    EXPECT_EQ(result.getCount(), 0);
 }
-*/
-
