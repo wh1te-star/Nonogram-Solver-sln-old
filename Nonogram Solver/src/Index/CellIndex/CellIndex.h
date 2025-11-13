@@ -22,6 +22,10 @@ public:
     CellIndex operator-(BoardLength shift) const;
     CellIndex operator+(HintNumber shift) const;
     CellIndex operator-(HintNumber shift) const;
+    CellIndex operator++();
+    CellIndex operator--();
+    CellIndex operator++(int);
+    CellIndex operator--(int);
     bool operator==(const CellIndex& other) const;
     bool operator!=(const CellIndex& other) const;
     bool operator<(const CellIndex& other) const;

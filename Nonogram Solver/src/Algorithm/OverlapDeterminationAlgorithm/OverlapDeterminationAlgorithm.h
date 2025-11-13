@@ -4,24 +4,26 @@
 
 #include <vector>
 #include "Cell/Cell/Cell.h"
+#include "Board/Line/Column.h"
+#include "Hint/HintLine/HintLine.h"
+#include "Placement/Placement/ColumnPlacement.h"
 
-class PlacementPatternCountAlgorithm {
+class OverlapDeterminationAlgorithm {
 public:
-    static std::vector<Cell> determineByOverlap(
-        int totalLength,
-        const std::vector<int>& hintNumbers,
-        const std::vector<Cell>& determinedStates
+    static Line determineByOverlap(
+        const Line& line,
+		const HintLine& hintLine
     );
 
 private:
-    static std::vector<int> getLeftmostPlacement(
-        const std::vector<Cell>& determinedCells,
-        const std::vector<int>& hints
+    static Placement getLeftmostPlacement(
+        const Line& line,
+		const HintLine& hintLine
     );
 
-	static std::vector<int> getRightmostPositions(
-		const std::vector<Cell>& determinedCells,
-		const std::vector<int>& hints
+	static Placement getRightmostPositions(
+        const Line& line,
+		const HintLine& hintLine
 	);
 };
 

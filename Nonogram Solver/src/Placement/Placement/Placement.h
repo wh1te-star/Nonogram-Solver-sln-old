@@ -15,6 +15,7 @@ protected:
 
 public:
     explicit Placement(std::vector<Cell> placement);
+    explicit Placement(HintNumber hintNumber);
     virtual ~Placement() = default;
 
 public:
@@ -24,6 +25,8 @@ public:
     bool operator==(const Placement& other) const;
     bool operator!=(const Placement& other) const;
 	Cell operator[](const CellIndex& index) const;
+	Placement operator+(const Placement& other) const;
+	Placement& operator+=(const Placement& other);
 
 private:
     bool hasNone() const;
@@ -31,6 +34,7 @@ private:
 public:
 	const size_t size() const;
     const std::vector<CellLocation> getCellLocationList(const Coordinate& coordinate) const;
+	const std::vector<CellIndex> getHintIndex() const;
 };
 
 #endif

@@ -10,6 +10,13 @@ Placement::Placement(std::vector<Cell> placement) :
     assert(!hasNone());
 }
 
+Placement::Placement(HintNumber hintNumber) {
+    for(int i= 0; i < hintNumber.getNumber(); i++) {
+        placement.emplace_back(Cell(CellColor::Black));
+	}
+}
+
+
 const std::vector<Cell>& Placement::getPlacement() const {
     return placement;
 }
@@ -18,12 +25,22 @@ bool Placement::operator==(const Placement& other) const {
 	return placement == other.placement;
 }
 
-bool Placement::operator!=(const Placement& other) const {
-    return !(*this == other);
-}
-
 Cell Placement::operator[](const CellIndex& index) const {
     return placement[index.getIndex()];
+}
+
+Placement Placement::operator+(const Placement& other) const {
+    std::vector<Cell> newPlacement;
+    newPlacement.reserve(placement.size() + other.placement.size());
+    newPlacement.insert(newPlacement.end(), placement.begin(), placement.end());
+    newPlacement.insert(newPlacement.end(), other.placement.begin(), other.placement.end());
+    return Placement(newPlacement);
+}
+
+Placement& Placement::operator+=(const Placement& other) {
+    placement.insert(placement.end(), other.placement.begin(), other.placement.end());
+    assert(!hasNone()); 
+    return *this;
 }
 
 bool Placement::hasNone() const {
@@ -50,4 +67,16 @@ const std::vector<CellLocation> Placement::getCellLocationList(const Coordinate&
 		shift++;
 	}
 	return cellLocationList;
+}
+
+const std::vector<CellIndex> Placement::getHintIndex() const {
+    std::vector<CellIndex> hintIndexList;
+    for (size_t i = 0; i < placement.size(); ++i) {
+        if (i - 1 < 0 || placement[i - 1].getColor() != CellColor::Black) {
+            if (placement[i].getColor() == CellColor::Black) {
+                hintIndexList.emplace_back(static_cast<int>(i));
+            }
+        }
+    }
+    return hintIndexList;
 }

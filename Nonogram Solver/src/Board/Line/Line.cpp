@@ -38,3 +38,27 @@ const std::vector<CellLocation> Line::getCellLocationList(const Coordinate& coor
 	}
 	return cellLocationList;
 }
+
+bool Line::canPlaceBlock(const CellIndex& startIndex, const HintNumber& hintNumber) const {
+	int start = startIndex.getIndex();
+	int end = start + hintNumber.getNumber() - 1;
+	if (end >= static_cast<int>(line.size())) {
+		return false;
+	}
+	for (int i = start; i <= end; i++) {
+		if (!line[i].canColor(CellColor::Black)) {
+			return false;
+		}
+	}
+	if (start > 0) {
+		if (line[start - 1].getColor() == CellColor::Black) {
+			return false;
+		}
+	}
+	if (end + 1 < static_cast<int>(line.size())) {
+		if (line[end + 1].getColor() == CellColor::Black) {
+			return false;
+		}
+	}
+	return true;
+}

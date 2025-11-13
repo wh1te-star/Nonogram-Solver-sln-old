@@ -1,100 +1,91 @@
-#include "Algorithm/BacktrackAlgorithm/BacktrackAlgorithm.h"
+#include "Algorithm/OverlapDeterminationAlgorithm/OverlapDeterminationAlgorithm.h"
 
 #include "Board/Line/Line.h"
 
 
-/*
-std::vector<int> BacktrackAlgorithm::getLeftmostPlacement(
-    const std::vector<CellState>& determinedCells,
-    const std::vector<int>& hints
+Line OverlapDeterminationAlgorithm::determineByOverlap(
+	const Line& line,
+	const HintLine& hintLine
 ) {
-    std::vector<int> positions;
-    int currentPos = 0;
-    for (size_t i = 0; i < hints.size(); ++i) {
-        int hint = hints[i];
-        while (true) {
-            if (canPlaceBlock(determinedCells, currentPos, hint)) {
-                if (i > 0 && determinedCells[currentPos - 1] == BLACK) {
-                    currentPos++;
-                    continue;
-                }
-                break;
-            }
-            currentPos++;
-            if (currentPos > determinedCells.size()) {
-                 return {};
-            }
-        }
-        positions.push_back(currentPos);
-        currentPos += hint + 1;
-    }
-    return positions;
-}
+	Placement leftmostPlacement = getLeftmostPlacement(line, hintLine);
+	Placement rightmostPlacement = getRightmostPositions(line, hintLine);
 
-std::vector<int> BacktrackAlgorithm::getRightmostPositions(
-    const std::vector<CellState>& determinedCells,
-    const std::vector<int>& hints
-) {
-    std::vector<int> positions(hints.size());
-    int currentPos = determinedCells.size() - 1;
-    for (int i = hints.size() - 1; i >= 0; --i) {
-        int hint = hints[i];
-		int blockStartPos = currentPos - hint + 1;
-		int blockEndPos = currentPos;
-        while (true) {
-            if (canPlaceBlock(determinedCells, blockStartPos, hint)) {
-                if (i < hints.size() - 1 && determinedCells[currentPos + 1] == BLACK) {
-                    currentPos--;
-                    continue;
-                }
-                break;
-            }
-            currentPos--;
-            if (currentPos < 0) {
-                 return {};
-            }
-        }
-        positions[i] = currentPos - hint + 1;
-        currentPos -= (hint + 1);
-    }
-    return positions;
-}
+	std::vector<CellIndex> leftmostHintIndex = leftmostPlacement.getHintIndex();
+	std::vector<CellIndex> rightmostHintIndex = rightmostPlacement.getHintIndex();
 
-std::vector<CellState> determineByOverlap(
-    int totalLength,
-    const std::vector<int>& hintNumbers,
-    const std::vector<CellState>& determinedStates
-) {
-    std::vector<CellState> determined = determinedStates;
-
-    std::vector<int> leftmostPositions = getLeftmostPositions(determinedStates, hintNumbers);
-    if (leftmostPositions.empty()) {
-        return std::vector<CellState>(totalLength, UNKNOWN);
-    }
-
-    std::vector<int> rightmostPositions = getRightmostPositions(determinedStates, hintNumbers);
-    if (rightmostPositions.empty()) {
-        return std::vector<CellState>(totalLength, UNKNOWN);
-    }
-
-    for(int i = 0; i < leftmostPositions.front(); i++) {
-        determined[i] = WHITE;
+	Line determined(std::vector<Cell>(line.size(), Cell(CellColor::None)));
+    for(int i = 0; i < leftmostHintIndex.front().getIndex(); i++) {
+		CellIndex cellIndex = CellIndex(i);
+        determined[cellIndex] = Cell(White);
 	}
-    for(int i = totalLength-1; i > rightmostPositions.back() + hintNumbers.back(); i--) {
-        determined[i] = WHITE;
+    for (int i = (rightmostHintIndex.back() + hintLine.getNumbers().back()).getIndex(); i < line.size(); i++) {
+		CellIndex cellIndex = CellIndex(i);
+        determined[cellIndex] = Cell(White);
 	}
-    for(int k = 0; k < hintNumbers.size(); k++) {
-        int leftStart = leftmostPositions[k];
-        int leftEnd = leftStart + hintNumbers[k] - 1;
-        int rightStart = rightmostPositions[k];
-        int rightEnd = rightStart + hintNumbers[k] - 1;
-        for(int i = leftStart; i <= leftEnd; i++) {
-            if (i >= rightStart && i <= rightEnd) {
-                determined[i] = BLACK;
+    for(int hintIndex = 0; hintIndex < hintLine.size(); hintIndex++) {
+        CellIndex leftStart = leftmostHintIndex[hintIndex];
+        CellIndex leftEnd = leftStart + hintLine[hintIndex] - 1;
+        CellIndex rightStart = rightmostHintIndex[hintIndex];
+        CellIndex rightEnd = rightStart + hintLine[hintIndex] - 1;
+        for(CellIndex cellIndex = leftStart; cellIndex <= leftEnd; cellIndex++) {
+            if (rightStart <= cellIndex && cellIndex <= rightEnd) {
+				determined[cellIndex] = Cell(Black);
             }
         }
 	}
 
     return determined;
 }
-*/
+
+Placement OverlapDeterminationAlgorithm::getLeftmostPlacement(
+	const Line& line,
+	const HintLine& hintLine
+) {
+    Placement placement = Placement({});
+	CellIndex currentIndex = CellIndex(0);
+    for (size_t hintIndex = 0; hintIndex < hintLine.size(); hintIndex++) {
+        HintNumber hintNumber = hintLine[hintIndex];
+        while (true) {
+            if (line.canPlaceBlock(currentIndex, hintNumber)) {
+				placement += Placement(hintNumber);
+                currentIndex = currentIndex + hintNumber;
+                break;
+            }
+        }
+
+        if(hintIndex < hintLine.size() - 1) {
+            placement += Placement({ Cell(White) });
+            currentIndex = currentIndex + 1;
+		}
+    }
+    for (int i = placement.size(); i < line.size(); i++) {
+        placement += Placement({ Cell(White) });
+    }
+    return placement;
+}
+
+Placement OverlapDeterminationAlgorithm::getRightmostPositions(
+	const Line& line,
+	const HintLine& hintLine
+) {
+    Placement placement = Placement({});
+	CellIndex currentIndex = CellIndex(line.size() - 1);
+    for (size_t hintIndex = hintLine.size()-1; hintIndex >= 0; hintIndex--){
+        HintNumber hintNumber = hintLine[hintIndex];
+        while (true) {
+            if (line.canPlaceBlock(currentIndex, hintNumber)) {
+				placement = Placement(hintNumber) + placement;
+                break;
+            }
+        }
+
+        if(hintIndex > 0) {
+			placement = Placement({ Cell(White) }) + placement;
+            currentIndex = currentIndex - 1;
+		}
+    }
+    for (int i = placement.size(); i < line.size(); i++) {
+		placement = Placement({ Cell(White) }) + placement;
+    }
+    return placement;
+}

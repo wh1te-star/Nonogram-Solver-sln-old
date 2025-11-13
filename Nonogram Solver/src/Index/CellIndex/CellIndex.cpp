@@ -33,6 +33,28 @@ CellIndex CellIndex::operator-(HintNumber shift) const {
     return CellIndex(index - shift.getNumber());
 }
 
+CellIndex CellIndex::operator++() {
+	index++;
+	return *this;
+}
+
+CellIndex CellIndex::operator--() {
+	index--;
+	return *this;
+}
+
+CellIndex CellIndex::operator++(int) {
+	CellIndex temp = *this;
+	index++;
+	return temp;
+}
+
+CellIndex CellIndex::operator--(int) {
+	CellIndex temp = *this;
+	index--;
+	return temp;
+}
+
 bool CellIndex::operator==(const CellIndex& other) const {
 	return index == other.index;
 }
