@@ -6,6 +6,7 @@
 #include "Hint/HintLine/HintLine.h"
 #include "Cell/Cell/Cell.h"
 
+
 TEST(Algorithm_PlacementCount, VerySimpleCase) {
     Line line = Line(std::vector<Cell>{
         Cell(None),

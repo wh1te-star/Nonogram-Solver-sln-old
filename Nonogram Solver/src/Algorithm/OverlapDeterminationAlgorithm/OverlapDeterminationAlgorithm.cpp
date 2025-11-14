@@ -51,6 +51,7 @@ Placement OverlapDeterminationAlgorithm::getLeftmostPlacement(
                 currentIndex = currentIndex + hintNumber;
                 break;
             }
+            currentIndex++;
         }
 
         if(hintIndex < hintLine.size() - 1) {
@@ -70,13 +71,14 @@ Placement OverlapDeterminationAlgorithm::getRightmostPositions(
 ) {
     Placement placement = Placement({});
 	CellIndex currentIndex = CellIndex(line.size() - 1);
-    for (size_t hintIndex = hintLine.size()-1; hintIndex >= 0; hintIndex--){
+    for (int hintIndex = (int)hintLine.size()-1; hintIndex >= 0; hintIndex--){
         HintNumber hintNumber = hintLine[hintIndex];
         while (true) {
             if (line.canPlaceBlock(currentIndex, hintNumber)) {
 				placement = Placement(hintNumber) + placement;
                 break;
             }
+            currentIndex++;
         }
 
         if(hintIndex > 0) {
