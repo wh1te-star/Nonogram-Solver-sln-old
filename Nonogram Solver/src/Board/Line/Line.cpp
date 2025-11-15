@@ -20,8 +20,12 @@ bool Line::operator!=(const Line& other) const {
     return !(*this == other);
 }
 
-Cell Line::operator[](const CellIndex& index) const {
-    return line[index.getIndex()];
+const Cell& Line::operator[](const CellIndex& index) const {
+    return line[index.getIndex()]; 
+}
+
+Cell& Line::operator[](const CellIndex& index) {
+    return line[index.getIndex()]; 
 }
 
 const size_t Line::size() const {
@@ -61,4 +65,13 @@ bool Line::canPlaceBlock(const CellIndex& startIndex, const HintNumber& hintNumb
 		}
 	}
 	return true;
+}
+
+std::ostream& operator<<(std::ostream& os, const Line& line) {
+    os << "[";
+    for (size_t i = 0; i < line.size(); ++i) {
+        os << line[CellIndex(i)]; 
+    }
+    os << "]";
+    return os;
 }

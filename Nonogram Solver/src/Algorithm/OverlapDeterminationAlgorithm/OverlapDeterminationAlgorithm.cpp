@@ -43,14 +43,15 @@ Placement OverlapDeterminationAlgorithm::getLeftmostPlacement(
 ) {
     Placement placement = Placement({});
 	CellIndex currentIndex = CellIndex(0);
-    for (size_t hintIndex = 0; hintIndex < hintLine.size(); hintIndex++) {
+    for (int hintIndex = 0; hintIndex < hintLine.size(); hintIndex++) {
         HintNumber hintNumber = hintLine[hintIndex];
         while (true) {
             if (line.canPlaceBlock(currentIndex, hintNumber)) {
-				placement += Placement(hintNumber);
+				placement = placement + Placement(hintNumber);
                 currentIndex = currentIndex + hintNumber;
                 break;
             }
+			placement = placement + Placement({ Cell(White) });
             currentIndex++;
         }
 
@@ -78,7 +79,7 @@ Placement OverlapDeterminationAlgorithm::getRightmostPositions(
 				placement = Placement(hintNumber) + placement;
                 break;
             }
-            currentIndex++;
+            currentIndex--;
         }
 
         if(hintIndex > 0) {

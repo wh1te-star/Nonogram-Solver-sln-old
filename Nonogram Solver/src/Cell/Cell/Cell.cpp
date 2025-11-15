@@ -27,3 +27,22 @@ bool Cell::canColor(const CellColor& newColor) const {
     }
     return color == newColor;
 }
+
+std::ostream& operator<<(std::ostream& os, const Cell& cell) {
+    switch (cell.getColor()) {
+        case CellColor::Black: 
+            os << "B"; 
+            break;
+        case CellColor::White: 
+            os << "W"; 
+            break;
+        case CellColor::None:  
+			os << "?";
+            break;
+        default: 
+            os << "?"; 
+            break;
+    }
+    return os;
+}
+

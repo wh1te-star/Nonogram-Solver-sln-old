@@ -72,7 +72,7 @@ const std::vector<CellLocation> Placement::getCellLocationList(const Coordinate&
 const std::vector<CellIndex> Placement::getHintIndex() const {
     std::vector<CellIndex> hintIndexList;
     for (size_t i = 0; i < placement.size(); ++i) {
-        if (i - 1 < 0 || placement[i - 1].getColor() != CellColor::Black) {
+        if (i <= 0 || placement[i - 1].getColor() != CellColor::Black) {
             if (placement[i].getColor() == CellColor::Black) {
                 hintIndexList.emplace_back(static_cast<int>(i));
             }

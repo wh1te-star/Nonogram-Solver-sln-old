@@ -23,12 +23,15 @@ public:
 public:
     bool operator==(const Line& other) const;
     bool operator!=(const Line& other) const;
-	Cell operator[](const CellIndex& index) const;
+    const Cell& operator[](const CellIndex& index) const;
+	Cell& operator[](const CellIndex& index); 
 
 public:
 	const size_t size() const;
     const std::vector<CellLocation> getCellLocationList(const Coordinate& coordinate) const;
 	bool canPlaceBlock(const CellIndex& startIndex, const HintNumber& hintNumber) const;
 };
+std::ostream& operator<<(std::ostream& os, const Line& line);
+
 
 #endif

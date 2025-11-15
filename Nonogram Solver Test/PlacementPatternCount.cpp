@@ -7,7 +7,7 @@
 #include "Cell/Cell/Cell.h"
 
 
-TEST(Algorithm_PlacementCount, VerySimpleCase) {
+TEST(Algorithm_PlacementPatternCount, VerySimpleCase) {
     Line line = Line(std::vector<Cell>{
         Cell(None),
         Cell(None),
@@ -26,7 +26,7 @@ TEST(Algorithm_PlacementCount, VerySimpleCase) {
     EXPECT_EQ(result.getCount(), 3);
 }
 
-TEST(Algorithm_PlacementCount, ImpossibleCase) {
+TEST(Algorithm_PlacementPatternCount, ImpossibleCase) {
     Line line = Line(std::vector<Cell>{
         Cell(None),
         Cell(None),

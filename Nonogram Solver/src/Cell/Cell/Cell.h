@@ -2,6 +2,7 @@
 #define CELL_H
 
 
+#include <iostream>
 #include "Cell/CellColor/CellColor.h"
 
 class Cell {
@@ -22,5 +23,8 @@ public:
 public:
 	bool canColor(const CellColor& newColor) const;
 };
+
+std::ostream& operator<<(std::ostream& os, const Cell& cell);
+
 
 #endif
