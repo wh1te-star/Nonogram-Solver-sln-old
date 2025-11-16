@@ -8,5 +8,9 @@ enum CellColor {
 	White
 };
 
+static const char NONE_CHAR = ' ';
+static const char BLACK_CHAR = 'B';
+static const char WHITE_CHAR = 'W';
+
 
 #endif

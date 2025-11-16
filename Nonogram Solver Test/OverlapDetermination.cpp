@@ -5,54 +5,21 @@
 
 
 TEST(Algorithm_OverlapDetermination, VerySimpleCase) {
-    Line line = Line(std::vector<Cell>{
-        Cell(None),
-        Cell(None),
-        Cell(None),
-        Cell(None),
-        Cell(None),
-    });
+    Line line = Line("     ");
+    HintLine hintLine = HintLine({ 1, 2 });
+    Line expected = Line("   B ");
 
-    HintLine hintLine = HintLine(std::vector<HintNumber>{
-        HintNumber(1),
-        HintNumber(2)
-    });
-
-    Line expected = Line(std::vector<Cell>{
-        Cell(None),
-        Cell(None),
-        Cell(None),
-        Cell(Black),
-        Cell(None)
-	});
 
 	Line result = OverlapDeterminationAlgorithm::determineByOverlap(line, hintLine);
-
     EXPECT_EQ(result, expected);
 }
 
+
 TEST(Algorithm_OverlapDetermination, EdgeWhiteCase) {
-    Line line = Line(std::vector<Cell>{
-        Cell(None),
-        Cell(White),
-        Cell(None),
-        Cell(None),
-        Cell(None),
-    });
-
-    HintLine hintLine = HintLine(std::vector<HintNumber>{
-        HintNumber(2)
-    });
-
-    Line expected = Line(std::vector<Cell>{
-        Cell(White),
-        Cell(White),
-        Cell(None),
-        Cell(Black),
-        Cell(None)
-	});
+    Line line = Line(" W   ");
+    HintLine hintLine = HintLine({ 2 });
+    Line expected = Line("WW B ");
 
 	Line result = OverlapDeterminationAlgorithm::determineByOverlap(line, hintLine);
-
     EXPECT_EQ(result, expected);
 }

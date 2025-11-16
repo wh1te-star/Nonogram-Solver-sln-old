@@ -10,6 +10,22 @@ Placement::Placement(std::vector<Cell> placement) :
     assert(!hasNone());
 }
 
+Placement::Placement(std::string colorString) {
+	for (char colorChar : colorString) {
+		switch (colorChar) {
+		case BLACK_CHAR:
+			placement.emplace_back(CellColor::Black);
+			break;
+		case WHITE_CHAR:
+			placement.emplace_back(CellColor::White);
+			break;
+		default: 
+			assert(false);
+			break;
+		}
+	}
+}
+
 Placement::Placement(HintNumber hintNumber) {
     for(int i= 0; i < hintNumber.getNumber(); i++) {
         placement.emplace_back(Cell(CellColor::Black));
@@ -23,6 +39,10 @@ const std::vector<Cell>& Placement::getPlacement() const {
 
 bool Placement::operator==(const Placement& other) const {
 	return placement == other.placement;
+}
+
+bool Placement::operator!=(const Placement& other) const {
+    return !(placement == other.placement);
 }
 
 Cell Placement::operator[](const CellIndex& index) const {

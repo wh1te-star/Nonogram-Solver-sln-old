@@ -15,7 +15,6 @@ public:
 		const HintLine& hintLine
     );
 
-private:
     static Placement getLeftmostPlacement(
         const Line& line,
 		const HintLine& hintLine

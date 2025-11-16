@@ -15,6 +15,7 @@ protected:
 
 public:
     explicit Line(std::vector<Cell> line);
+    explicit Line(std::string colorString);
     virtual ~Line() = default;
 
 public:

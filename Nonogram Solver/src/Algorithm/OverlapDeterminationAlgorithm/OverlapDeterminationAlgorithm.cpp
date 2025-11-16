@@ -41,7 +41,7 @@ Placement OverlapDeterminationAlgorithm::getLeftmostPlacement(
 	const Line& line,
 	const HintLine& hintLine
 ) {
-    Placement placement = Placement({});
+    Placement placement = Placement(std::vector<Cell>());
 	CellIndex currentIndex = CellIndex(0);
     for (int hintIndex = 0; hintIndex < hintLine.size(); hintIndex++) {
         HintNumber hintNumber = hintLine[hintIndex];
@@ -70,7 +70,7 @@ Placement OverlapDeterminationAlgorithm::getRightmostPositions(
 	const Line& line,
 	const HintLine& hintLine
 ) {
-    Placement placement = Placement({});
+    Placement placement = Placement(std::vector<Cell>());
 	CellIndex currentIndex = CellIndex(line.size() - 1);
     for (int hintIndex = (int)hintLine.size()-1; hintIndex >= 0; hintIndex--){
         HintNumber hintNumber = hintLine[hintIndex];

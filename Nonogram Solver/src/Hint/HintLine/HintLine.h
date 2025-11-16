@@ -12,6 +12,7 @@ private:
 
 public:
 	HintLine(std::vector<HintNumber> numbers);
+	HintLine(std::vector<int> numbers);
 
 public:
 	const std::vector<HintNumber>& getNumbers() const;

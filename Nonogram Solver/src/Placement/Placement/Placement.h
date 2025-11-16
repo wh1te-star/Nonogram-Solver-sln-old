@@ -15,6 +15,7 @@ protected:
 
 public:
     explicit Placement(std::vector<Cell> placement);
+    explicit Placement(std::string colorString);
     explicit Placement(HintNumber hintNumber);
     virtual ~Placement() = default;
 

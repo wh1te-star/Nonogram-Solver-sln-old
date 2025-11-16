@@ -1,7 +1,8 @@
 #include "Cell/Cell/Cell.h"
 
-#include "Cell/CellColor/CellColor.h"
 #include <algorithm>
+#include <cassert>
+#include "Cell/CellColor/CellColor.h"
 
 
 Cell::Cell() : color(None) {}
@@ -37,10 +38,10 @@ std::ostream& operator<<(std::ostream& os, const Cell& cell) {
             os << "W"; 
             break;
         case CellColor::None:  
-			os << "?";
+			os << ".";
             break;
         default: 
-            os << "?"; 
+            assert(false);
             break;
     }
     return os;

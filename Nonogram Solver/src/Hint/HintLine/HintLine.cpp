@@ -3,6 +3,12 @@
 
 HintLine::HintLine(std::vector<HintNumber> numbers) : numbers(numbers) {}
 
+HintLine::HintLine(std::vector<int> numbers) {
+	for(int number : numbers) {
+		this->numbers.emplace_back(HintNumber(number));
+	}
+}
+
 const std::vector<HintNumber>& HintLine::getNumbers() const {
 	return numbers;
 }

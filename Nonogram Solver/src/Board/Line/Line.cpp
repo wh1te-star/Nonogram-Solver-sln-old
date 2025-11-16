@@ -8,6 +8,25 @@
 Line::Line(std::vector<Cell> line) :
     line(line) {}
 
+Line::Line(std::string colorString) {
+	for (char colorChar : colorString) {
+		switch (colorChar) {
+		case BLACK_CHAR:
+			line.emplace_back(CellColor::Black);
+			break;
+		case WHITE_CHAR:
+			line.emplace_back(CellColor::White);
+			break;
+		case NONE_CHAR:
+			line.emplace_back(CellColor::None);
+			break;
+		default: 
+			assert(false);
+			break;
+		}
+	}
+}
+
 const std::vector<Cell>& Line::getLine() const {
     return line;
 }
