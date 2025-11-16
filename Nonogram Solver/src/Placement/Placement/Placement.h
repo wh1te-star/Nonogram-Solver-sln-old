@@ -37,5 +37,7 @@ public:
     const std::vector<CellLocation> getCellLocationList(const Coordinate& coordinate) const;
 	const std::vector<CellIndex> getHintIndex() const;
 };
+std::ostream& operator<<(std::ostream& os, const Placement& placement);
+
 
 #endif

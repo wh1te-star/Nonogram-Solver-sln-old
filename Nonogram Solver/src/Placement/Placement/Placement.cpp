@@ -100,3 +100,12 @@ const std::vector<CellIndex> Placement::getHintIndex() const {
     }
     return hintIndexList;
 }
+
+std::ostream& operator<<(std::ostream& os, const Placement& placement) {
+    os << "[";
+    for (size_t i = 0; i < placement.size(); ++i) {
+        os << placement[CellIndex(i)]; 
+    }
+    os << "]";
+    return os;
+}
