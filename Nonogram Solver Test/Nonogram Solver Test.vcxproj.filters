@@ -8,6 +8,9 @@
     <ClCompile Include="PlacementPatternCount.cpp">
       <Filter>TestCases</Filter>
     </ClCompile>
+    <ClCompile Include="FindPlacementPatternExhaustive.cpp">
+      <Filter>TestCases</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -16,5 +19,8 @@
     <Filter Include="TestCases">
       <UniqueIdentifier>{c390f510-282d-4605-9035-36792e941cab}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Algorithm_FindPlacementPatternExhaustive_ManyHintsCase.txt" />
   </ItemGroup>
 </Project>

@@ -143,6 +143,7 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="FindPlacementPatternExhaustive.cpp" />
     <ClCompile Include="OverlapDetermination.cpp" />
     <ClCompile Include="PlacementPatternCount.cpp" />
     <ClCompile Include="pch.cpp">
@@ -158,6 +159,9 @@
     <ProjectReference Include="..\Nonogram Solver\Nonogram Solver.vcxproj">
       <Project>{4961b33c-6293-46ae-9eea-4d609356f469}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Algorithm_FindPlacementPatternExhaustive_ManyHintsCase.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

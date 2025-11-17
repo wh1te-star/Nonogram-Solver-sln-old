@@ -1,98 +1,84 @@
-#include "Algorithm/BacktrackAlgorithm/BacktrackAlgorithm.h"
+#include "Algorithm/ExhaustivePlacementPatternFindAlgorithm/ExhaustivePlacementPatternFindAlgorithm.h"
 
 #include "Board/Line/Line.h"
 
 
-/*
-std::vector<Placement> BacktrackAlgorithm::findPlacementsExhaustive(
-	const Placement& placement,
+std::vector<Placement> ExhaustivePlacementPatternFindAlgorithm::run(
+	const Line& line,
 	const HintLine& hintLine
 ) {
-    std::vector<std::vector<CellState>> solutions;
-    std::stack<SearchState> stk;
-    stk.push({0, 0, {}});
+	return findPlacementsExhaustive(
+		line,
+		hintLine
+	);
+}
 
-    while (!stk.empty()) {
-        SearchState current = stk.top();
-        stk.pop();
-
-        // Base Case: All hints have been placed
-        if (current.hint_index == hintNumbers.size()) {
-            bool allRemainingAreWhite = true;
-            for (size_t i = current.current_pos; i < totalLength; ++i) {
-                if (determinedStates[i] == BLACK) {
-                    allRemainingAreWhite = false;
-                    break;
-                }
-            }
-            if (!allRemainingAreWhite) {
-                continue;
-            }
-            
-            std::vector<CellState> finalPlacement = current.current_placement;
-            finalPlacement.resize(totalLength, WHITE);
-            solutions.push_back(finalPlacement);
-            continue;
-        }
-
-        int currentHintNumber = hintNumbers[current.hint_index];
-        int remainingHintsLength = 0;
-        for (size_t i = current.hint_index; i < hintNumbers.size(); ++i) {
-            remainingHintsLength += hintNumbers[i];
-        }
-        if (hintNumbers.size() > current.hint_index) {
-            remainingHintsLength += (hintNumbers.size() - current.hint_index - 1);
-        }
-
-        // Iterate through all possible starting positions for the current hint
-        for (int placePosition = current.current_pos; placePosition <= totalLength - remainingHintsLength; ++placePosition) {
-            
-            // Check for conflicts in the leading whitespace
-            bool canProceed = true;
-            for (int i = current.current_pos; i < placePosition; ++i) {
-                if (!canPlace(WHITE, determinedStates[i])) {
-                    canProceed = false;
-                    break;
-                }
-            }
-            if (!canProceed) continue;
-
-            // Check for conflicts within the hint block (BLACK cells)
-            for (int i = 0; i < currentHintNumber; ++i) {
-                if (!canPlace(BLACK, determinedStates[placePosition + i])) {
-                    canProceed = false;
-                    break;
-                }
-            }
-            if (!canProceed) continue;
-
-            // Check for conflicts with the mandatory whitespace separator
-            if (current.hint_index < hintNumbers.size() - 1 && 
-                !canPlace(WHITE, determinedStates[placePosition + currentHintNumber])) {
-                continue;
-            }
-
-            // If valid, create and push the next state
-            SearchState nextState;
-            nextState.hint_index = current.hint_index + 1;
-            
-            // Build the new placement from the current one
-            nextState.current_placement = current.current_placement;
-            for (int i = current.current_pos; i < placePosition; ++i) {
-                nextState.current_placement.push_back(WHITE);
-            }
-            for (int i = 0; i < currentHintNumber; ++i) {
-                nextState.current_placement.push_back(BLACK);
-            }
-            if (nextState.current_placement.size() < totalLength && nextState.hint_index < hintNumbers.size()) {
-                nextState.current_placement.push_back(WHITE);
-            }
-
-            nextState.current_pos = nextState.current_placement.size();
-            stk.push(nextState);
-        }
-    }
-    std::reverse(solutions.begin(), solutions.end());
+std::vector<Placement> ExhaustivePlacementPatternFindAlgorithm::findPlacementsExhaustive(
+	const Line& line,
+	const HintLine& hintLine
+) {
+    std::vector<Placement> solutions;
+	Placement currentPlacement = Placement("");
+	findPlacementsExhaustiveRecursive(
+		line,
+		hintLine,
+		solutions,
+		currentPlacement,
+		0
+	);
     return solutions;
 }
-*/
+
+void ExhaustivePlacementPatternFindAlgorithm::findPlacementsExhaustiveRecursive(
+	const Line& line,
+	const HintLine& hintLine,
+	std::vector<Placement>& solutions,
+	Placement& currentPlacement,
+	int currentHintIndex
+) {
+	if (currentPlacement.size() > line.size()) {
+		return;
+	}
+	if (currentHintIndex >= hintLine.size()) {
+		Placement foundPlacement = currentPlacement;
+		for (CellIndex i = CellIndex(currentPlacement.size()); i < line.size(); i = i + 1) {
+			if (!line[i].canColor(White)) {
+				return;
+			}
+			foundPlacement = foundPlacement + Placement("W");
+		}
+		solutions.push_back(foundPlacement);
+		return;
+	}
+	
+	HintNumber hintNumber = hintLine[currentHintIndex];
+	CellIndex currentIndex = CellIndex(currentPlacement.size());
+	if (line.canPlaceBlock(currentIndex, hintNumber)) {
+		Placement previousPlacement = currentPlacement;
+		currentPlacement = currentPlacement + Placement(hintNumber);
+		if (currentPlacement.size() < line.size()) {
+			currentPlacement = currentPlacement + Placement("W");
+		}
+		findPlacementsExhaustiveRecursive(
+			line,
+			hintLine,
+			solutions,
+			currentPlacement,
+			currentHintIndex + 1
+		);
+		currentPlacement = previousPlacement;
+	}
+
+	if (currentIndex < line.size() && line[currentIndex].canColor(White)) {
+		Placement previousPlacement = currentPlacement;
+		currentPlacement = currentPlacement + Placement("W");
+		findPlacementsExhaustiveRecursive(
+			line,
+			hintLine,
+			solutions,
+			currentPlacement,
+			currentHintIndex
+		);
+		currentPlacement = previousPlacement;
+	}
+}
