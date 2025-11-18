@@ -67,3 +67,12 @@ bool ColumnIndex::operator>(const ColumnLength& other) const {
 bool ColumnIndex::operator>=(const ColumnLength& other) const {
 	return index >= other.getLength();
 }
+
+std::vector<ColumnIndex> ColumnIndex::iterate(const int start, const int end){
+	std::vector<ColumnIndex> indexes;
+	for (int i = start; i < end; i++) {
+		indexes.push_back(ColumnIndex(i));
+	}
+	return indexes;
+}
+

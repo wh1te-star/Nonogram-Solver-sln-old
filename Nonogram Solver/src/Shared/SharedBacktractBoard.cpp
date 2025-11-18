@@ -12,23 +12,23 @@ const BacktrackBoard& SharedBacktrackBoard::getBacktrackBoard() const {
 	return backtrackBoard;
 }
 
-const Row& SharedBacktrackBoard::getRowLine(RowIndex rowIndex) const {
+Row SharedBacktrackBoard::getRowLine(RowIndex rowIndex) const {
 	return backtrackBoard.getRowLine(rowIndex);
 }
 
-const Column& SharedBacktrackBoard::getColumnLine(ColumnIndex columnIndex) const {
+Column SharedBacktrackBoard::getColumnLine(ColumnIndex columnIndex) const {
 	return backtrackBoard.getColumnLine(columnIndex);
 }
 
-const HintLine& SharedBacktrackBoard::getRowHintLine(RowIndex rowIndex) const {
+HintLine SharedBacktrackBoard::getRowHintLine(RowIndex rowIndex) const {
 	return backtrackBoard.getRowHintLine(rowIndex);
 }
 
-const HintLine& SharedBacktrackBoard::getColumnHintLine(ColumnIndex columnIndex) const {
+HintLine SharedBacktrackBoard::getColumnHintLine(ColumnIndex columnIndex) const {
 	return backtrackBoard.getColumnHintLine(columnIndex);
 }
 
-const bool SharedBacktrackBoard::isSolved() const {
+bool SharedBacktrackBoard::isSolved() const {
 	return backtrackBoard.isSolved();
 }
 
@@ -38,8 +38,18 @@ void SharedBacktrackBoard::applyCell(const Coordinate& coordinate, const Cell& c
 	backtrackBoard.applyCell(coordinate, cell);
 }
 
-void SharedBacktrackBoard::applyPlacement(const Coordinate& coordinate, const Placement& placement) {
-	std::lock_guard<std::mutex> lock(mtx);
+void SharedBacktrackBoard::applyRow(const RowIndex& rowIndex, const Row& row) {
+	return backtrackBoard.applyRow(rowIndex, row);
+}
 
-	backtrackBoard.applyPlacement(coordinate, placement);
+void SharedBacktrackBoard::applyRow(const RowIndex& rowIndex, const RowPlacement& rowPlacement) {
+	return backtrackBoard.applyRow(rowIndex, rowPlacement);
+}
+
+void SharedBacktrackBoard::applyColumn(const ColumnIndex& columnIndex, const Column& column) {
+	return backtrackBoard.applyColumn(columnIndex, column);
+}
+
+void SharedBacktrackBoard::applyColumn(const ColumnIndex& columnIndex, const ColumnPlacement& columnPlacement) {
+	return backtrackBoard.applyColumn(columnIndex, columnPlacement);
 }

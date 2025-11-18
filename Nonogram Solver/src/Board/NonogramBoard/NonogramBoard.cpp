@@ -29,22 +29,23 @@ const ColumnHintLineList& NonogramBoard::getColumnHintLineList() const {
 	return columnHintLineList;
 }
 
-const Row& NonogramBoard::getRowLine(RowIndex rowIndex) const {
+Row NonogramBoard::getRowLine(RowIndex rowIndex) const {
 	return board.getRowLine(rowIndex);
 }
-const Column& NonogramBoard::getColumnLine(ColumnIndex columnIndex) const {
+
+Column NonogramBoard::getColumnLine(ColumnIndex columnIndex) const {
 	return board.getColumnLine(columnIndex);
 }
 
-const HintLine& NonogramBoard::getRowHintLine(RowIndex rowIndex) const {
+HintLine NonogramBoard::getRowHintLine(RowIndex rowIndex) const {
 	return rowHintLineList[rowIndex];
 }
 
-const HintLine& NonogramBoard::getColumnHintLine(ColumnIndex columnIndex) const {
+HintLine NonogramBoard::getColumnHintLine(ColumnIndex columnIndex) const {
 	return columnHintLineList[columnIndex];
 }
 
-const bool NonogramBoard::isSolved() const {
+bool NonogramBoard::isSolved() const {
 	return board.isSolved();
 }
 
@@ -52,6 +53,18 @@ void NonogramBoard::applyCell(const Coordinate& coordinate, const Cell& cell) {
 	board.applyCell(coordinate, cell);
 }
 
-void NonogramBoard::applyPlacement(const Coordinate& coordinate, const Placement& placement) {
-	board.applyPlacement(coordinate, placement);
+void NonogramBoard::applyRow(const RowIndex& rowIndex, const Row& row) {
+	return board.applyRow(rowIndex, row);
+}
+
+void NonogramBoard::applyRow(const RowIndex& rowIndex, const RowPlacement& rowPlacement) {
+	return board.applyRow(rowIndex, rowPlacement);
+}
+
+void NonogramBoard::applyColumn(const ColumnIndex& columnIndex, const Column& column) {
+	return board.applyColumn(columnIndex, column);
+}
+
+void NonogramBoard::applyColumn(const ColumnIndex& columnIndex, const ColumnPlacement& columnPlacement) {
+	return board.applyColumn(columnIndex, columnPlacement);
 }

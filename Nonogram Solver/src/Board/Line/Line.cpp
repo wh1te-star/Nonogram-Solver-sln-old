@@ -2,6 +2,8 @@
 
 #include "Cell/Cell/Cell.h"
 #include "Index/Coordinate/Coordinate.h"
+#include "Board/Line/Row.h"
+#include "Board/Line/Column.h"
 #include <cassert>
 
 
@@ -84,6 +86,15 @@ bool Line::canPlaceBlock(const CellIndex& startIndex, const HintNumber& hintNumb
 		}
 	}
 	return true;
+}
+
+Row Line::toRow() const {
+	return Row(line);
+}
+
+Column Line::toColumn() const
+{
+	return Column(line);
 }
 
 std::ostream& operator<<(std::ostream& os, const Line& line) {

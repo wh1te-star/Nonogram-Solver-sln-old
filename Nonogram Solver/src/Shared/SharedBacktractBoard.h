@@ -18,15 +18,18 @@ public:
     const BacktrackBoard& getBacktrackBoard() const;
 
 public:
-	const Row& getRowLine(RowIndex rowIndex) const ;
-	const Column& getColumnLine(ColumnIndex columnIndex) const;
-	const HintLine& getRowHintLine(RowIndex rowIndex) const;
-	const HintLine& getColumnHintLine(ColumnIndex columnIndex) const;
-	const bool isSolved() const;
+	Row getRowLine(RowIndex rowIndex) const ;
+	Column getColumnLine(ColumnIndex columnIndex) const;
+	HintLine getRowHintLine(RowIndex rowIndex) const;
+	HintLine getColumnHintLine(ColumnIndex columnIndex) const;
+	bool isSolved() const;
 
 public:
 	void applyCell(const Coordinate& coordinate, const Cell& cellColor);
-	void applyPlacement(const Coordinate& coordinate, const Placement& placement);
+	void applyRow(const RowIndex& rowIndex, const Row& row);
+	void applyRow(const RowIndex& rowIndex, const RowPlacement& rowPlacement);
+	void applyColumn(const ColumnIndex& columnIndex, const Column& column);
+	void applyColumn(const ColumnIndex& columnIndex, const ColumnPlacement& columnPlacement);
 };
 
 

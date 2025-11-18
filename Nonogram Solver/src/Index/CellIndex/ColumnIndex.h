@@ -26,6 +26,7 @@ public:
     bool operator<=(const ColumnLength& other) const;
     bool operator>(const ColumnLength& other) const;
     bool operator>=(const ColumnLength& other) const;
+    static std::vector<ColumnIndex> iterate(const int start, const int end);
 };
 
 #endif

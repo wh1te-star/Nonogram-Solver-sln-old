@@ -16,13 +16,13 @@ void BacktrackAlgorithm::run() {
 	for (RowIndex rowIndex : RowIndex::iterate(0, 10)) {
         Row rowLine = sharedBacktrackBoard.getRowLine(rowIndex);
 		HintLine rowHintLine = sharedBacktrackBoard.getRowHintLine(rowIndex);
-		Line newLine = OverlapDeterminationAlgorithm::determineByOverlap(
+		Row newRow = OverlapDeterminationAlgorithm::determineByOverlap(
             rowLine,
 			rowHintLine
-		);
+		).toRow();
 
-		sharedBacktrackBoard.applyLine(coordinate, Cell(Black));
-		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+		sharedBacktrackBoard.applyRow(rowIndex, newRow);
+		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
 }
 

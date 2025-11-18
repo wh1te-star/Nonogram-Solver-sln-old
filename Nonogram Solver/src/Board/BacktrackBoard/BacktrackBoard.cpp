@@ -21,23 +21,23 @@ const ColumnPlacementCountList& BacktrackBoard::getColumnPlacementCountList() co
 	return columnPlacementCountList;
 }
 
-const Row& BacktrackBoard::getRowLine(RowIndex rowIndex) const {
+Row BacktrackBoard::getRowLine(RowIndex rowIndex) const {
 	return nonogramBoard.getRowLine(rowIndex);
 }
 
-const Column& BacktrackBoard::getColumnLine(ColumnIndex columnIndex) const {
+Column BacktrackBoard::getColumnLine(ColumnIndex columnIndex) const {
 	return nonogramBoard.getColumnLine(columnIndex);
 }
 
-const HintLine& BacktrackBoard::getRowHintLine(RowIndex rowIndex) const {
+HintLine BacktrackBoard::getRowHintLine(RowIndex rowIndex) const {
 	return nonogramBoard.getRowHintLine(rowIndex);
 }
 
-const HintLine& BacktrackBoard::getColumnHintLine(ColumnIndex columnIndex) const {
+HintLine BacktrackBoard::getColumnHintLine(ColumnIndex columnIndex) const {
 	return nonogramBoard.getColumnHintLine(columnIndex);
 }
 
-const bool BacktrackBoard::isSolved() const {
+bool BacktrackBoard::isSolved() const {
 	return nonogramBoard.isSolved();
 }
 
@@ -45,6 +45,19 @@ void BacktrackBoard::applyCell(const Coordinate& coordinate, const Cell& cell) {
 	nonogramBoard.applyCell(coordinate, cell);
 }
 
-void BacktrackBoard::applyPlacement(const Coordinate& coordinate, const Placement& placement) {
-	nonogramBoard.applyPlacement(coordinate, placement);
+void BacktrackBoard::applyRow(const RowIndex& rowIndex, const Row& row) {
+	return nonogramBoard.applyRow(rowIndex, row);
 }
+
+void BacktrackBoard::applyRow(const RowIndex& rowIndex, const RowPlacement& rowPlacement) {
+	return nonogramBoard.applyRow(rowIndex, rowPlacement);
+}
+
+void BacktrackBoard::applyColumn(const ColumnIndex& columnIndex, const Column& column) {
+	return nonogramBoard.applyColumn(columnIndex, column);
+}
+
+void BacktrackBoard::applyColumn(const ColumnIndex& columnIndex, const ColumnPlacement& columnPlacement) {
+	return nonogramBoard.applyColumn(columnIndex, columnPlacement);
+}
+

@@ -2,7 +2,6 @@
 
 #include <typeinfo>
 #include <cassert>
-#include "Board.h"
 #include "Board/BoardLength/ColumnLength.h"
 #include "Board/BoardLength/RowLength.h"
 #include "Cell/Cell/Cell.h"
@@ -66,14 +65,14 @@ bool Board::isInRange(const Coordinate& coordinate) const {
 	return true;
 }
 
-const Cell& Board::getCell(const Coordinate& coordinate) const {
+Cell Board::getCell(const Coordinate& coordinate) const {
 	assert(isInRange(coordinate));
 	RowIndex rowIndex = coordinate.getRowIndex();
 	ColumnIndex columnIndex = coordinate.getColumnIndex();
 	return board[rowIndex.getIndex()][columnIndex.getIndex()];
 }
 
-const Row& Board::getRowLine(RowIndex rowIndex) const {
+Row Board::getRowLine(RowIndex rowIndex) const {
 	std::vector<Cell> row;
 	for (ColumnIndex currentColumnIndex = ColumnIndex(0);
 		currentColumnIndex < columnLength;
@@ -86,7 +85,7 @@ const Row& Board::getRowLine(RowIndex rowIndex) const {
 	return Row(row);
 }
 
-const Column& Board::getColumnLine(ColumnIndex columnIndex) const {
+Column Board::getColumnLine(ColumnIndex columnIndex) const {
 	std::vector<Cell> column;
 	for (RowIndex currentRowIndex = RowIndex(0);
 		currentRowIndex < rowLength;
@@ -119,12 +118,33 @@ void Board::applyRow(const RowIndex& rowIndex, const Row& row) {
 	}
 }
 
-void Board::applyRow(const RowIndex& rowIndex, const RowPlacement& RowPlacement) {
+void Board::applyRow(const RowIndex& rowIndex, const RowPlacement& rowPlacement) {
+	assert(rowPlacement.size() == columnLength.getLength());
+
+	for (ColumnIndex columnIndex : ColumnIndex::iterate(0, rowPlacement.size())) {
+		Coordinate coordinate = Coordinate(rowIndex, columnIndex);
+		Cell cell = rowPlacement[columnIndex];
+		applyCell(coordinate, cell);
+	}
 }
 
 void Board::applyColumn(const ColumnIndex& columnIndex, const Column& column) {
+	assert(column.size() == rowLength.getLength());
+
+	for (RowIndex rowIndex : RowIndex::iterate(0, column.size())) {
+		Coordinate coordinate = Coordinate(rowIndex, columnIndex);
+		Cell cell = column[rowIndex];
+		applyCell(coordinate, cell);
+	}
 }
 
 void Board::applyColumn(const ColumnIndex& columnIndex, const ColumnPlacement& columnPlacement) {
+	assert(columnPlacement.size() == rowLength.getLength());
+
+	for (RowIndex rowIndex : RowIndex::iterate(0, columnPlacement.size())) {
+		Coordinate coordinate = Coordinate(rowIndex, columnIndex);
+		Cell cell = columnPlacement[rowIndex];
+		applyCell(coordinate, cell);
+	}
 }
 

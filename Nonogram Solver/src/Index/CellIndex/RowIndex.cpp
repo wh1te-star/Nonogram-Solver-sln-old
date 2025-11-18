@@ -68,3 +68,11 @@ bool RowIndex::operator>=(const RowLength& other) const {
 	return index >= other.getLength();
 }
 
+std::vector<RowIndex> RowIndex::iterate(const int start, const int end){
+	std::vector<RowIndex> indexes;
+	for (int i = start; i < end; i++) {
+		indexes.push_back(RowIndex(i));
+	}
+	return indexes;
+}
+

@@ -13,6 +13,8 @@
 #include "Board/Line/Row.h"
 #include "Board/Line/Column.h"
 #include "Placement/Placement/Placement.h"
+#include "Placement/Placement/RowPlacement.h"
+#include "Placement/Placement/ColumnPlacement.h"
 
 class Board {
 private:
@@ -35,14 +37,14 @@ public:
 public:
 	const bool isSolved() const;
 	bool isInRange(const Coordinate& coordinate) const;
-	const Cell& getCell(const Coordinate& coordinate) const;
-	const Row& getRowLine(RowIndex rowIndex) const;
-	const Column& getColumnLine(ColumnIndex columnIndex) const;
+	Cell getCell(const Coordinate& coordinate) const;
+	Row getRowLine(RowIndex rowIndex) const;
+	Column getColumnLine(ColumnIndex columnIndex) const;
 
 public:
 	void applyCell(const Coordinate& coordinate, const Cell& cell);
 	void applyRow(const RowIndex& rowIndex, const Row& row);
-	void applyRow(const RowIndex& rowIndex, const RowPlacement& RowPlacement);
+	void applyRow(const RowIndex& rowIndex, const RowPlacement& rowPlacement);
 	void applyColumn(const ColumnIndex& columnIndex, const Column& column);
 	void applyColumn(const ColumnIndex& columnIndex, const ColumnPlacement& columnPlacement);
 };
