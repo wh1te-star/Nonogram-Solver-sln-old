@@ -5,9 +5,9 @@
 #include "Board/Board/Board.h"
 #include "Board/BoardLength/RowLength.h"
 #include "Board/BoardLength/ColumnLength.h"
-#include "Board/Board/Board.h"
 #include "Hint/HintLineList/ColumnHintLineList.h"
 #include "Hint/HintLineList/RowHintLineList.h"
+#include "Hint/HintLine/HintLine.h"
 
 class NonogramBoard {
 private:
@@ -28,6 +28,13 @@ public:
 	const ColumnLength& getColumnCount() const;
 	const RowHintLineList& getRowHintLineList() const;
 	const ColumnHintLineList& getColumnHintLineList() const;
+
+public:
+	const Row& getRowLine(RowIndex rowIndex) const;
+	const Column& getColumnLine(ColumnIndex columnIndex) const;
+	const HintLine& getRowHintLine(RowIndex rowIndex) const;
+	const HintLine& getColumnHintLine(ColumnIndex columnIndex) const;
+	const bool isSolved() const;
 
 public:
 	void applyCell(const Coordinate& coordinate, const Cell& cell);

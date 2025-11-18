@@ -94,3 +94,11 @@ bool CellIndex::operator>=(const BoardLength& other) const {
 	return index >= other.getLength();
 }
 
+std::vector<CellIndex> CellIndex::iterate(const int start, const int end){
+	std::vector<CellIndex> indexes;
+	for (int i = start; i < end; i++) {
+		indexes.push_back(CellIndex(i));
+	}
+	return indexes;
+}
+

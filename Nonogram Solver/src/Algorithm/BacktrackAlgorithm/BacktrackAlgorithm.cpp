@@ -1,6 +1,7 @@
 #include "Algorithm/BacktrackAlgorithm/BacktrackAlgorithm.h"
 
 #include "Board/Line/Line.h"
+#include "Algorithm/OverlapDeterminationAlgorithm/OverlapDeterminationAlgorithm.h"
 #include <atomic>
 #include <thread>
 #include <chrono>
@@ -10,7 +11,19 @@ BacktrackAlgorithm::BacktrackAlgorithm(SharedBacktrackBoard& sharedBacktrackBoar
 	: sharedBacktrackBoard(sharedBacktrackBoard) {}
 
 void BacktrackAlgorithm::run() {
-	recursiveSolve(0, 100);
+	//recursiveSolve(0, 100);
+
+	for (RowIndex rowIndex : RowIndex::iterate(0, 10)) {
+        Row rowLine = sharedBacktrackBoard.getRowLine(rowIndex);
+		HintLine rowHintLine = sharedBacktrackBoard.getRowHintLine(rowIndex);
+		Line newLine = OverlapDeterminationAlgorithm::determineByOverlap(
+            rowLine,
+			rowHintLine
+		);
+
+		sharedBacktrackBoard.applyLine(coordinate, Cell(Black));
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
 }
 
 void BacktrackAlgorithm::recursiveSolve(int count, int max) {

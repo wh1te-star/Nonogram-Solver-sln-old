@@ -21,6 +21,26 @@ const ColumnPlacementCountList& BacktrackBoard::getColumnPlacementCountList() co
 	return columnPlacementCountList;
 }
 
+const Row& BacktrackBoard::getRowLine(RowIndex rowIndex) const {
+	return nonogramBoard.getRowLine(rowIndex);
+}
+
+const Column& BacktrackBoard::getColumnLine(ColumnIndex columnIndex) const {
+	return nonogramBoard.getColumnLine(columnIndex);
+}
+
+const HintLine& BacktrackBoard::getRowHintLine(RowIndex rowIndex) const {
+	return nonogramBoard.getRowHintLine(rowIndex);
+}
+
+const HintLine& BacktrackBoard::getColumnHintLine(ColumnIndex columnIndex) const {
+	return nonogramBoard.getColumnHintLine(columnIndex);
+}
+
+const bool BacktrackBoard::isSolved() const {
+	return nonogramBoard.isSolved();
+}
+
 void BacktrackBoard::applyCell(const Coordinate& coordinate, const Cell& cell) {
 	nonogramBoard.applyCell(coordinate, cell);
 }

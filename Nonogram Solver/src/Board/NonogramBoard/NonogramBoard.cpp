@@ -29,6 +29,25 @@ const ColumnHintLineList& NonogramBoard::getColumnHintLineList() const {
 	return columnHintLineList;
 }
 
+const Row& NonogramBoard::getRowLine(RowIndex rowIndex) const {
+	return board.getRowLine(rowIndex);
+}
+const Column& NonogramBoard::getColumnLine(ColumnIndex columnIndex) const {
+	return board.getColumnLine(columnIndex);
+}
+
+const HintLine& NonogramBoard::getRowHintLine(RowIndex rowIndex) const {
+	return rowHintLineList[rowIndex];
+}
+
+const HintLine& NonogramBoard::getColumnHintLine(ColumnIndex columnIndex) const {
+	return columnHintLineList[columnIndex];
+}
+
+const bool NonogramBoard::isSolved() const {
+	return board.isSolved();
+}
+
 void NonogramBoard::applyCell(const Coordinate& coordinate, const Cell& cell) {
 	board.applyCell(coordinate, cell);
 }

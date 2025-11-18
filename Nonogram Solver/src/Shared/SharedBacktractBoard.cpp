@@ -12,6 +12,26 @@ const BacktrackBoard& SharedBacktrackBoard::getBacktrackBoard() const {
 	return backtrackBoard;
 }
 
+const Row& SharedBacktrackBoard::getRowLine(RowIndex rowIndex) const {
+	return backtrackBoard.getRowLine(rowIndex);
+}
+
+const Column& SharedBacktrackBoard::getColumnLine(ColumnIndex columnIndex) const {
+	return backtrackBoard.getColumnLine(columnIndex);
+}
+
+const HintLine& SharedBacktrackBoard::getRowHintLine(RowIndex rowIndex) const {
+	return backtrackBoard.getRowHintLine(rowIndex);
+}
+
+const HintLine& SharedBacktrackBoard::getColumnHintLine(ColumnIndex columnIndex) const {
+	return backtrackBoard.getColumnHintLine(columnIndex);
+}
+
+const bool SharedBacktrackBoard::isSolved() const {
+	return backtrackBoard.isSolved();
+}
+
 void SharedBacktrackBoard::applyCell(const Coordinate& coordinate, const Cell& cell) {
 	std::lock_guard<std::mutex> lock(mtx);
 

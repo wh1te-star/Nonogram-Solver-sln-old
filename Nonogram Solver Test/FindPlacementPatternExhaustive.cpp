@@ -9,6 +9,8 @@
 #include "Algorithm/ExhaustivePlacementPatternFindAlgorithm/ExhaustivePlacementPatternFindAlgorithm.h"
 
 
+const std::string projectName = "Nonogram Solver Test";
+
 void findPlacementPatternExhaustiveTest(
     const std::string& lineStr,
     const std::vector<int>& hintNumbers,
@@ -17,15 +19,9 @@ void findPlacementPatternExhaustiveTest(
     Line line = Line(lineStr);
     HintLine hintLine = HintLine(hintNumbers);
     std::vector<Placement> expected;
-    expected.reserve(expectedList.size()); 
-    std::transform(
-        expectedList.begin(),
-        expectedList.end(),
-        std::back_inserter(expected),
-        [](const std::string& str) {
-            return Placement(str);
-        }
-    );
+	for (std::string str : expectedList) {
+		expected.emplace_back(Placement(str));
+    }
     
     std::vector<Placement> result = ExhaustivePlacementPatternFindAlgorithm::run(line, hintLine);
     EXPECT_EQ(result, expected);
@@ -46,6 +42,8 @@ std::vector<std::string> readLinesFromFile(const std::string& filename) {
     }
     return lines;
 }
+
+
 TEST(Algorithm_FindPlacementPatternExhaustive, VerySimpleCase) {
     findPlacementPatternExhaustiveTest(
         "      ",
@@ -58,6 +56,18 @@ TEST(Algorithm_FindPlacementPatternExhaustive, VerySimpleCase) {
         }
 	);
 }
+TEST(Algorithm_FindPlacementPatternExhaustive, ConditionedVerySimpleCase) {
+    findPlacementPatternExhaustiveTest(
+        " B    ",
+        {3},
+        {
+			"BBBWWW",
+			"WBBBWW",
+        }
+	);
+}
+
+
 TEST(Algorithm_FindPlacementPatternExhaustive, SomeHintsCase) {
     findPlacementPatternExhaustiveTest(
         "      ",
@@ -69,8 +79,20 @@ TEST(Algorithm_FindPlacementPatternExhaustive, SomeHintsCase) {
         }
 	);
 }
+TEST(Algorithm_FindPlacementPatternExhaustive, ConditionedSomeHintsCase) {
+    findPlacementPatternExhaustiveTest(
+        " B    ",
+        {1, 3},
+        {
+			"WBWBBB",
+        }
+	);
+}
+
+
 TEST(Algorithm_FindPlacementPatternExhaustive, ManyHintsCase) {
-    const std::string filePath = "..\\..\\Nonogram Solver Test\\Algorithm_FindPlacementPatternExhaustive_ManyHintsCase.txt";
+	const std::string fileName = "Algorithm_FindPlacementPatternExhaustive_ManyHintsCase.txt";
+	const std::string filePath = "..\\..\\" + projectName + "\\" + fileName;
     std::vector<std::string> expectedLines;
     try {
         expectedLines = readLinesFromFile(filePath);
@@ -83,4 +105,20 @@ TEST(Algorithm_FindPlacementPatternExhaustive, ManyHintsCase) {
         {1, 3, 4, 2, 3},
         expectedLines
     );
+}
+
+
+TEST(Algorithm_FindPlacementPatternExhaustive, ImpossibleCase) {
+    findPlacementPatternExhaustiveTest(
+        "      ",
+        {7},
+        {}
+	);
+}
+TEST(Algorithm_FindPlacementPatternExhaustive, ConditionedImpossibleCase) {
+    findPlacementPatternExhaustiveTest(
+        " W W W",
+        {2},
+        {}
+	);
 }

@@ -20,11 +20,6 @@ public:
 
 	void recursiveSolve(int count, int max);
     void request_stop();
-
-    PlacementCount countPlacements(
-		const Line& line,
-		const HintLine& hintLine
-	) const;
 };
 
 

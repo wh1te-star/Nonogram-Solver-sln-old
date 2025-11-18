@@ -2,6 +2,7 @@
 #define CELLINDEX_H
 
 
+#include <vector>
 #include "Board/BoardLength/BoardLength.h"
 #include "Hint/HintNumber/HintNumber.h"
 
@@ -36,6 +37,7 @@ public:
     bool operator<=(const BoardLength& other) const;
     bool operator>(const BoardLength& other) const;
     bool operator>=(const BoardLength& other) const;
+    static std::vector<CellIndex> iterate(const int start, const int end);
 };
 
 #endif

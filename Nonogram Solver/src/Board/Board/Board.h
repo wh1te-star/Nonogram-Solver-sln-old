@@ -10,6 +10,8 @@
 #include "Index/Coordinate/Coordinate.h"
 #include "Index/CellIndex/ColumnIndex.h"
 #include "Index/CellIndex/RowIndex.h"
+#include "Board/Line/Row.h"
+#include "Board/Line/Column.h"
 #include "Placement/Placement/Placement.h"
 
 class Board {
@@ -31,12 +33,18 @@ public:
 	bool operator!=(const Board& other) const;
 
 public:
+	const bool isSolved() const;
 	bool isInRange(const Coordinate& coordinate) const;
 	const Cell& getCell(const Coordinate& coordinate) const;
+	const Row& getRowLine(RowIndex rowIndex) const;
+	const Column& getColumnLine(ColumnIndex columnIndex) const;
 
 public:
 	void applyCell(const Coordinate& coordinate, const Cell& cell);
-	void applyPlacement(const Coordinate& coordinate, const Placement& placement);
+	void applyRow(const RowIndex& rowIndex, const Row& row);
+	void applyRow(const RowIndex& rowIndex, const RowPlacement& RowPlacement);
+	void applyColumn(const ColumnIndex& columnIndex, const Column& column);
+	void applyColumn(const ColumnIndex& columnIndex, const ColumnPlacement& columnPlacement);
 };
 
 

@@ -43,6 +43,17 @@ bool Board::operator!=(const Board& other) const {
 	return !(*this == other);
 }
 
+const bool Board::isSolved() const {
+	for (std::vector<Cell> row : board) {
+		for (Cell cell : row) {
+			if (cell.getColor() == None) {
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
 bool Board::isInRange(const Coordinate& coordinate) const {
 	RowIndex rowIndex = coordinate.getRowIndex();
 	ColumnIndex columnIndex = coordinate.getColumnIndex();
@@ -62,6 +73,32 @@ const Cell& Board::getCell(const Coordinate& coordinate) const {
 	return board[rowIndex.getIndex()][columnIndex.getIndex()];
 }
 
+const Row& Board::getRowLine(RowIndex rowIndex) const {
+	std::vector<Cell> row;
+	for (ColumnIndex currentColumnIndex = ColumnIndex(0);
+		currentColumnIndex < columnLength;
+		currentColumnIndex++
+		) {
+		Coordinate coordinate = Coordinate(rowIndex, currentColumnIndex);
+		Cell cell = getCell(coordinate);
+		row.push_back(cell);
+	}
+	return Row(row);
+}
+
+const Column& Board::getColumnLine(ColumnIndex columnIndex) const {
+	std::vector<Cell> column;
+	for (RowIndex currentRowIndex = RowIndex(0);
+		currentRowIndex < rowLength;
+		currentRowIndex++
+		) {
+		Coordinate coordinate = Coordinate(currentRowIndex, columnIndex);
+		Cell cell = getCell(coordinate);
+		column.push_back(cell);
+	}
+	return Column(column);
+}
+
 void Board::applyCell(const Coordinate& coordinate, const Cell& cell) {
     if(!isInRange(coordinate)) {
         return;
@@ -72,13 +109,22 @@ void Board::applyCell(const Coordinate& coordinate, const Cell& cell) {
 	board[rowIndex.getIndex()][columnIndex.getIndex()] = cell;
 }
 
-void Board::applyPlacement(const Coordinate& coordinate, const Placement& placement) {
-	assert(
-		typeid(placement) == typeid(RowPlacement) ||
-		typeid(placement) == typeid(ColumnPlacement)
-	);
+void Board::applyRow(const RowIndex& rowIndex, const Row& row) {
+	assert(row.size() == columnLength.getLength());
 
-	for(const CellLocation& cellLocation : placement.getCellLocationList(coordinate)) {
-		applyCell(cellLocation.getCoordinate(), cellLocation.getCell());
+	for (ColumnIndex columnIndex : ColumnIndex::iterate(0, row.size())) {
+		Coordinate coordinate = Coordinate(rowIndex, columnIndex);
+		Cell cell = row[columnIndex];
+		applyCell(coordinate, cell);
 	}
 }
+
+void Board::applyRow(const RowIndex& rowIndex, const RowPlacement& RowPlacement) {
+}
+
+void Board::applyColumn(const ColumnIndex& columnIndex, const Column& column) {
+}
+
+void Board::applyColumn(const ColumnIndex& columnIndex, const ColumnPlacement& columnPlacement) {
+}
+
