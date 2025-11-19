@@ -5,10 +5,10 @@
 
 Line OverlapDeterminationAlgorithm::determineByOverlap(
 	const Line& line,
-	const HintLine& hintLine
+	const HintSet& HintSet
 ) {
-	Placement leftmostPlacement = getLeftmostPlacement(line, hintLine);
-	Placement rightmostPlacement = getRightmostPositions(line, hintLine);
+	Placement leftmostPlacement = getLeftmostPlacement(line, HintSet);
+	Placement rightmostPlacement = getRightmostPositions(line, HintSet);
     if (leftmostPlacement.size() == 0 || rightmostPlacement.size() == 0) {
         return line;
     }
@@ -21,15 +21,15 @@ Line OverlapDeterminationAlgorithm::determineByOverlap(
 		CellIndex cellIndex = CellIndex(i);
         determined[cellIndex] = Cell(White);
 	}
-    for (int i = (rightmostHintIndex.back() + hintLine.getNumbers().back()).getIndex(); i < line.size(); i++) {
+    for (int i = (rightmostHintIndex.back() + HintSet.getNumbers().back()).getIndex(); i < line.size(); i++) {
 		CellIndex cellIndex = CellIndex(i);
         determined[cellIndex] = Cell(White);
 	}
-    for(int hintIndex = 0; hintIndex < hintLine.size(); hintIndex++) {
+    for(int hintIndex = 0; hintIndex < HintSet.size(); hintIndex++) {
         CellIndex leftStart = leftmostHintIndex[hintIndex];
-        CellIndex leftEnd = leftStart + hintLine[hintIndex] - 1;
+        CellIndex leftEnd = leftStart + HintSet[hintIndex] - 1;
         CellIndex rightStart = rightmostHintIndex[hintIndex];
-        CellIndex rightEnd = rightStart + hintLine[hintIndex] - 1;
+        CellIndex rightEnd = rightStart + HintSet[hintIndex] - 1;
         for(CellIndex cellIndex = leftStart; cellIndex <= leftEnd; cellIndex++) {
             if (rightStart <= cellIndex && cellIndex <= rightEnd) {
 				determined[cellIndex] = Cell(Black);
@@ -42,12 +42,12 @@ Line OverlapDeterminationAlgorithm::determineByOverlap(
 
 Placement OverlapDeterminationAlgorithm::getLeftmostPlacement(
 	const Line& line,
-	const HintLine& hintLine
+	const HintSet& HintSet
 ) {
     Placement placement = Placement(std::vector<Cell>());
 	CellIndex currentIndex = CellIndex(0);
-    for (int hintIndex = 0; hintIndex < hintLine.size(); hintIndex++) {
-        HintNumber hintNumber = hintLine[hintIndex];
+    for (int hintIndex = 0; hintIndex < HintSet.size(); hintIndex++) {
+        HintNumber hintNumber = HintSet[hintIndex];
         while (true) {
             if (currentIndex >= line.size()) {
 				return Placement("");
@@ -61,7 +61,7 @@ Placement OverlapDeterminationAlgorithm::getLeftmostPlacement(
             currentIndex++;
         }
 
-        if(hintIndex < hintLine.size() - 1) {
+        if(hintIndex < HintSet.size() - 1) {
             placement += Placement({ Cell(White) });
             currentIndex = currentIndex + 1;
 		}
@@ -74,13 +74,13 @@ Placement OverlapDeterminationAlgorithm::getLeftmostPlacement(
 
 Placement OverlapDeterminationAlgorithm::getRightmostPositions(
 	const Line& line,
-	const HintLine& hintLine
+	const HintSet& HintSet
 ) {
     Placement placement = Placement(std::vector<Cell>());
 	CellIndex currentIndex = CellIndex(line.size());
 
-    for (int hintIndex = (int)hintLine.size()-1; hintIndex >= 0; hintIndex--){
-        HintNumber hintNumber = hintLine[hintIndex];
+    for (int hintIndex = (int)HintSet.size()-1; hintIndex >= 0; hintIndex--){
+        HintNumber hintNumber = HintSet[hintIndex];
         currentIndex = currentIndex - hintNumber;
         while (true) {
             if (currentIndex < 0) {

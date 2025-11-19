@@ -29,12 +29,12 @@ Column BacktrackBoard::getColumnLine(ColumnIndex columnIndex) const {
 	return nonogramBoard.getColumnLine(columnIndex);
 }
 
-HintLine BacktrackBoard::getRowHintLine(RowIndex rowIndex) const {
-	return nonogramBoard.getRowHintLine(rowIndex);
+HintSet BacktrackBoard::getRowHintSet(RowIndex rowIndex) const {
+	return nonogramBoard.getRowHintSet(rowIndex);
 }
 
-HintLine BacktrackBoard::getColumnHintLine(ColumnIndex columnIndex) const {
-	return nonogramBoard.getColumnHintLine(columnIndex);
+HintSet BacktrackBoard::getColumnHintSet(ColumnIndex columnIndex) const {
+	return nonogramBoard.getColumnHintSet(columnIndex);
 }
 
 bool BacktrackBoard::isSolved() const {

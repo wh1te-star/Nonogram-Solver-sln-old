@@ -8,7 +8,7 @@
 SharedBacktrackBoard::SharedBacktrackBoard(BacktrackBoard backtrackBoard)
 	: backtrackBoard(backtrackBoard) {}
 
-Row SharedBacktrackBoard::getRowLine(RowIndex rowIndex) const {
+const Row SharedBacktrackBoard::getRowLine(RowIndex rowIndex) const {
 	std::lock_guard<std::mutex> lock(mtx);
 	return backtrackBoard.getRowLine(rowIndex);
 }
@@ -18,14 +18,14 @@ Column SharedBacktrackBoard::getColumnLine(ColumnIndex columnIndex) const {
 	return backtrackBoard.getColumnLine(columnIndex);
 }
 
-HintLine SharedBacktrackBoard::getRowHintLine(RowIndex rowIndex) const {
+HintSet SharedBacktrackBoard::getRowHintSet(RowIndex rowIndex) const {
 	std::lock_guard<std::mutex> lock(mtx);
-	return backtrackBoard.getRowHintLine(rowIndex);
+	return backtrackBoard.getRowHintSet(rowIndex);
 }
 
-HintLine SharedBacktrackBoard::getColumnHintLine(ColumnIndex columnIndex) const {
+HintSet SharedBacktrackBoard::getColumnHintSet(ColumnIndex columnIndex) const {
 	std::lock_guard<std::mutex> lock(mtx);
-	return backtrackBoard.getColumnHintLine(columnIndex);
+	return backtrackBoard.getColumnHintSet(columnIndex);
 }
 
 bool SharedBacktrackBoard::isSolved() const {

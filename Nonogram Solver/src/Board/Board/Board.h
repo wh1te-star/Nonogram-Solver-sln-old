@@ -37,7 +37,7 @@ public:
 	Row getRowLine(RowIndex rowIndex) const;
 	Column getColumnLine(ColumnIndex columnIndex) const;
 	bool isInRange(const Coordinate& coordinate) const;
-	const bool isSolved() const;
+	bool isSolved() const;
 
 public:
 	void applyCell(const Coordinate& coordinate, const Cell& cell);

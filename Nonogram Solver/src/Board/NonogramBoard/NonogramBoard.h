@@ -5,35 +5,35 @@
 #include "Board/Board/Board.h"
 #include "Board/BoardLength/RowLength.h"
 #include "Board/BoardLength/ColumnLength.h"
-#include "Hint/HintLineList/ColumnHintLineList.h"
-#include "Hint/HintLineList/RowHintLineList.h"
-#include "Hint/HintLine/HintLine.h"
+#include "Hint/HintSetList/ColumnHintSetList.h"
+#include "Hint/HintSetList/RowHintSetList.h"
+#include "Hint/HintSet/HintSet.h"
 
 class NonogramBoard {
 private:
     Board board;
-	RowHintLineList rowHintLineList;
-	ColumnHintLineList columnHintLineList;
+	RowHintSetList rowHintSetList;
+	ColumnHintSetList columnHintSetList;
 
 public:
     explicit NonogramBoard(
 		Board board,
-		RowHintLineList rowHintLineList,
-		ColumnHintLineList columnHintLineList
+		RowHintSetList rowHintSetList,
+		ColumnHintSetList columnHintSetList
 	);
 
 public:
 	const Board& getBoard() const;
 	const RowLength& getRowCount() const;
 	const ColumnLength& getColumnCount() const;
-	const RowHintLineList& getRowHintLineList() const;
-	const ColumnHintLineList& getColumnHintLineList() const;
+	const RowHintSetList& getRowHintSetList() const;
+	const ColumnHintSetList& getColumnHintSetList() const;
 
 public:
 	Row getRowLine(RowIndex rowIndex) const;
 	Column getColumnLine(ColumnIndex columnIndex) const;
-	HintLine getRowHintLine(RowIndex rowIndex) const;
-	HintLine getColumnHintLine(ColumnIndex columnIndex) const;
+	HintSet getRowHintSet(RowIndex rowIndex) const;
+	HintSet getColumnHintSet(ColumnIndex columnIndex) const;
 	bool isSolved() const;
 
 public:

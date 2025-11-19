@@ -17,13 +17,13 @@ void findPlacementPatternExhaustiveTest(
     const std::vector<std::string>& expectedList
 ) {
     Line line = Line(lineStr);
-    HintLine hintLine = HintLine(hintNumbers);
+    HintSet HintSet = HintSet(hintNumbers);
     std::vector<Placement> expected;
 	for (std::string str : expectedList) {
 		expected.emplace_back(Placement(str));
     }
     
-    std::vector<Placement> result = ExhaustivePlacementPatternFindAlgorithm::run(line, hintLine);
+    std::vector<Placement> result = ExhaustivePlacementPatternFindAlgorithm::run(line, HintSet);
     EXPECT_EQ(result, expected);
 }
 std::vector<std::string> readLinesFromFile(const std::string& filename) {

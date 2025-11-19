@@ -38,40 +38,40 @@ std::vector<std::vector<HintNumber>> TestDataRepository::parseHints(const std::s
     return hintMatrix;
 }
 
-RowHintLineList TestDataRepository::getRowHintLineList(TestDataType type) {
+RowHintSetList TestDataRepository::getRowHintSetList(TestDataType type) {
 	std::string rowHintNumbersString = GetRowHintString(type);
     std::vector<std::vector<HintNumber>> tempRowHintNumbers = parseHints(rowHintNumbersString);
 
-    std::vector<HintLine> hintLineListVector;
+    std::vector<HintSet> HintSetListVector;
     for(int k = 0; k < tempRowHintNumbers.size(); k++) {
-		std::vector<HintNumber> hintLineVector;
+		std::vector<HintNumber> HintSetVector;
         for(int i = 0; i < tempRowHintNumbers[k].size(); i++) {
 			if (tempRowHintNumbers[k][i] == HintNumber(0)) continue;
-			hintLineVector.push_back(tempRowHintNumbers[k][i]);
+			HintSetVector.push_back(tempRowHintNumbers[k][i]);
 		}
-		hintLineListVector.emplace_back(hintLineVector);
+		HintSetListVector.emplace_back(HintSetVector);
 	}
 
-	RowHintLineList rowHintLineList(hintLineListVector);
-	return rowHintLineList;
+	RowHintSetList rowHintSetList(HintSetListVector);
+	return rowHintSetList;
 }
 
-ColumnHintLineList TestDataRepository::getColumnHintLineList(TestDataType type) {
+ColumnHintSetList TestDataRepository::getColumnHintSetList(TestDataType type) {
 	std::string columnHintNumbersString = GetColumnHintString(type);
 	std::vector<std::vector<HintNumber>> tempColumnHintNumbers = parseHints(columnHintNumbersString);
 
-    std::vector<HintLine> hintLineListVector;
+    std::vector<HintSet> HintSetListVector;
     for(int k = 0; k < tempColumnHintNumbers[0].size(); k++) {
-		std::vector<HintNumber> hintLineVector;
+		std::vector<HintNumber> HintSetVector;
         for(int i = 0; i < tempColumnHintNumbers.size(); i++) {
 			if (tempColumnHintNumbers[i][k] == HintNumber(0)) continue;
-			hintLineVector.push_back(tempColumnHintNumbers[i][k]);
+			HintSetVector.push_back(tempColumnHintNumbers[i][k]);
 		}
-		hintLineListVector.emplace_back(hintLineVector);
+		HintSetListVector.emplace_back(HintSetVector);
 	}
 
-	ColumnHintLineList columnHintLineList(hintLineListVector);
-	return columnHintLineList;
+	ColumnHintSetList columnHintSetList(HintSetListVector);
+	return columnHintSetList;
 }
 
 std::string TestDataRepository::GetRowHintString(TestDataType type) {

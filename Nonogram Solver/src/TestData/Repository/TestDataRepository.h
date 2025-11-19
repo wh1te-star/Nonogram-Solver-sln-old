@@ -4,8 +4,8 @@
 #include <string>
 #include <vector>
 #include "Hint/HintNumber/HintNumber.h"
-#include "Hint/HintLineList/RowHintLineList.h"
-#include "Hint/HintLineList/ColumnHintLineList.h"
+#include "Hint/HintSetList/RowHintSetList.h"
+#include "Hint/HintSetList/ColumnHintSetList.h"
 
 class TestDataRepository {
 public:
@@ -26,8 +26,8 @@ private:
     static std::vector<std::vector<HintNumber>> parseHints(const std::string& hintString);
 
 public:
-    static RowHintLineList getRowHintLineList(TestDataType type);
-    static ColumnHintLineList getColumnHintLineList(TestDataType type);
+    static RowHintSetList getRowHintSetList(TestDataType type);
+    static ColumnHintSetList getColumnHintSetList(TestDataType type);
 };
 
 #endif

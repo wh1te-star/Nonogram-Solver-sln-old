@@ -55,10 +55,10 @@ int RenderingSystem::initialize() {
 void RenderingSystem::renderingLoop() {
 	bool first_time = true;
 
-	RowHintLineList rowHintLineList = TestDataRepository::getRowHintLineList(TestDataRepository::LARGE);
-	ColumnHintLineList columnHintLineList = TestDataRepository::getColumnHintLineList(TestDataRepository::LARGE);
+	RowHintSetList rowHintSetList = TestDataRepository::getRowHintSetList(TestDataRepository::LARGE);
+	ColumnHintSetList columnHintSetList = TestDataRepository::getColumnHintSetList(TestDataRepository::LARGE);
 	BacktrackBoard backtrackBoard = BacktrackBoard(
-		NonogramBoard(Board(RowLength(20), ColumnLength(30)), rowHintLineList, columnHintLineList),
+		NonogramBoard(Board(RowLength(20), ColumnLength(30)), rowHintSetList, columnHintSetList),
 		RowPlacementCountList({
 			PlacementCount(1), PlacementCount(2), PlacementCount(3), PlacementCount(4), PlacementCount(5),
 			PlacementCount(6), PlacementCount(7), PlacementCount(8), PlacementCount(9), PlacementCount(10),

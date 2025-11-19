@@ -6,23 +6,23 @@
 #include "Cell/Cell/Cell.h"
 #include "Board/Line/Line.h"
 #include "Placement/Placement/Placement.h"
-#include "Hint/HintLine/HintLine.h"
+#include "Hint/HintSet/HintSet.h"
 
 class ExhaustivePlacementPatternFindAlgorithm {
 public:
 	static std::vector<Placement> run(
 		const Line& line,
-		const HintLine& hintLine
+		const HintSet& HintSet
 	);
 
 	static std::vector<Placement> findPlacementsExhaustive(
 		const Line& line,
-		const HintLine& hintLine
+		const HintSet& HintSet
 	);
 
 	static void findPlacementsExhaustiveRecursive(
 		const Line& line,
-		const HintLine& hintLine,
+		const HintSet& HintSet,
 		std::vector<Placement>& solutions,
 		Placement& currentPlacement,
 		int currentHintIndex

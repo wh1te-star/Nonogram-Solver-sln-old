@@ -10,10 +10,10 @@ void leftMostPlacementTest(
     const std::string& expectedStr
 ) {
     Line line = Line(lineStr);
-    HintLine hintLine = HintLine(hintNumbers);
+    HintSet HintSet = HintSet(hintNumbers);
     Placement expected = Placement(expectedStr);
     
-    Placement result = OverlapDeterminationAlgorithm::getLeftmostPlacement(line, hintLine);
+    Placement result = OverlapDeterminationAlgorithm::getLeftmostPlacement(line, HintSet);
     EXPECT_EQ(result, expected);
 }
 TEST(Algorithm_LeftMostPlacement, VerySimpleCase) {
@@ -42,10 +42,10 @@ void rightMostPlacementTest(
     const std::string& expectedStr
 ) {
     Line line = Line(lineStr);
-    HintLine hintLine = HintLine(hintNumbers);
+    HintSet HintSet = HintSet(hintNumbers);
     Placement expected = Placement(expectedStr);
     
-    Placement result = OverlapDeterminationAlgorithm::getRightmostPositions(line, hintLine);
+    Placement result = OverlapDeterminationAlgorithm::getRightmostPositions(line, HintSet);
     EXPECT_EQ(result, expected);
 }
 TEST(Algorithm_RightMostPlacement, VerySimpleCase) {
@@ -71,19 +71,19 @@ TEST(Algorithm_RightMostPlacement, ImpossibleCase) {
 
 TEST(Algorithm_OverlapDetermination, VerySimpleCase) {
     Line line = Line("     ");
-    HintLine hintLine = HintLine({ 1, 2 });
+    HintSet HintSet = HintSet({ 1, 2 });
     Line expected = Line("   B ");
 
-	Line result = OverlapDeterminationAlgorithm::determineByOverlap(line, hintLine);
+	Line result = OverlapDeterminationAlgorithm::determineByOverlap(line, HintSet);
     EXPECT_EQ(result, expected);
 }
 
 
 TEST(Algorithm_OverlapDetermination, EdgeWhiteCase) {
     Line line = Line(" W   ");
-    HintLine hintLine = HintLine({ 2 });
+    HintSet HintSet = HintSet({ 2 });
     Line expected = Line("WW B ");
 
-	Line result = OverlapDeterminationAlgorithm::determineByOverlap(line, hintLine);
+	Line result = OverlapDeterminationAlgorithm::determineByOverlap(line, HintSet);
     EXPECT_EQ(result, expected);
 }

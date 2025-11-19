@@ -81,7 +81,7 @@ bool Board::isInRange(const Coordinate& coordinate) const {
 	return true;
 }
 
-const bool Board::isSolved() const {
+bool Board::isSolved() const {
 	for (std::vector<Cell> row : board) {
 		for (Cell cell : row) {
 			if (cell.getColor() == None) {

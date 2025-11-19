@@ -4,19 +4,19 @@
 
 #include "Placement/PlacementCount/PlacementCount.h"
 #include "Board/Line/Line.h"
-#include "Hint/HintLine/HintLine.h"
+#include "Hint/HintSet/HintSet.h"
 
 class PlacementPatternCountAlgorithm {
 public:
 	static PlacementCount run(
 		const Line& line,
-		const HintLine& hintLine
+		const HintSet& HintSet
 	);
 
 private:
 	static PlacementCount CountPlacement(
 		const Line& line,
-		const HintLine& hintLine
+		const HintSet& HintSet
 	);
 
 	static bool isSeparated(

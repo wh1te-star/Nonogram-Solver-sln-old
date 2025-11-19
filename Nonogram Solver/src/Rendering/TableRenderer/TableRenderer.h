@@ -11,8 +11,8 @@
 #include "Index/CellIndex/ColumnIndex.h"
 #include "Board/BoardLength/RowLength.h"
 #include "Board/BoardLength/ColumnLength.h"
-#include "Hint/HintLineList/RowHintLineList.h"
-#include "Hint/HintLineList/ColumnHintLineList.h"
+#include "Hint/HintSetList/RowHintSetList.h"
+#include "Hint/HintSetList/ColumnHintSetList.h"
 #include "Placement/PlacementCountList/RowPlacementCountList.h"
 #include "Placement/PlacementCountList/ColumnPlacementCountList.h"
 class SharedBacktrackBoard;
@@ -57,8 +57,8 @@ private:
 		CellType cellType,
 		RowLength columnHintLength,
 		ColumnLength rowHintLength,
-		RowHintLineList rowHintLineList,
-		ColumnHintLineList columnHintLineList,
+		RowHintSetList rowHintSetList,
+		ColumnHintSetList columnHintSetList,
 		RowPlacementCountList rowPlacementCountList,
 		ColumnPlacementCountList columnPlacementCountList,
 		float cell_size

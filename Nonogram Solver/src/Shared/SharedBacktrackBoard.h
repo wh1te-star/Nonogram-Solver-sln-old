@@ -17,10 +17,10 @@ public:
 	SharedBacktrackBoard(BacktrackBoard backtrackBoard);
 
 public:
-	Row getRowLine(RowIndex rowIndex) const;
+	const Row getRowLine(RowIndex rowIndex) const;
 	Column getColumnLine(ColumnIndex columnIndex) const;
-	HintLine getRowHintLine(RowIndex rowIndex) const;
-	HintLine getColumnHintLine(ColumnIndex columnIndex) const;
+	HintSet getRowHintSet(RowIndex rowIndex) const;
+	HintSet getColumnHintSet(ColumnIndex columnIndex) const;
 	bool isSolved() const;
 	void applyCell(const Coordinate& coordinate, const Cell& cellColor);
 	void applyRow(const RowIndex& rowIndex, const Row& row);

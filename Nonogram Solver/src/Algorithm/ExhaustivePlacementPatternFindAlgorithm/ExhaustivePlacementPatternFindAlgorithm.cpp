@@ -5,23 +5,23 @@
 
 std::vector<Placement> ExhaustivePlacementPatternFindAlgorithm::run(
 	const Line& line,
-	const HintLine& hintLine
+	const HintSet& HintSet
 ) {
 	return findPlacementsExhaustive(
 		line,
-		hintLine
+		HintSet
 	);
 }
 
 std::vector<Placement> ExhaustivePlacementPatternFindAlgorithm::findPlacementsExhaustive(
 	const Line& line,
-	const HintLine& hintLine
+	const HintSet& HintSet
 ) {
     std::vector<Placement> solutions;
 	Placement currentPlacement = Placement("");
 	findPlacementsExhaustiveRecursive(
 		line,
-		hintLine,
+		HintSet,
 		solutions,
 		currentPlacement,
 		0
@@ -31,7 +31,7 @@ std::vector<Placement> ExhaustivePlacementPatternFindAlgorithm::findPlacementsEx
 
 void ExhaustivePlacementPatternFindAlgorithm::findPlacementsExhaustiveRecursive(
 	const Line& line,
-	const HintLine& hintLine,
+	const HintSet& HintSet,
 	std::vector<Placement>& solutions,
 	Placement& currentPlacement,
 	int currentHintIndex
@@ -39,7 +39,7 @@ void ExhaustivePlacementPatternFindAlgorithm::findPlacementsExhaustiveRecursive(
 	if (currentPlacement.size() > line.size()) {
 		return;
 	}
-	if (currentHintIndex >= hintLine.size()) {
+	if (currentHintIndex >= HintSet.size()) {
 		Placement foundPlacement = currentPlacement;
 		for (CellIndex i = CellIndex(currentPlacement.size()); i < line.size(); i = i + 1) {
 			if (!line[i].canColor(White)) {
@@ -51,7 +51,7 @@ void ExhaustivePlacementPatternFindAlgorithm::findPlacementsExhaustiveRecursive(
 		return;
 	}
 	
-	HintNumber hintNumber = hintLine[currentHintIndex];
+	HintNumber hintNumber = HintSet[currentHintIndex];
 	CellIndex currentIndex = CellIndex(currentPlacement.size());
 	if (line.canPlaceBlock(currentIndex, hintNumber)) {
 		Placement previousPlacement = currentPlacement;
@@ -61,7 +61,7 @@ void ExhaustivePlacementPatternFindAlgorithm::findPlacementsExhaustiveRecursive(
 		}
 		findPlacementsExhaustiveRecursive(
 			line,
-			hintLine,
+			HintSet,
 			solutions,
 			currentPlacement,
 			currentHintIndex + 1
@@ -74,7 +74,7 @@ void ExhaustivePlacementPatternFindAlgorithm::findPlacementsExhaustiveRecursive(
 		currentPlacement = currentPlacement + Placement("W");
 		findPlacementsExhaustiveRecursive(
 			line,
-			hintLine,
+			HintSet,
 			solutions,
 			currentPlacement,
 			currentHintIndex

@@ -6,7 +6,7 @@
 #include <thread>
 #include "Shared/SharedBacktrackBoard.h"
 #include "Board/Line/Line.h"
-#include "Hint/HintLine/HintLine.h"
+#include "Hint/HintSet/HintSet.h"
 
 class BacktrackAlgorithm {
 private:

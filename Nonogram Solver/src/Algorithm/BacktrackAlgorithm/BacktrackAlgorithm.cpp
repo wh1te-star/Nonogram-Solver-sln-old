@@ -13,10 +13,10 @@ BacktrackAlgorithm::BacktrackAlgorithm(SharedBacktrackBoard& sharedBacktrackBoar
 void BacktrackAlgorithm::run() {
 	for (RowIndex rowIndex : RowIndex::iterate(0, 10)) {
         Row rowLine = sharedBacktrackBoard.getRowLine(rowIndex);
-		HintLine rowHintLine = sharedBacktrackBoard.getRowHintLine(rowIndex);
+		HintSet rowHintSet = sharedBacktrackBoard.getRowHintSet(rowIndex);
 		Row newRow = OverlapDeterminationAlgorithm::determineByOverlap(
             rowLine,
-			rowHintLine
+			rowHintSet
 		).toRow();
 
 		sharedBacktrackBoard.applyRow(rowIndex, newRow);

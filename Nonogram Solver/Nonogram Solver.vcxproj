@@ -199,7 +199,7 @@
     <ClCompile Include="src\Cell\Cell\Cell.h" />
     <ClCompile Include="src\Cell\CellColor\CellColor.h" />
     <ClCompile Include="src\Cell\CellLocation\CellLocation.cpp" />
-    <ClCompile Include="src\Hint\HintLineList\ColumnHintLineList.cpp" />
+    <ClCompile Include="src\Hint\HintSetList\ColumnHintSetList.cpp" />
     <ClCompile Include="src\Board\BoardLength\ColumnLength.cpp" />
     <ClCompile Include="src\Rendering\HighlightIndexes\HighlightIndexes.cpp" />
     <ClCompile Include="src\Shared\SharedBacktrackBoard.cpp" />
@@ -207,8 +207,8 @@
     <ClCompile Include="src\Placement\PlacementCountList\PlacementCountList.cpp" />
     <ClCompile Include="src\Placement\PlacementCountList\RowPlacementCountList.cpp" />
     <ClCompile Include="src\Placement\Placement\ColumnPlacement.cpp" />
-    <ClCompile Include="src\Hint\HintLine\HintLine.cpp" />
-    <ClCompile Include="src\Hint\HintLineList\HintLineList.cpp" />
+    <ClCompile Include="src\Hint\HintSet\HintSet.cpp" />
+    <ClCompile Include="src\Hint\HintSetList\HintSetList.cpp" />
     <ClCompile Include="src\Hint\HintNumber\HintNumber.cpp" />
     <ClCompile Include="imgui\imgui_draw.cpp" />
     <ClCompile Include="imgui\imgui_tables.cpp" />
@@ -221,7 +221,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\Board\Board\Board.cpp" />
     <ClCompile Include="src\Placement\PlacementCount\PlacementCount.cpp" />
-    <ClCompile Include="src\Hint\HintLineList\RowHintLineList.cpp" />
+    <ClCompile Include="src\Hint\HintSetList\RowHintSetList.cpp" />
     <ClCompile Include="src\Board\BoardLength\RowLength.cpp" />
     <ClCompile Include="src\Placement\Placement\RowPlacement.cpp" />
     <ClCompile Include="src\Rendering\FontData\FontData.cpp" />
@@ -249,7 +249,7 @@
     <ClInclude Include="src\Index\Coordinate\Coordinate.h" />
     <ClInclude Include="src\Board\NonogramBoard\NonogramBoard.h" />
     <ClInclude Include="src\Cell\CellLocation\CellLocation.h" />
-    <ClInclude Include="src\Hint\HintLineList\ColumnHintLineList.h" />
+    <ClInclude Include="src\Hint\HintSetList\ColumnHintSetList.h" />
     <ClInclude Include="src\Board\BoardLength\ColumnLength.h" />
     <ClInclude Include="src\Rendering\HighlightIndexes\HighlightIndexes.h" />
     <ClInclude Include="src\Shared\SharedBacktrackBoard.h" />
@@ -257,8 +257,8 @@
     <ClInclude Include="src\Placement\PlacementCountList\PlacementCountList.h" />
     <ClInclude Include="src\Placement\PlacementCountList\RowPlacementCountList.h" />
     <ClInclude Include="src\Placement\Placement\ColumnPlacement.h" />
-    <ClInclude Include="src\Hint\HintLine\HintLine.h" />
-    <ClInclude Include="src\Hint\HintLineList\HintLineList.h" />
+    <ClInclude Include="src\Hint\HintSet\HintSet.h" />
+    <ClInclude Include="src\Hint\HintSetList\HintSetList.h" />
     <ClInclude Include="src\Hint\HintNumber\HintNumber.h" />
     <ClInclude Include="imgui\backends\imgui_impl_glfw.h" />
     <ClInclude Include="imgui\backends\imgui_impl_opengl3.h" />
@@ -273,7 +273,7 @@
     <ClInclude Include="src\Placement\Placement\Placement.h" />
     <ClInclude Include="src\Board\Board\Board.h" />
     <ClInclude Include="src\Placement\PlacementCount\PlacementCount.h" />
-    <ClInclude Include="src\Hint\HintLineList\RowHintLineList.h" />
+    <ClInclude Include="src\Hint\HintSetList\RowHintSetList.h" />
     <ClInclude Include="src\Board\BoardLength\RowLength.h" />
     <ClInclude Include="src\Placement\Placement\RowPlacement.h" />
     <ClInclude Include="src\Rendering\FontData\FontData.h" />

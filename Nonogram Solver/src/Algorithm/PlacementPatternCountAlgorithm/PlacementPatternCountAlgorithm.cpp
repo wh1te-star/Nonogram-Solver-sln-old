@@ -1,21 +1,21 @@
 #include "Algorithm/PlacementPatternCountAlgorithm/PlacementPatternCountAlgorithm.h"
 
 #include "Board/Line/Line.h"
-#include "Hint/HintLine/HintLine.h"
+#include "Hint/HintSet/HintSet.h"
 
 
 PlacementCount PlacementPatternCountAlgorithm::run(
     const Line& line,
-    const HintLine& hintLine
+    const HintSet& HintSet
 ) {
-    return CountPlacement(line, hintLine);
+    return CountPlacement(line, HintSet);
 }
 
 PlacementCount PlacementPatternCountAlgorithm::CountPlacement(
     const Line& line,
-    const HintLine& hintLine
+    const HintSet& HintSet
 ) {
-    int hintsCount = hintLine.size();
+    int hintsCount = HintSet.size();
     int totalLength = line.size();
     std::vector<std::vector<PlacementCount>> partialCount(
         hintsCount + 1,
@@ -40,7 +40,7 @@ PlacementCount PlacementPatternCountAlgorithm::CountPlacement(
     }
 
     for (int hintNumberIndexInt = 1; hintNumberIndexInt <= hintsCount; hintNumberIndexInt++) {
-        HintNumber hintNumber = hintLine[hintNumberIndexInt - 1]; 
+        HintNumber hintNumber = HintSet[hintNumberIndexInt - 1]; 
 
         for (int cellIndexInt = 1; cellIndexInt <= totalLength; cellIndexInt++) {
             CellIndex cellIndex = CellIndex(cellIndexInt);
