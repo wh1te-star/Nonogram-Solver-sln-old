@@ -11,8 +11,6 @@ BacktrackAlgorithm::BacktrackAlgorithm(SharedBacktrackBoard& sharedBacktrackBoar
 	: sharedBacktrackBoard(sharedBacktrackBoard) {}
 
 void BacktrackAlgorithm::run() {
-	//recursiveSolve(0, 100);
-
 	for (RowIndex rowIndex : RowIndex::iterate(0, 10)) {
         Row rowLine = sharedBacktrackBoard.getRowLine(rowIndex);
 		HintLine rowHintLine = sharedBacktrackBoard.getRowHintLine(rowIndex);

@@ -22,6 +22,14 @@ Board::Board(RowLength rowLength, ColumnLength columnLength)
 	);
 }
 
+bool Board::operator==(const Board& other) const {
+	return board == other.board;
+}
+
+bool Board::operator!=(const Board& other) const {
+	return !(*this == other);
+}
+
 const RowLength& Board::getRowLength() const {
 	return rowLength;
 }
@@ -34,23 +42,31 @@ const CellVector2D& Board::getBoard() const {
 	return board;
 }
 
-bool Board::operator==(const Board& other) const {
-	return board == other.board;
+const Cell& Board::getCell(const Coordinate& coordinate) const {
+	assert(isInRange(coordinate));
+	RowIndex rowIndex = coordinate.getRowIndex();
+	ColumnIndex columnIndex = coordinate.getColumnIndex();
+	return board[rowIndex.getIndex()][columnIndex.getIndex()];
 }
 
-bool Board::operator!=(const Board& other) const {
-	return !(*this == other);
-}
-
-const bool Board::isSolved() const {
-	for (std::vector<Cell> row : board) {
-		for (Cell cell : row) {
-			if (cell.getColor() == None) {
-				return false;
-			}
-		}
+Row Board::getRowLine(RowIndex rowIndex) const {
+	std::vector<Cell> row;
+	for (ColumnIndex columnIndex : ColumnIndex::iterate(0, columnLength.getLength())) {
+		Coordinate coordinate = Coordinate(rowIndex, columnIndex);
+		Cell cell = getCell(coordinate);
+		row.push_back(cell);
 	}
-	return true;
+	return Row(row);
+}
+
+Column Board::getColumnLine(ColumnIndex columnIndex) const {
+	std::vector<Cell> column;
+	for (RowIndex rowIndex : RowIndex::iterate(0, rowLength.getLength())) {
+		Coordinate coordinate = Coordinate(rowIndex, columnIndex);
+		Cell cell = getCell(coordinate);
+		column.push_back(cell);
+	}
+	return Column(column);
 }
 
 bool Board::isInRange(const Coordinate& coordinate) const {
@@ -65,37 +81,15 @@ bool Board::isInRange(const Coordinate& coordinate) const {
 	return true;
 }
 
-Cell Board::getCell(const Coordinate& coordinate) const {
-	assert(isInRange(coordinate));
-	RowIndex rowIndex = coordinate.getRowIndex();
-	ColumnIndex columnIndex = coordinate.getColumnIndex();
-	return board[rowIndex.getIndex()][columnIndex.getIndex()];
-}
-
-Row Board::getRowLine(RowIndex rowIndex) const {
-	std::vector<Cell> row;
-	for (ColumnIndex currentColumnIndex = ColumnIndex(0);
-		currentColumnIndex < columnLength;
-		currentColumnIndex++
-		) {
-		Coordinate coordinate = Coordinate(rowIndex, currentColumnIndex);
-		Cell cell = getCell(coordinate);
-		row.push_back(cell);
+const bool Board::isSolved() const {
+	for (std::vector<Cell> row : board) {
+		for (Cell cell : row) {
+			if (cell.getColor() == None) {
+				return false;
+			}
+		}
 	}
-	return Row(row);
-}
-
-Column Board::getColumnLine(ColumnIndex columnIndex) const {
-	std::vector<Cell> column;
-	for (RowIndex currentRowIndex = RowIndex(0);
-		currentRowIndex < rowLength;
-		currentRowIndex++
-		) {
-		Coordinate coordinate = Coordinate(currentRowIndex, columnIndex);
-		Cell cell = getCell(coordinate);
-		column.push_back(cell);
-	}
-	return Column(column);
+	return true;
 }
 
 void Board::applyCell(const Coordinate& coordinate, const Cell& cell) {

@@ -13,7 +13,7 @@
 #include "Board/BoardLength/RowLength.h"
 #include "Board/BoardLength/ColumnLength.h"
 #include <string>
-#include "Shared/SharedBacktractBoard.h"
+#include "Shared/SharedBacktrackBoard.h"
 
 
 TableRenderer::TableRenderer(){}

@@ -11,7 +11,7 @@
 #include "Rendering/TableRenderer/TableRenderer.h"
 #include "TestData/Repository/TestDataRepository.h"
 #include "Algorithm/BacktrackAlgorithm/BacktrackAlgorithm.h"
-#include "Shared/SharedBacktractBoard.h"
+#include "Shared/SharedBacktrackBoard.h"
 
 
 RenderingSystem::RenderingSystem() :

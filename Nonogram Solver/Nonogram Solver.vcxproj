@@ -201,7 +201,8 @@
     <ClCompile Include="src\Cell\CellLocation\CellLocation.cpp" />
     <ClCompile Include="src\Hint\HintLineList\ColumnHintLineList.cpp" />
     <ClCompile Include="src\Board\BoardLength\ColumnLength.cpp" />
-    <ClCompile Include="src\Shared\SharedBacktractBoard.cpp" />
+    <ClCompile Include="src\Rendering\HighlightIndexes\HighlightIndexes.cpp" />
+    <ClCompile Include="src\Shared\SharedBacktrackBoard.cpp" />
     <ClCompile Include="src\Placement\PlacementCountList\ColumnPlacementCountList.cpp" />
     <ClCompile Include="src\Placement\PlacementCountList\PlacementCountList.cpp" />
     <ClCompile Include="src\Placement\PlacementCountList\RowPlacementCountList.cpp" />
@@ -250,7 +251,8 @@
     <ClInclude Include="src\Cell\CellLocation\CellLocation.h" />
     <ClInclude Include="src\Hint\HintLineList\ColumnHintLineList.h" />
     <ClInclude Include="src\Board\BoardLength\ColumnLength.h" />
-    <ClInclude Include="src\Shared\SharedBacktractBoard.h" />
+    <ClInclude Include="src\Rendering\HighlightIndexes\HighlightIndexes.h" />
+    <ClInclude Include="src\Shared\SharedBacktrackBoard.h" />
     <ClInclude Include="src\Placement\PlacementCountList\ColumnPlacementCountList.h" />
     <ClInclude Include="src\Placement\PlacementCountList\PlacementCountList.h" />
     <ClInclude Include="src\Placement\PlacementCountList\RowPlacementCountList.h" />

@@ -24,22 +24,20 @@ private:
 
 public:
 	Board(RowLength rowLength, ColumnLength columnLength);
-
-public:
-	const RowLength& getRowLength() const;
-	const ColumnLength& getColumnLength() const;
-	const CellVector2D& getBoard() const;
 	
 public:
 	bool operator==(const Board& other) const;
 	bool operator!=(const Board& other) const;
 
 public:
-	const bool isSolved() const;
-	bool isInRange(const Coordinate& coordinate) const;
-	Cell getCell(const Coordinate& coordinate) const;
+	const RowLength& getRowLength() const;
+	const ColumnLength& getColumnLength() const;
+	const CellVector2D& getBoard() const;
+	const Cell& getCell(const Coordinate& coordinate) const;
 	Row getRowLine(RowIndex rowIndex) const;
 	Column getColumnLine(ColumnIndex columnIndex) const;
+	bool isInRange(const Coordinate& coordinate) const;
+	const bool isSolved() const;
 
 public:
 	void applyCell(const Coordinate& coordinate, const Cell& cell);

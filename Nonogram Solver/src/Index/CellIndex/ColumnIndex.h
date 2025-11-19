@@ -29,4 +29,14 @@ public:
     static std::vector<ColumnIndex> iterate(const int start, const int end);
 };
 
+namespace std {
+    template <>
+    struct hash<ColumnIndex> {
+        size_t operator()(const ColumnIndex& columnIndex) const {
+            return std::hash<int>{}(columnIndex.getIndex()); 
+        }
+    };
+}
+
+
 #endif

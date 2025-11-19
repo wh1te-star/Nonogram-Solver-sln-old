@@ -29,5 +29,14 @@ public:
     static std::vector<RowIndex> iterate(const int start, const int end);
 };
 
+namespace std {
+    template <>
+    struct hash<RowIndex> {
+        size_t operator()(const RowIndex& rowIndex) const {
+            return std::hash<int>{}(rowIndex.getIndex()); 
+        }
+    };
+}
+
 
 #endif

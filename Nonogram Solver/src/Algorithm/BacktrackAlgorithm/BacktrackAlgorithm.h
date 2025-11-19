@@ -4,7 +4,7 @@
 
 #include <atomic>
 #include <thread>
-#include "Shared/SharedBacktractBoard.h"
+#include "Shared/SharedBacktrackBoard.h"
 #include "Board/Line/Line.h"
 #include "Hint/HintLine/HintLine.h"
 
