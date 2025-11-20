@@ -30,19 +30,15 @@ bool Board::operator!=(const Board& other) const {
 	return !(*this == other);
 }
 
-const RowLength& Board::getRowLength() const {
+RowLength Board::getRowLength() const {
 	return rowLength;
 }
 
-const ColumnLength& Board::getColumnLength() const {
+ColumnLength Board::getColumnLength() const {
 	return columnLength;
 }
 
-const CellVector2D& Board::getBoard() const {
-	return board;
-}
-
-const Cell& Board::getCell(const Coordinate& coordinate) const {
+Cell Board::getCell(Coordinate coordinate) const {
 	assert(isInRange(coordinate));
 	RowIndex rowIndex = coordinate.getRowIndex();
 	ColumnIndex columnIndex = coordinate.getColumnIndex();
@@ -69,7 +65,7 @@ Column Board::getColumnLine(ColumnIndex columnIndex) const {
 	return Column(column);
 }
 
-bool Board::isInRange(const Coordinate& coordinate) const {
+bool Board::isInRange(Coordinate coordinate) const {
 	RowIndex rowIndex = coordinate.getRowIndex();
 	ColumnIndex columnIndex = coordinate.getColumnIndex();
 	if (columnIndex < ColumnLength(0) || columnLength <= columnIndex) {
@@ -92,7 +88,7 @@ bool Board::isSolved() const {
 	return true;
 }
 
-void Board::applyCell(const Coordinate& coordinate, const Cell& cell) {
+void Board::applyCell(Coordinate coordinate, const Cell& cell) {
     if(!isInRange(coordinate)) {
         return;
     }
@@ -102,7 +98,7 @@ void Board::applyCell(const Coordinate& coordinate, const Cell& cell) {
 	board[rowIndex.getIndex()][columnIndex.getIndex()] = cell;
 }
 
-void Board::applyRow(const RowIndex& rowIndex, const Row& row) {
+void Board::applyRow(RowIndex rowIndex, const Row& row) {
 	assert(row.size() == columnLength.getLength());
 
 	for (ColumnIndex columnIndex : ColumnIndex::iterate(0, row.size())) {
@@ -112,7 +108,7 @@ void Board::applyRow(const RowIndex& rowIndex, const Row& row) {
 	}
 }
 
-void Board::applyRow(const RowIndex& rowIndex, const RowPlacement& rowPlacement) {
+void Board::applyRow(RowIndex rowIndex, const RowPlacement& rowPlacement) {
 	assert(rowPlacement.size() == columnLength.getLength());
 
 	for (ColumnIndex columnIndex : ColumnIndex::iterate(0, rowPlacement.size())) {
@@ -122,7 +118,7 @@ void Board::applyRow(const RowIndex& rowIndex, const RowPlacement& rowPlacement)
 	}
 }
 
-void Board::applyColumn(const ColumnIndex& columnIndex, const Column& column) {
+void Board::applyColumn(ColumnIndex columnIndex, const Column& column) {
 	assert(column.size() == rowLength.getLength());
 
 	for (RowIndex rowIndex : RowIndex::iterate(0, column.size())) {
@@ -132,7 +128,7 @@ void Board::applyColumn(const ColumnIndex& columnIndex, const Column& column) {
 	}
 }
 
-void Board::applyColumn(const ColumnIndex& columnIndex, const ColumnPlacement& columnPlacement) {
+void Board::applyColumn(ColumnIndex columnIndex, const ColumnPlacement& columnPlacement) {
 	assert(columnPlacement.size() == rowLength.getLength());
 
 	for (RowIndex rowIndex : RowIndex::iterate(0, columnPlacement.size())) {

@@ -21,15 +21,11 @@ TableRenderer::TableRenderer(){}
 void TableRenderer::render(const SharedBacktrackBoard& sharedBacktrackBoard) const {
 	ImGui::Begin("Nonogram Board", NULL, ImGuiWindowFlags_None);
 
-
-	const BacktrackBoard& backtrackBoard = sharedBacktrackBoard.getBacktrackBoard();
-	const NonogramBoard& nonogramBoard = backtrackBoard.getNonogramBoard();
-
-	const Board& board = nonogramBoard.getBoard();
-	const RowHintSetList& rowHintSetList = nonogramBoard.getRowHintSetList();
-	const ColumnHintSetList& columnHintSetList = nonogramBoard.getColumnHintSetList();
-	const RowPlacementCountList& rowPlacementCountList = backtrackBoard.getRowPlacementCountList();
-	const ColumnPlacementCountList& columnPlacementCountList = backtrackBoard.getColumnPlacementCountList();
+	const Board board = sharedBacktrackBoard.getBoard();
+	const RowHintSetList rowHintSetList = sharedBacktrackBoard.getRowHintSetList();
+	const ColumnHintSetList columnHintSetList = sharedBacktrackBoard.getColumnHintSetList();
+	const RowPlacementCountList rowPlacementCountList = sharedBacktrackBoard.getRowPlacementCountList();
+	const ColumnPlacementCountList columnPlacementCountList = sharedBacktrackBoard.getColumnPlacementCountList();
 
 	const RowLength boardRowLength = board.getRowLength();
 	const ColumnLength boardColumnLength = board.getColumnLength();

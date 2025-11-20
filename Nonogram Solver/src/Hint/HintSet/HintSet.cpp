@@ -9,7 +9,7 @@ HintSet::HintSet(std::vector<int> numbers) {
 	}
 }
 
-const std::vector<HintNumber>& HintSet::getNumbers() const {
+std::vector<HintNumber> HintSet::getNumbers() const {
 	return numbers;
 }
 

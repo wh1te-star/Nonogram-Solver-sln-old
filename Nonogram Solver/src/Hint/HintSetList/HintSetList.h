@@ -17,7 +17,7 @@ public:
     virtual ~HintSetList() = default;
 
 public:
-    const std::vector<HintSet>& getHintSetList() const;
+    std::vector<HintSet> getHintSetList() const;
 
 public:
     bool operator==(const HintSetList& other) const;

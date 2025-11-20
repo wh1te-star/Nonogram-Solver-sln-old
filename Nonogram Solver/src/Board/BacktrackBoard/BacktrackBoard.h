@@ -21,22 +21,27 @@ public:
 
 public:
 	const NonogramBoard& getNonogramBoard() const;
-	const RowPlacementCountList& getRowPlacementCountList() const;
-	const ColumnPlacementCountList& getColumnPlacementCountList() const;
-
-public:
+	RowLength getRowLength() const;
+	ColumnLength getColumnLength() const;
+	Board getBoard() const;
+	Cell getCell(Coordinate coordinate) const;
 	Row getRowLine(RowIndex rowIndex) const;
 	Column getColumnLine(ColumnIndex columnIndex) const;
-	HintSet getRowHintSet(RowIndex rowIndex) const;
-	HintSet getColumnHintSet(ColumnIndex columnIndex) const;
+	bool isInRange(Coordinate coordinate) const;
 	bool isSolved() const;
+	void applyCell(Coordinate coordinate, const Cell& cell);
+	void applyRow(RowIndex rowIndex, const Row& row);
+	void applyRow(RowIndex rowIndex, const RowPlacement& rowPlacement);
+	void applyColumn(ColumnIndex columnIndex, const Column& column);
+	void applyColumn(ColumnIndex columnIndex, const ColumnPlacement& columnPlacement);
 
 public:
-	void applyCell(const Coordinate& coordinate, const Cell& cell);
-	void applyRow(const RowIndex& rowIndex, const Row& row);
-	void applyRow(const RowIndex& rowIndex, const RowPlacement& rowPlacement);
-	void applyColumn(const ColumnIndex& columnIndex, const Column& column);
-	void applyColumn(const ColumnIndex& columnIndex, const ColumnPlacement& columnPlacement);
+	RowHintSetList getRowHintSetList() const;
+	ColumnHintSetList getColumnHintSetList() const;
+
+public:
+	RowPlacementCountList getRowPlacementCountList() const;
+	ColumnPlacementCountList getColumnPlacementCountList() const;
 };
 
 #endif

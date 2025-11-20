@@ -13,12 +13,20 @@ const NonogramBoard& BacktrackBoard::getNonogramBoard() const {
 	return nonogramBoard;
 }
 
-const RowPlacementCountList& BacktrackBoard::getRowPlacementCountList() const {
-	return rowPlacementCountList;
+RowLength BacktrackBoard::getRowLength() const {
+	return nonogramBoard.getRowLength();
 }
 
-const ColumnPlacementCountList& BacktrackBoard::getColumnPlacementCountList() const {
-	return columnPlacementCountList;
+ColumnLength BacktrackBoard::getColumnLength() const {
+	return nonogramBoard.getColumnLength();
+}
+
+Board BacktrackBoard::getBoard() const {
+	return nonogramBoard.getBoard();
+}
+
+Cell BacktrackBoard::getCell(Coordinate coordinate) const {
+	return nonogramBoard.getCell(coordinate);
 }
 
 Row BacktrackBoard::getRowLine(RowIndex rowIndex) const {
@@ -29,35 +37,47 @@ Column BacktrackBoard::getColumnLine(ColumnIndex columnIndex) const {
 	return nonogramBoard.getColumnLine(columnIndex);
 }
 
-HintSet BacktrackBoard::getRowHintSet(RowIndex rowIndex) const {
-	return nonogramBoard.getRowHintSet(rowIndex);
-}
-
-HintSet BacktrackBoard::getColumnHintSet(ColumnIndex columnIndex) const {
-	return nonogramBoard.getColumnHintSet(columnIndex);
+bool BacktrackBoard::isInRange(Coordinate coordinate) const {
+	return nonogramBoard.isInRange(coordinate);
 }
 
 bool BacktrackBoard::isSolved() const {
 	return nonogramBoard.isSolved();
 }
 
-void BacktrackBoard::applyCell(const Coordinate& coordinate, const Cell& cell) {
+void BacktrackBoard::applyCell(Coordinate coordinate, const Cell& cell) {
 	nonogramBoard.applyCell(coordinate, cell);
 }
 
-void BacktrackBoard::applyRow(const RowIndex& rowIndex, const Row& row) {
+void BacktrackBoard::applyRow(RowIndex rowIndex, const Row& row) {
 	return nonogramBoard.applyRow(rowIndex, row);
 }
 
-void BacktrackBoard::applyRow(const RowIndex& rowIndex, const RowPlacement& rowPlacement) {
+void BacktrackBoard::applyRow(RowIndex rowIndex, const RowPlacement& rowPlacement) {
 	return nonogramBoard.applyRow(rowIndex, rowPlacement);
 }
 
-void BacktrackBoard::applyColumn(const ColumnIndex& columnIndex, const Column& column) {
+void BacktrackBoard::applyColumn(ColumnIndex columnIndex, const Column& column) {
 	return nonogramBoard.applyColumn(columnIndex, column);
 }
 
-void BacktrackBoard::applyColumn(const ColumnIndex& columnIndex, const ColumnPlacement& columnPlacement) {
+void BacktrackBoard::applyColumn(ColumnIndex columnIndex, const ColumnPlacement& columnPlacement) {
 	return nonogramBoard.applyColumn(columnIndex, columnPlacement);
+}
+
+RowHintSetList BacktrackBoard::getRowHintSetList() const {
+	return nonogramBoard.getRowHintSetList();
+}
+
+ColumnHintSetList BacktrackBoard::getColumnHintSetList() const {
+	return nonogramBoard.getColumnHintSetList();
+}
+
+RowPlacementCountList BacktrackBoard::getRowPlacementCountList() const {
+	return rowPlacementCountList;
+}
+
+ColumnPlacementCountList BacktrackBoard::getColumnPlacementCountList() const {
+	return columnPlacementCountList;
 }
 

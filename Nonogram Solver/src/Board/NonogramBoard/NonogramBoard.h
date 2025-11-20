@@ -23,25 +23,24 @@ public:
 	);
 
 public:
-	const Board& getBoard() const;
-	const RowLength& getRowCount() const;
-	const ColumnLength& getColumnCount() const;
-	const RowHintSetList& getRowHintSetList() const;
-	const ColumnHintSetList& getColumnHintSetList() const;
-
-public:
+	RowLength getRowLength() const;
+	ColumnLength getColumnLength() const;
+	Board getBoard() const;
+	Cell getCell(Coordinate coordinate) const;
 	Row getRowLine(RowIndex rowIndex) const;
 	Column getColumnLine(ColumnIndex columnIndex) const;
-	HintSet getRowHintSet(RowIndex rowIndex) const;
-	HintSet getColumnHintSet(ColumnIndex columnIndex) const;
+	bool isInRange(Coordinate coordinate) const;
 	bool isSolved() const;
+public:
+	void applyCell(Coordinate coordinate, const Cell& cell);
+	void applyRow(RowIndex rowIndex, const Row& row);
+	void applyRow(RowIndex rowIndex, const RowPlacement& rowPlacement);
+	void applyColumn(ColumnIndex columnIndex, const Column& column);
+	void applyColumn(ColumnIndex columnIndex, const ColumnPlacement& columnPlacement);
 
 public:
-	void applyCell(const Coordinate& coordinate, const Cell& cell);
-	void applyRow(const RowIndex& rowIndex, const Row& row);
-	void applyRow(const RowIndex& rowIndex, const RowPlacement& rowPlacement);
-	void applyColumn(const ColumnIndex& columnIndex, const Column& column);
-	void applyColumn(const ColumnIndex& columnIndex, const ColumnPlacement& columnPlacement);
+	RowHintSetList getRowHintSetList() const;
+	ColumnHintSetList getColumnHintSetList() const;
 };
 
 #endif

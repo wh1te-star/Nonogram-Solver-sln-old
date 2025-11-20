@@ -7,7 +7,7 @@
 HintSetList::HintSetList(std::vector<HintSet> hintSetList) :
 	hintSetList(hintSetList) {}
 
-const std::vector<HintSet>& HintSetList::getHintSetList() const {
+std::vector<HintSet> HintSetList::getHintSetList() const {
 	return hintSetList;
 }
 

@@ -17,24 +17,31 @@ public:
 	SharedBacktrackBoard(BacktrackBoard backtrackBoard);
 
 public:
-	const Row getRowLine(RowIndex rowIndex) const;
+	RowLength getRowLength() const;
+	ColumnLength getColumnLength() const;
+	Board getBoard() const;
+	Cell getCell(Coordinate coordinate) const;
+	Row getRowLine(RowIndex rowIndex) const;
 	Column getColumnLine(ColumnIndex columnIndex) const;
-	HintSet getRowHintSet(RowIndex rowIndex) const;
-	HintSet getColumnHintSet(ColumnIndex columnIndex) const;
+	bool isInRange(Coordinate coordinate) const;
 	bool isSolved() const;
-	void applyCell(const Coordinate& coordinate, const Cell& cellColor);
-	void applyRow(const RowIndex& rowIndex, const Row& row);
-	void applyRow(const RowIndex& rowIndex, const RowPlacement& rowPlacement);
-	void applyColumn(const ColumnIndex& columnIndex, const Column& column);
-	void applyColumn(const ColumnIndex& columnIndex, const ColumnPlacement& columnPlacement);
+	void applyCell(Coordinate coordinate, const Cell& cell);
+	void applyRow(RowIndex rowIndex, const Row& row);
+	void applyRow(RowIndex rowIndex, const RowPlacement& rowPlacement);
+	void applyColumn(ColumnIndex columnIndex, const Column& column);
+	void applyColumn(ColumnIndex columnIndex, const ColumnPlacement& columnPlacement);
+	RowHintSetList getRowHintSetList() const;
+	ColumnHintSetList getColumnHintSetList() const;
+	RowPlacementCountList getRowPlacementCountList() const;
+	ColumnPlacementCountList getColumnPlacementCountList() const;
 
 public:
-	void addRowIndex(const RowIndex& rowIndex);
-	void addColumnIndex(const ColumnIndex& columnIndex);
-	void deleteRowIndex(const RowIndex& rowIndex);
-	void deleteColumnIndex(const ColumnIndex& columnIndex);
-	bool findRowIndex(const RowIndex& rowIndex) const;
-	bool findColumnIndex(const ColumnIndex& columnIndex) const;
+	void addRowIndex(RowIndex rowIndex);
+	void addColumnIndex(ColumnIndex columnIndex);
+	void deleteRowIndex(RowIndex rowIndex);
+	void deleteColumnIndex(ColumnIndex columnIndex);
+	bool findRowIndex(RowIndex rowIndex) const;
+	bool findColumnIndex(ColumnIndex columnIndex) const;
 	void clear();
 	void clearRowIndexes();
 	void clearColumnIndexes();

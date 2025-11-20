@@ -2,9 +2,6 @@
 
 #include "Board/Line/Line.h"
 #include "Algorithm/OverlapDeterminationAlgorithm/OverlapDeterminationAlgorithm.h"
-#include <atomic>
-#include <thread>
-#include <chrono>
 
 
 BacktrackAlgorithm::BacktrackAlgorithm(SharedBacktrackBoard& sharedBacktrackBoard)
@@ -13,13 +10,14 @@ BacktrackAlgorithm::BacktrackAlgorithm(SharedBacktrackBoard& sharedBacktrackBoar
 void BacktrackAlgorithm::run() {
 	for (RowIndex rowIndex : RowIndex::iterate(0, 10)) {
         Row rowLine = sharedBacktrackBoard.getRowLine(rowIndex);
-		HintSet rowHintSet = sharedBacktrackBoard.getRowHintSet(rowIndex);
-		Row newRow = OverlapDeterminationAlgorithm::determineByOverlap(
+		RowHintSetList rowHintSetList = sharedBacktrackBoard.getRowHintSetList();
+		HintSet rowHintSet = rowHintSetList[rowIndex];
+		Row newRowLine = OverlapDeterminationAlgorithm::determineByOverlap(
             rowLine,
 			rowHintSet
 		).toRow();
 
-		sharedBacktrackBoard.applyRow(rowIndex, newRow);
+		sharedBacktrackBoard.applyRow(rowIndex, newRowLine);
 		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
 }

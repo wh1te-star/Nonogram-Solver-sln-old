@@ -15,7 +15,7 @@ public:
 	HintSet(std::vector<int> numbers);
 
 public:
-	const std::vector<HintNumber>& getNumbers() const;
+	std::vector<HintNumber> getNumbers() const;
 
 public:
 	bool operator==(const HintSet& other) const;
