@@ -10,7 +10,8 @@ public:
     explicit ColumnPlacementCountList(std::vector<PlacementCount> placementCountList);
 
 public:
-    PlacementCount operator[](ColumnIndex index) const;
+    const PlacementCount& operator[](ColumnIndex index) const;
+    PlacementCount& operator[](ColumnIndex index);
 };
 
 

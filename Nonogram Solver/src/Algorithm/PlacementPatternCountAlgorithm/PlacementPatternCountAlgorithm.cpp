@@ -67,6 +67,10 @@ PlacementCount PlacementPatternCountAlgorithm::CountPlacement(
                     }
                 }
             }
+
+            if (partialCount[hintNumberIndexInt][cellIndexInt] > MAX_COUNT) {
+                return MAX_COUNT;
+            }
         }
     }
 

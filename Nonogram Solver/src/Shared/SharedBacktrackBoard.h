@@ -34,6 +34,8 @@ public:
 	ColumnHintSetList getColumnHintSetList() const;
 	RowPlacementCountList getRowPlacementCountList() const;
 	ColumnPlacementCountList getColumnPlacementCountList() const;
+	void setRowPlacementCount(RowIndex rowIndex, PlacementCount placementCount);
+	void setColumnPlacementCount(ColumnIndex columnIndex, PlacementCount placementCount);
 
 public:
 	void addRowIndex(RowIndex rowIndex);

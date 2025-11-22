@@ -6,6 +6,10 @@
 ColumnPlacementCountList::ColumnPlacementCountList(std::vector<PlacementCount> placementCountList) :
 	PlacementCountList(placementCountList) {}
 
-PlacementCount ColumnPlacementCountList::operator[](ColumnIndex index) const {
-	return placementCountList[index.getIndex()];
+const PlacementCount& ColumnPlacementCountList::operator[](ColumnIndex index) const {
+    return placementCountList[index.getIndex()]; 
+}
+
+PlacementCount& ColumnPlacementCountList::operator[](ColumnIndex index) {
+    return placementCountList[index.getIndex()]; 
 }

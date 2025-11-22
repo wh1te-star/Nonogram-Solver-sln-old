@@ -8,6 +8,9 @@
 
 class PlacementPatternCountAlgorithm {
 public:
+	static inline const PlacementCount MAX_COUNT = PlacementCount(999);
+
+public:
 	static PlacementCount run(
 		const Line& line,
 		const HintSet& HintSet

@@ -81,3 +81,11 @@ ColumnPlacementCountList BacktrackBoard::getColumnPlacementCountList() const {
 	return columnPlacementCountList;
 }
 
+void BacktrackBoard::setRowPlacementCount(RowIndex rowIndex, PlacementCount placementCount) {
+	rowPlacementCountList[rowIndex] = placementCount;
+}
+
+void BacktrackBoard::setColumnPlacementCount(ColumnIndex columnIndex, PlacementCount placementCount) {
+	columnPlacementCountList[columnIndex] = placementCount;
+}
+

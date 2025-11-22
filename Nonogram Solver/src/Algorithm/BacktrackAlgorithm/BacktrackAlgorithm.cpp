@@ -2,13 +2,16 @@
 
 #include "Board/Line/Line.h"
 #include "Algorithm/OverlapDeterminationAlgorithm/OverlapDeterminationAlgorithm.h"
+#include "Algorithm/PlacementPatternCountAlgorithm/PlacementPatternCountAlgorithm.h"
 
 
 BacktrackAlgorithm::BacktrackAlgorithm(SharedBacktrackBoard& sharedBacktrackBoard)
 	: sharedBacktrackBoard(sharedBacktrackBoard) {}
 
 void BacktrackAlgorithm::run() {
-	for (RowIndex rowIndex : RowIndex::iterate(0, 10)) {
+	RowLength rowLength = sharedBacktrackBoard.getRowLength();
+	ColumnLength columnLength = sharedBacktrackBoard.getColumnLength();
+	for (RowIndex rowIndex : RowIndex::iterate(0, rowLength.getLength())) {
         Row rowLine = sharedBacktrackBoard.getRowLine(rowIndex);
 		RowHintSetList rowHintSetList = sharedBacktrackBoard.getRowHintSetList();
 		HintSet rowHintSet = rowHintSetList[rowIndex];
@@ -18,6 +21,13 @@ void BacktrackAlgorithm::run() {
 		).toRow();
 
 		sharedBacktrackBoard.applyRow(rowIndex, newRowLine);
+
+		PlacementCount count = PlacementPatternCountAlgorithm::run(
+			rowLine,
+			rowHintSet
+		);
+		sharedBacktrackBoard.setRowPlacementCount(rowIndex, count);
+
 		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     }
 }

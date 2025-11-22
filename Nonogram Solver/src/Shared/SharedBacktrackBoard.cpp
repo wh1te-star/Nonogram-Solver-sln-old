@@ -93,6 +93,13 @@ ColumnPlacementCountList SharedBacktrackBoard::getColumnPlacementCountList() con
 	return backtrackBoard.getColumnPlacementCountList();
 }
 
+void SharedBacktrackBoard::setRowPlacementCount(RowIndex rowIndex, PlacementCount placementCount) {
+	backtrackBoard.setRowPlacementCount(rowIndex, placementCount);
+}
+
+void SharedBacktrackBoard::setColumnPlacementCount(ColumnIndex columnIndex, PlacementCount placementCount) {
+	backtrackBoard.setColumnPlacementCount(columnIndex, placementCount);
+}
 
 void SharedBacktrackBoard::addRowIndex(RowIndex rowIndex) {
 	std::lock_guard<std::mutex> lock(mtx);

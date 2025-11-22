@@ -11,7 +11,8 @@ public:
     explicit RowPlacementCountList(std::vector<PlacementCount> placementCountList);
 
 public:
-    PlacementCount operator[](RowIndex index) const;
+    const PlacementCount& operator[](RowIndex index) const; 
+    PlacementCount& operator[](RowIndex index); 
 };
 
 
