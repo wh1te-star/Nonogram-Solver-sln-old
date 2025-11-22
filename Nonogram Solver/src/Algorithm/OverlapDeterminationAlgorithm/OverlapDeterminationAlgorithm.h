@@ -10,20 +10,15 @@
 
 class OverlapDeterminationAlgorithm {
 public:
+    static Line run(
+        const Line& line,
+		const HintSet& HintSet
+    );
+
     static Line determineByOverlap(
         const Line& line,
 		const HintSet& HintSet
     );
-
-    static Placement getLeftmostPlacement(
-        const Line& line,
-		const HintSet& HintSet
-    );
-
-	static Placement getRightmostPositions(
-        const Line& line,
-		const HintSet& HintSet
-	);
 };
 
 

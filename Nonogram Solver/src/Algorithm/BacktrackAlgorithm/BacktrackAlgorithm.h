@@ -4,21 +4,26 @@
 
 #include <atomic>
 #include <thread>
-#include "Shared/SharedBacktrackBoard.h"
+#include "Shared/SharedBacktrackBoard/SharedBacktrackBoard.h"
+#include "Shared/SharedHighlightIndexes/SharedHighlightIndexes.h"
 #include "Board/Line/Line.h"
 #include "Hint/HintSet/HintSet.h"
 
 class BacktrackAlgorithm {
 private:
 	SharedBacktrackBoard& sharedBacktrackBoard;
+	SharedHighlightIndexes& sharedHighlightIndexes;
     std::atomic<bool> terminate{ false };
 
 public:
-    explicit BacktrackAlgorithm(SharedBacktrackBoard& sharedBacktrackBoard);
+    explicit BacktrackAlgorithm(
+		SharedBacktrackBoard& sharedBacktrackBoard,
+		SharedHighlightIndexes& sharedHighlightIndexes
+    );
 
 	void run();
 
-	void recursiveSolve(int count, int max);
+    bool waitAndCheckTermination(const int waitMillis) const;
     void request_stop();
 };
 

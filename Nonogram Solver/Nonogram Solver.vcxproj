@@ -182,6 +182,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\Algorithm\BacktrackAlgorithm\BacktrackAlgorithm.cpp" />
+    <ClCompile Include="src\Algorithm\FindLeftMostPlacementAlgorithm\FindLeftMostPlacementAlgorithm.cpp" />
+    <ClCompile Include="src\Algorithm\FindRightMostPlacementAlgorithm\FindRightMostPlacementAlgorithm.cpp" />
     <ClCompile Include="src\Algorithm\OverlapDeterminationAlgorithm\OverlapDeterminationAlgorithm.cpp" />
     <ClCompile Include="src\Algorithm\ExhaustivePlacementPatternFindAlgorithm\ExhaustivePlacementPatternFindAlgorithm.cpp" />
     <ClCompile Include="src\Algorithm\PlacementPatternCountAlgorithm\PlacementPatternCountAlgorithm.cpp" />
@@ -202,7 +204,7 @@
     <ClCompile Include="src\Hint\HintSetList\ColumnHintSetList.cpp" />
     <ClCompile Include="src\Board\BoardLength\ColumnLength.cpp" />
     <ClCompile Include="src\Rendering\HighlightIndexes\HighlightIndexes.cpp" />
-    <ClCompile Include="src\Shared\SharedBacktrackBoard.cpp" />
+    <ClCompile Include="src\Shared\SharedBacktrackBoard\SharedBacktrackBoard.cpp" />
     <ClCompile Include="src\Placement\PlacementCountList\ColumnPlacementCountList.cpp" />
     <ClCompile Include="src\Placement\PlacementCountList\PlacementCountList.cpp" />
     <ClCompile Include="src\Placement\PlacementCountList\RowPlacementCountList.cpp" />
@@ -227,6 +229,7 @@
     <ClCompile Include="src\Rendering\FontData\FontData.cpp" />
     <ClCompile Include="src\Rendering\RenderingSystem\RenderingSystem.cpp" />
     <ClCompile Include="src\Rendering\TableRenderer\TableRenderer.cpp" />
+    <ClCompile Include="src\Shared\SharedHighlightIndexes\SharedHighlightIndexes.cpp" />
     <ClCompile Include="src\TestData\TestData\TestDataEasy.cpp" />
     <ClCompile Include="src\TestData\TestData\TestDataLambda.cpp" />
     <ClCompile Include="src\TestData\TestData\TestDataLarge.cpp" />
@@ -235,6 +238,8 @@
   <ItemGroup>
     <ClInclude Include="src\Algorithm\BacktrackAlgorithm\BacktrackAlgorithm.h" />
     <ClInclude Include="src\Algorithm\ExhaustivePlacementPatternFindAlgorithm\ExhaustivePlacementPatternFindAlgorithm.h" />
+    <ClInclude Include="src\Algorithm\FindLeftMostPlacementAlgorithm\FindLeftMostPlacementAlgorithm.h" />
+    <ClInclude Include="src\Algorithm\FindRightMostPlacementAlgorithm\FindRightMostPlacementAlgorithm.h" />
     <ClInclude Include="src\Algorithm\OverlapDeterminationAlgorithm\OverlapDeterminationAlgorithm.h" />
     <ClInclude Include="src\Algorithm\PlacementPatternCountAlgorithm\PlacementPatternCountAlgorithm.h" />
     <ClInclude Include="src\Board\BacktrackBoard\BacktrackBoard.h" />
@@ -252,7 +257,7 @@
     <ClInclude Include="src\Hint\HintSetList\ColumnHintSetList.h" />
     <ClInclude Include="src\Board\BoardLength\ColumnLength.h" />
     <ClInclude Include="src\Rendering\HighlightIndexes\HighlightIndexes.h" />
-    <ClInclude Include="src\Shared\SharedBacktrackBoard.h" />
+    <ClInclude Include="src\Shared\SharedBacktrackBoard\SharedBacktrackBoard.h" />
     <ClInclude Include="src\Placement\PlacementCountList\ColumnPlacementCountList.h" />
     <ClInclude Include="src\Placement\PlacementCountList\PlacementCountList.h" />
     <ClInclude Include="src\Placement\PlacementCountList\RowPlacementCountList.h" />
@@ -279,6 +284,7 @@
     <ClInclude Include="src\Rendering\FontData\FontData.h" />
     <ClInclude Include="src\Rendering\RenderingSystem\RenderingSystem.h" />
     <ClInclude Include="src\Rendering\TableRenderer\TableRenderer.h" />
+    <ClInclude Include="src\Shared\SharedHighlightIndexes\SharedHighlightIndexes.h" />
     <ClInclude Include="src\TestData\Repository\TestDataRepository.h" />
   </ItemGroup>
   <ItemGroup>

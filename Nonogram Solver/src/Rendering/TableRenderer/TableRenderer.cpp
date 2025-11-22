@@ -13,13 +13,19 @@
 #include "Board/BoardLength/RowLength.h"
 #include "Board/BoardLength/ColumnLength.h"
 #include <string>
-#include "Shared/SharedBacktrackBoard.h"
+#include "Shared/SharedBacktrackBoard/SharedBacktrackBoard.h"
+#include "Shared/SharedHighlightIndexes/SharedHighlightIndexes.h"
 
 
 TableRenderer::TableRenderer(){}
 
-void TableRenderer::render(const SharedBacktrackBoard& sharedBacktrackBoard) const {
+void TableRenderer::render(
+	const SharedBacktrackBoard& sharedBacktrackBoard,
+	const SharedHighlightIndexes& sharedHighlightIndexes
+) const {
 	ImGui::Begin("Nonogram Board", NULL, ImGuiWindowFlags_None);
+
+	const HighlightIndexes highlightIndexes = sharedHighlightIndexes.getHighlightIndexes();
 
 	const Board board = sharedBacktrackBoard.getBoard();
 	const RowHintSetList rowHintSetList = sharedBacktrackBoard.getRowHintSetList();
@@ -75,7 +81,8 @@ void TableRenderer::render(const SharedBacktrackBoard& sharedBacktrackBoard) con
 					columnHintLength,
 					rowHintLength,
 					board,
-					cellType
+					cellType,
+					highlightIndexes
 				);
 
 				std::string label = setLabel(
@@ -150,11 +157,14 @@ void TableRenderer::setupCellStyle(
 	RowLength columnHintLength,
 	ColumnLength rowHintLength,
 	Board board,
-	CellType cellType
+	CellType cellType,
+	HighlightIndexes highlightIndexes
 ) const {
 	const ImVec4 outOfBoardVec4 = ImVec4(0.5f, 0.5f, 0.5f, 1.0f);
 	const ImVec4 rowHintColorVec4 = ImVec4(0.8f, 0.8f, 0.9f, 1.0f);
 	const ImVec4 columnHintColorVec4 = ImVec4(0.8f, 0.9f, 0.8f, 1.0f);
+	const ImVec4 highlightedRowHintColorVec4 = ImVec4(0.5f, 0.5f, 0.9f, 1.0f);
+	const ImVec4 highlightedColumnHintColorVec4 = ImVec4(0.5f, 0.9f, 0.5f, 1.0f);
 	const ImVec4 blackVec4 = ImVec4(0.2f, 0.2f, 0.2f, 1.0f);
 	const ImVec4 whiteVec4 = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
 	const ImVec4 emptyVec4 = ImVec4(0.9f, 0.9f, 0.9f, 1.0f);
@@ -163,10 +173,20 @@ void TableRenderer::setupCellStyle(
 		ImGui::PushStyleColor(ImGuiCol_Button, outOfBoardVec4);
 	}
 	else if (cellType == ROW_PLACEMENT_COUNT || cellType == ROW_HINT) {
-		ImGui::PushStyleColor(ImGuiCol_Button, rowHintColorVec4);
+		if (highlightIndexes.findRowIndex(rowIndex - columnHintLength)) {
+			ImGui::PushStyleColor(ImGuiCol_Button, highlightedRowHintColorVec4);
+		}
+		else {
+			ImGui::PushStyleColor(ImGuiCol_Button, rowHintColorVec4);
+		}
 	}
 	else if (cellType == COLUMN_PLACEMENT_COUNT || cellType == COLUMN_HINT) {
-		ImGui::PushStyleColor(ImGuiCol_Button, columnHintColorVec4);
+		if (highlightIndexes.findColumnIndex(columnIndex - rowHintLength)) {
+			ImGui::PushStyleColor(ImGuiCol_Button, highlightedColumnHintColorVec4);
+		}
+		else {
+			ImGui::PushStyleColor(ImGuiCol_Button, columnHintColorVec4);
+		}
 	}
 	else {
 		Coordinate coordinate = Coordinate(rowIndex - columnHintLength, columnIndex - rowHintLength);

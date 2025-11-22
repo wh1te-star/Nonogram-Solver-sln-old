@@ -37,7 +37,7 @@ public:
     bool operator<=(const BoardLength& other) const;
     bool operator>(const BoardLength& other) const;
     bool operator>=(const BoardLength& other) const;
-    static std::vector<CellIndex> iterate(const int start, const int end);
+    static std::vector<CellIndex> range(int first, int last);
 };
 
 #endif

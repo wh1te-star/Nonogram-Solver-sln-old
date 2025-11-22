@@ -2,6 +2,8 @@
 
 #include <vector>
 #include "Algorithm/OverlapDeterminationAlgorithm/OverlapDeterminationAlgorithm.h"
+#include "Algorithm/FindLeftMostPlacementAlgorithm/FindLeftMostPlacementAlgorithm.h"
+#include "Algorithm/FindRightMostPlacementAlgorithm/FindRightMostPlacementAlgorithm.h"
 
 
 void leftMostPlacementTest(
@@ -10,10 +12,10 @@ void leftMostPlacementTest(
     const std::string& expectedStr
 ) {
     Line line = Line(lineStr);
-    HintSet HintSet = HintSet(hintNumbers);
+    HintSet hintSet = HintSet(hintNumbers);
     Placement expected = Placement(expectedStr);
     
-    Placement result = OverlapDeterminationAlgorithm::getLeftmostPlacement(line, HintSet);
+    Placement result = FindLeftMostPlacementAlgorithm::run(line, hintSet);
     EXPECT_EQ(result, expected);
 }
 TEST(Algorithm_LeftMostPlacement, VerySimpleCase) {
@@ -42,10 +44,10 @@ void rightMostPlacementTest(
     const std::string& expectedStr
 ) {
     Line line = Line(lineStr);
-    HintSet HintSet = HintSet(hintNumbers);
+    HintSet hintSet = HintSet(hintNumbers);
     Placement expected = Placement(expectedStr);
     
-    Placement result = OverlapDeterminationAlgorithm::getRightmostPositions(line, HintSet);
+    Placement result = FindRightMostPlacementAlgorithm::run(line, hintSet);
     EXPECT_EQ(result, expected);
 }
 TEST(Algorithm_RightMostPlacement, VerySimpleCase) {
@@ -71,19 +73,19 @@ TEST(Algorithm_RightMostPlacement, ImpossibleCase) {
 
 TEST(Algorithm_OverlapDetermination, VerySimpleCase) {
     Line line = Line("     ");
-    HintSet HintSet = HintSet({ 1, 2 });
+    HintSet hintSet = HintSet({ 1, 2 });
     Line expected = Line("   B ");
 
-	Line result = OverlapDeterminationAlgorithm::determineByOverlap(line, HintSet);
+	Line result = OverlapDeterminationAlgorithm::determineByOverlap(line, hintSet);
     EXPECT_EQ(result, expected);
 }
 
 
 TEST(Algorithm_OverlapDetermination, EdgeWhiteCase) {
     Line line = Line(" W   ");
-    HintSet HintSet = HintSet({ 2 });
+    HintSet hintSet = HintSet({ 2 });
     Line expected = Line("WW B ");
 
-	Line result = OverlapDeterminationAlgorithm::determineByOverlap(line, HintSet);
+	Line result = OverlapDeterminationAlgorithm::determineByOverlap(line, hintSet);
     EXPECT_EQ(result, expected);
 }

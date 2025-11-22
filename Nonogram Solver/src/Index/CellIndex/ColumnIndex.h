@@ -26,7 +26,7 @@ public:
     bool operator<=(const ColumnLength& other) const;
     bool operator>(const ColumnLength& other) const;
     bool operator>=(const ColumnLength& other) const;
-    static std::vector<ColumnIndex> iterate(const int start, const int end);
+    static std::vector<ColumnIndex> range(int first, int last);
 };
 
 namespace std {

@@ -26,7 +26,7 @@ public:
     bool operator<=(const RowLength& other) const;
     bool operator>(const RowLength& other) const;
     bool operator>=(const RowLength& other) const;
-    static std::vector<RowIndex> iterate(const int start, const int end);
+    static std::vector<RowIndex> range(int first, int last);
 };
 
 namespace std {

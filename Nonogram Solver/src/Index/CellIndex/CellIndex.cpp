@@ -1,5 +1,7 @@
 #include "Index/CellIndex/CellIndex.h"
 
+#include <algorithm>
+#include <vector>
 #include "Board/BoardLength/BoardLength.h"
 
 
@@ -94,11 +96,20 @@ bool CellIndex::operator>=(const BoardLength& other) const {
 	return index >= other.getLength();
 }
 
-std::vector<CellIndex> CellIndex::iterate(const int start, const int end){
-	std::vector<CellIndex> indexes;
-	for (int i = start; i < end; i++) {
-		indexes.push_back(CellIndex(i));
-	}
-	return indexes;
-}
+std::vector<CellIndex> CellIndex::range(int first, int last) {
+    const int minVal = std::min(first, last);
+    const int maxVal = std::max(first, last);
+    const size_t range_size = maxVal - minVal + 1;
+	std::vector<CellIndex> indexes = std::vector<CellIndex>(range_size, CellIndex(0));
 
+    for (int index = 0; index <= maxVal - minVal; index++) {
+		int value = index + minVal;
+		indexes[index] = CellIndex(value);
+    }
+
+    if (first > last) {
+        std::reverse(indexes.begin(), indexes.end());
+    }
+    
+    return indexes;
+}

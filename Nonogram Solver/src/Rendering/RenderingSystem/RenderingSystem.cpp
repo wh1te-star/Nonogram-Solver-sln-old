@@ -11,7 +11,8 @@
 #include "Rendering/TableRenderer/TableRenderer.h"
 #include "TestData/Repository/TestDataRepository.h"
 #include "Algorithm/BacktrackAlgorithm/BacktrackAlgorithm.h"
-#include "Shared/SharedBacktrackBoard.h"
+#include "Shared/SharedBacktrackBoard/SharedBacktrackBoard.h"
+#include "Shared/SharedHighlightIndexes/SharedHighlightIndexes.h"
 
 
 RenderingSystem::RenderingSystem() :
@@ -55,17 +56,20 @@ int RenderingSystem::initialize() {
 void RenderingSystem::renderingLoop() {
 	bool first_time = true;
 
-	RowHintSetList rowHintSetList = TestDataRepository::getRowHintSetList(TestDataRepository::LARGE);
-	ColumnHintSetList columnHintSetList = TestDataRepository::getColumnHintSetList(TestDataRepository::LARGE);
+	// Large: row 20, column 30
+	// Easy: row 15, column 15
+	RowHintSetList rowHintSetList = TestDataRepository::getRowHintSetList(TestDataRepository::EASY);
+	ColumnHintSetList columnHintSetList = TestDataRepository::getColumnHintSetList(TestDataRepository::EASY);
 	BacktrackBoard backtrackBoard = BacktrackBoard(
-		NonogramBoard(Board(RowLength(20), ColumnLength(30)), rowHintSetList, columnHintSetList),
-		RowPlacementCountList(std::vector<PlacementCount>(20, PlacementCount(0))),
-		ColumnPlacementCountList(std::vector<PlacementCount>(30, PlacementCount(0)))
+		NonogramBoard(Board(RowLength(15), ColumnLength(15)), rowHintSetList, columnHintSetList),
+		RowPlacementCountList(std::vector<PlacementCount>(15, PlacementCount(0))),
+		ColumnPlacementCountList(std::vector<PlacementCount>(15, PlacementCount(0)))
 	);
 	SharedBacktrackBoard sharedBacktrackBoard = SharedBacktrackBoard(backtrackBoard);
+	SharedHighlightIndexes sharedHighlightIndexes = SharedHighlightIndexes();
 	TableRenderer tableRenderer = TableRenderer();
 
-	BacktrackAlgorithm algorithm(sharedBacktrackBoard);
+	BacktrackAlgorithm algorithm = BacktrackAlgorithm(sharedBacktrackBoard, sharedHighlightIndexes);
 	std::thread worker_thread(&BacktrackAlgorithm::run, &algorithm);
 
 	int count = 0;
@@ -127,7 +131,7 @@ void RenderingSystem::renderingLoop() {
 		}
 		ImGui::End();
 
-		tableRenderer.render(sharedBacktrackBoard);
+		tableRenderer.render(sharedBacktrackBoard, sharedHighlightIndexes);
 
 		ImGui::Render();
 		ImGui::EndFrame();

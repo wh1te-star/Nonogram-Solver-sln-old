@@ -15,7 +15,9 @@
 #include "Hint/HintSetList/ColumnHintSetList.h"
 #include "Placement/PlacementCountList/RowPlacementCountList.h"
 #include "Placement/PlacementCountList/ColumnPlacementCountList.h"
+#include "Rendering/HighlightIndexes/HighlightIndexes.h"
 class SharedBacktrackBoard;
+class SharedHighlightIndexes;
 
 class TableRenderer {
 private:
@@ -30,7 +32,10 @@ private:
 
 public:
 	TableRenderer();
-	void render(const SharedBacktrackBoard& sharedBacktrackBoard) const;
+	void render(
+		const SharedBacktrackBoard& sharedBacktrackBoard,
+		const SharedHighlightIndexes& sharedHighlightIndexes
+	) const;
 
 private:
 	CellType determineCellType(
@@ -48,7 +53,8 @@ private:
 		RowLength columnHintLength,
 		ColumnLength rowHintLength,
 		Board board,
-		CellType cellType
+		CellType cellType,
+		HighlightIndexes highlightIndexes
 	) const;
 
 	std::string setLabel(

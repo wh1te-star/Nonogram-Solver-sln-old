@@ -47,7 +47,7 @@ Cell Board::getCell(Coordinate coordinate) const {
 
 Row Board::getRowLine(RowIndex rowIndex) const {
 	std::vector<Cell> row;
-	for (ColumnIndex columnIndex : ColumnIndex::iterate(0, columnLength.getLength())) {
+	for (ColumnIndex columnIndex : ColumnIndex::range(0, columnLength.getLength() - 1)) {
 		Coordinate coordinate = Coordinate(rowIndex, columnIndex);
 		Cell cell = getCell(coordinate);
 		row.push_back(cell);
@@ -57,7 +57,7 @@ Row Board::getRowLine(RowIndex rowIndex) const {
 
 Column Board::getColumnLine(ColumnIndex columnIndex) const {
 	std::vector<Cell> column;
-	for (RowIndex rowIndex : RowIndex::iterate(0, rowLength.getLength())) {
+	for (RowIndex rowIndex : RowIndex::range(0, rowLength.getLength() - 1)) {
 		Coordinate coordinate = Coordinate(rowIndex, columnIndex);
 		Cell cell = getCell(coordinate);
 		column.push_back(cell);
@@ -92,6 +92,9 @@ void Board::applyCell(Coordinate coordinate, const Cell& cell) {
     if(!isInRange(coordinate)) {
         return;
     }
+	if (cell.getColor() == None) {
+		return;
+	}
 
     RowIndex rowIndex = coordinate.getRowIndex();
     ColumnIndex columnIndex = coordinate.getColumnIndex();
@@ -101,7 +104,7 @@ void Board::applyCell(Coordinate coordinate, const Cell& cell) {
 void Board::applyRow(RowIndex rowIndex, const Row& row) {
 	assert(row.size() == columnLength.getLength());
 
-	for (ColumnIndex columnIndex : ColumnIndex::iterate(0, row.size())) {
+	for (ColumnIndex columnIndex : ColumnIndex::range(0, row.size() - 1)) {
 		Coordinate coordinate = Coordinate(rowIndex, columnIndex);
 		Cell cell = row[columnIndex];
 		applyCell(coordinate, cell);
@@ -111,7 +114,7 @@ void Board::applyRow(RowIndex rowIndex, const Row& row) {
 void Board::applyRow(RowIndex rowIndex, const RowPlacement& rowPlacement) {
 	assert(rowPlacement.size() == columnLength.getLength());
 
-	for (ColumnIndex columnIndex : ColumnIndex::iterate(0, rowPlacement.size())) {
+	for (ColumnIndex columnIndex : ColumnIndex::range(0, rowPlacement.size() - 1)) {
 		Coordinate coordinate = Coordinate(rowIndex, columnIndex);
 		Cell cell = rowPlacement[columnIndex];
 		applyCell(coordinate, cell);
@@ -121,7 +124,7 @@ void Board::applyRow(RowIndex rowIndex, const RowPlacement& rowPlacement) {
 void Board::applyColumn(ColumnIndex columnIndex, const Column& column) {
 	assert(column.size() == rowLength.getLength());
 
-	for (RowIndex rowIndex : RowIndex::iterate(0, column.size())) {
+	for (RowIndex rowIndex : RowIndex::range(0, column.size() - 1)) {
 		Coordinate coordinate = Coordinate(rowIndex, columnIndex);
 		Cell cell = column[rowIndex];
 		applyCell(coordinate, cell);
@@ -131,7 +134,7 @@ void Board::applyColumn(ColumnIndex columnIndex, const Column& column) {
 void Board::applyColumn(ColumnIndex columnIndex, const ColumnPlacement& columnPlacement) {
 	assert(columnPlacement.size() == rowLength.getLength());
 
-	for (RowIndex rowIndex : RowIndex::iterate(0, columnPlacement.size())) {
+	for (RowIndex rowIndex : RowIndex::range(0, columnPlacement.size() - 1)) {
 		Coordinate coordinate = Coordinate(rowIndex, columnIndex);
 		Cell cell = columnPlacement[rowIndex];
 		applyCell(coordinate, cell);
