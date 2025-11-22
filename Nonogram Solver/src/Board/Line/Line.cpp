@@ -67,7 +67,7 @@ const std::vector<CellLocation> Line::getCellLocationList(const Coordinate& coor
 bool Line::canPlaceBlock(const CellIndex& startIndex, const HintNumber& hintNumber) const {
 	int start = startIndex.getIndex();
 	int end = start + hintNumber.getNumber() - 1;
-	if (end >= static_cast<int>(line.size())) {
+	if (start < 0 || static_cast<int>(line.size()) <= end) {
 		return false;
 	}
 	for (int i = start; i <= end; i++) {

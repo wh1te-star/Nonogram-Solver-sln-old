@@ -3,22 +3,22 @@
 
 Placement FindLeftMostPlacementAlgorithm::run(
 	const Line& line,
-	const HintSet& HintSet
+	const HintSet& hintSet
 ) {
 	return getLeftMostPlacement(
 		line,
-		HintSet
+		hintSet
 	);
 }
 
 Placement FindLeftMostPlacementAlgorithm::getLeftMostPlacement(
 	const Line& line,
-	const HintSet& HintSet
+	const HintSet& hintSet
 ) {
 	Placement currentPlacement = Placement("");
 	return getLeftMostPlacementRecursive(
 		line,
-		HintSet,
+		hintSet,
 		currentPlacement,
 		0
 	);
@@ -26,25 +26,27 @@ Placement FindLeftMostPlacementAlgorithm::getLeftMostPlacement(
 
 Placement FindLeftMostPlacementAlgorithm::getLeftMostPlacementRecursive(
 	const Line& line,
-	const HintSet& HintSet,
+	const HintSet& hintSet,
 	Placement& currentPlacement,
 	int currentHintIndex
 ) {
 	if (currentPlacement.size() > line.size()) {
 		return Placement("");
 	}
-	if (currentHintIndex >= HintSet.size()) {
+	if (currentHintIndex >= hintSet.size()) {
 		Placement foundPlacement = currentPlacement;
-		for (CellIndex cellIndex : CellIndex::range(currentPlacement.size(), line.size() - 1)) {
-			if (!line[cellIndex].canColor(White)) {
-				return Placement("");
+		if (currentPlacement.size() < line.size()) {
+			for (CellIndex cellIndex : CellIndex::range(currentPlacement.size(), line.size() - 1)) {
+				if (!line[cellIndex].canColor(White)) {
+					return Placement("");
+				}
+				foundPlacement = foundPlacement + Placement("W");
 			}
-			foundPlacement = foundPlacement + Placement("W");
 		}
 		return foundPlacement;
 	}
 	
-	HintNumber hintNumber = HintSet[currentHintIndex];
+	HintNumber hintNumber = hintSet[currentHintIndex];
 	CellIndex currentIndex = CellIndex(currentPlacement.size());
 	if (line.canPlaceBlock(currentIndex, hintNumber)) {
 		Placement previousPlacement = currentPlacement;
@@ -54,7 +56,7 @@ Placement FindLeftMostPlacementAlgorithm::getLeftMostPlacementRecursive(
 		}
 		Placement foundPlacement = getLeftMostPlacementRecursive(
 			line,
-			HintSet,
+			hintSet,
 			currentPlacement,
 			currentHintIndex + 1
 		);
@@ -69,9 +71,9 @@ Placement FindLeftMostPlacementAlgorithm::getLeftMostPlacementRecursive(
 		currentPlacement = currentPlacement + Placement("W");
 		Placement foundPlacement = getLeftMostPlacementRecursive(
 			line,
-			HintSet,
+			hintSet,
 			currentPlacement,
-			currentHintIndex + 1
+			currentHintIndex
 		);
 		if (foundPlacement.size() != 0) {
 			return foundPlacement;

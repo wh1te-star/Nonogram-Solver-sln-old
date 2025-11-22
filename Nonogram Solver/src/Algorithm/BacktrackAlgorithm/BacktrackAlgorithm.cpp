@@ -41,7 +41,7 @@ void BacktrackAlgorithm::run() {
             );
             sharedBacktrackBoard.setRowPlacementCount(rowIndex, count);
 
-            if (waitAndCheckTermination(10)) return;
+            if (waitAndCheckTermination(1000)) return;
 
 			sharedHighlightIndexes.deleteRowIndex(rowIndex);
         }
@@ -68,7 +68,7 @@ void BacktrackAlgorithm::run() {
             );
             sharedBacktrackBoard.setColumnPlacementCount(columnIndex, count);
 
-            if (waitAndCheckTermination(10)) return;
+            if (waitAndCheckTermination(1000)) return;
 
 			sharedHighlightIndexes.deleteColumnIndex(columnIndex);
         }

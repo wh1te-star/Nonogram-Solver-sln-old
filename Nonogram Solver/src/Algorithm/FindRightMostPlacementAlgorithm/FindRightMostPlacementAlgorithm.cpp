@@ -3,49 +3,51 @@
 
 Placement FindRightMostPlacementAlgorithm::run(
 	const Line& line,
-	const HintSet& HintSet
+	const HintSet& hintSet
 ) {
 	return getRightMostPlacement(
 		line,
-		HintSet
+		hintSet
 	);
 }
 
 Placement FindRightMostPlacementAlgorithm::getRightMostPlacement(
 	const Line& line,
-	const HintSet& HintSet
+	const HintSet& hintSet
 ) {
 	Placement currentPlacement = Placement("");
 	return getRightMostPlacementRecursive(
 		line,
-		HintSet,
+		hintSet,
 		currentPlacement,
-		0
+		hintSet.size() - 1
 	);
 }
 
 Placement FindRightMostPlacementAlgorithm::getRightMostPlacementRecursive(
 	const Line& line,
-	const HintSet& HintSet,
+	const HintSet& hintSet,
 	Placement& currentPlacement,
 	int currentHintIndex
 ) {
 	if (currentPlacement.size() > line.size()) {
 		return Placement("");
 	}
-	if (currentHintIndex >= HintSet.size()) {
+	if (currentHintIndex < 0) {
 		Placement foundPlacement = currentPlacement;
+		if (currentPlacement.size() < line.size()) {
 		for (CellIndex cellIndex : CellIndex::range(line.size() - currentPlacement.size() - 1, 0)) {
-			if (!line[cellIndex].canColor(White)) {
-				return Placement("");
+				if (!line[cellIndex].canColor(White)) {
+					return Placement("");
+				}
+				foundPlacement = Placement("W") + foundPlacement;
 			}
-			foundPlacement = Placement("W") + foundPlacement;
 		}
 		return foundPlacement;
 	}
 	
-	HintNumber hintNumber = HintSet[currentHintIndex];
-	CellIndex currentIndex = CellIndex(currentPlacement.size());
+	HintNumber hintNumber = hintSet[currentHintIndex];
+	CellIndex currentIndex = CellIndex(line.size() - currentPlacement.size() - hintNumber.getNumber());
 	if (line.canPlaceBlock(currentIndex, hintNumber)) {
 		Placement previousPlacement = currentPlacement;
 		currentPlacement = Placement(hintNumber) + currentPlacement;
@@ -54,9 +56,9 @@ Placement FindRightMostPlacementAlgorithm::getRightMostPlacementRecursive(
 		}
 		Placement foundPlacement = getRightMostPlacementRecursive(
 			line,
-			HintSet,
+			hintSet,
 			currentPlacement,
-			currentHintIndex + 1
+			currentHintIndex - 1
 		);
 		if (foundPlacement.size() != 0) {
 			return foundPlacement;
@@ -64,14 +66,14 @@ Placement FindRightMostPlacementAlgorithm::getRightMostPlacementRecursive(
 		currentPlacement = previousPlacement;
 	}
 
-	if (currentIndex < line.size() && line[currentIndex].canColor(White)) {
+	if (currentIndex >= 0 && line[currentIndex].canColor(White)) {
 		Placement previousPlacement = currentPlacement;
 		currentPlacement = Placement("W") + currentPlacement;
 		Placement foundPlacement = getRightMostPlacementRecursive(
 			line,
-			HintSet,
+			hintSet,
 			currentPlacement,
-			currentHintIndex + 1
+			currentHintIndex
 		);
 		if (foundPlacement.size() != 0) {
 			return foundPlacement;
