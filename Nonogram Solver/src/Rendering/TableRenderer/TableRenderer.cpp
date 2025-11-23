@@ -6,14 +6,16 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "imgui_internal.h"
+#include <string>
 #include "Board/BacktrackBoard/BacktrackBoard.h"
 #include "Rendering/FontData/FontData.h"
 #include "Index/CellIndex/RowIndex.h"
 #include "Index/CellIndex/ColumnIndex.h"
 #include "Board/BoardLength/RowLength.h"
 #include "Board/BoardLength/ColumnLength.h"
-#include <string>
+#include "Algorithm/Backtrack/BacktrackStack/BacktrackStack.h"
 #include "Shared/SharedBacktrackBoard/SharedBacktrackBoard.h"
+#include "Shared/SharedBacktrackStack/SharedBacktrackStack.h"
 #include "Shared/SharedHighlightIndexes/SharedHighlightIndexes.h"
 
 
@@ -21,11 +23,13 @@ TableRenderer::TableRenderer(){}
 
 void TableRenderer::render(
 	const SharedBacktrackBoard& sharedBacktrackBoard,
+	const SharedBacktrackStack& sharedBacktrackStack,
 	const SharedHighlightIndexes& sharedHighlightIndexes
 ) const {
 	ImGui::Begin("Nonogram Board", NULL, ImGuiWindowFlags_None);
 
 	const HighlightIndexes highlightIndexes = sharedHighlightIndexes.getHighlightIndexes();
+	const BacktrackStack backtrackStack = sharedBacktrackStack.getBacktrackStack();
 
 	const Board board = sharedBacktrackBoard.getBoard();
 	const RowHintSetList rowHintSetList = sharedBacktrackBoard.getRowHintSetList();
@@ -39,8 +43,10 @@ void TableRenderer::render(
 	const ColumnLength rowHintLength = rowHintSetList.getMaxHintSetLength();
 	const RowLength columnPlacementCountLength = RowLength(1);
 	const ColumnLength rowPlacementCountLength = ColumnLength(1);
-	const RowLength totalRowLength = columnHintLength + boardRowLength + columnPlacementCountLength;
-	const ColumnLength totalColumnLength = rowHintLength + boardColumnLength + rowPlacementCountLength;
+	const RowLength columnBacktrackStackLength = RowLength(1);
+	const ColumnLength rowBacktrackStackLength = ColumnLength(1);
+	const RowLength totalRowLength = columnHintLength + boardRowLength + columnPlacementCountLength + columnBacktrackStackLength;
+	const ColumnLength totalColumnLength = rowHintLength + boardColumnLength + rowPlacementCountLength + rowBacktrackStackLength;
 
 	ImVec2 container_size = ImGui::GetContentRegionAvail();
 
@@ -73,7 +79,16 @@ void TableRenderer::render(
 
 				ImVec2 button_size = ImVec2(cell_size, cell_size);
 
-				CellType cellType = determineCellType(rowIndex, columnIndex, columnHintLength, rowHintLength, boardRowLength, boardColumnLength);
+				CellType cellType = determineCellType(
+					rowIndex,
+					columnIndex,
+					columnHintLength,
+					rowHintLength,
+					boardRowLength,
+					boardColumnLength,
+					columnBacktrackStackLength,
+					rowBacktrackStackLength
+				);
 
 				setupCellStyle(
 					rowIndex,
@@ -95,12 +110,20 @@ void TableRenderer::render(
 					columnHintSetList,
 					rowPlacementCountList,
 					columnPlacementCountList,
-					cell_size
+					cell_size,
+					backtrackStack
 				);
 				std::string unique_label = label + "##Cell" + std::to_string(rowIndexInt) + "_" + std::to_string(columnIndexInt);
 				ImGui::Button(unique_label.c_str(), button_size);
 
-				if (cellType == ROW_PLACEMENT_COUNT || cellType == ROW_HINT || cellType == COLUMN_PLACEMENT_COUNT || cellType == COLUMN_HINT) {
+				if(
+					cellType == ROW_PLACEMENT_COUNT ||
+					cellType == ROW_HINT ||
+					cellType == ROW_BACKTRACK_STACK ||
+					cellType == COLUMN_PLACEMENT_COUNT ||
+					cellType == COLUMN_HINT ||
+					cellType == COLUMN_BACKTRACK_STACK
+				) {
 					ImGui::PopFont();
 					ImGui::PopStyleColor(1);
 				}
@@ -124,7 +147,9 @@ TableRenderer::CellType TableRenderer::determineCellType(
 	RowLength columnHintLength,
 	ColumnLength rowHintLength,
 	RowLength boardRowLength,
-	ColumnLength boardColumnLength
+	ColumnLength boardColumnLength,
+	RowLength columnBacktrackStackLength,
+	ColumnLength rowBacktrackStackLength
 ) const { 
 	if (rowHintLength <= columnIndex && columnIndex < rowHintLength + boardColumnLength) {
 		if (rowIndex < columnHintLength) {
@@ -133,8 +158,11 @@ TableRenderer::CellType TableRenderer::determineCellType(
 		else if (rowIndex < columnHintLength + boardRowLength) {
 			return BOARD_CELL;
 		}
-		else {
+		else if(rowIndex < columnHintLength + boardRowLength + columnBacktrackStackLength) {
 			return COLUMN_PLACEMENT_COUNT;
+		}
+		else {
+			return COLUMN_BACKTRACK_STACK;
 		}
 	}
 	if (columnHintLength <= rowIndex && rowIndex < columnHintLength + boardRowLength) {
@@ -144,8 +172,11 @@ TableRenderer::CellType TableRenderer::determineCellType(
 		else if (columnIndex < rowHintLength + boardColumnLength) {
 			return BOARD_CELL;
 		}
-		else {
+		else if(columnIndex < rowHintLength + boardColumnLength + rowBacktrackStackLength) {
 			return ROW_PLACEMENT_COUNT;
+		}
+		else {
+			return ROW_BACKTRACK_STACK;
 		}
 	}
 	return OUT_OF_BOARD;
@@ -172,7 +203,7 @@ void TableRenderer::setupCellStyle(
 	if (cellType == OUT_OF_BOARD) {
 		ImGui::PushStyleColor(ImGuiCol_Button, outOfBoardVec4);
 	}
-	else if (cellType == ROW_PLACEMENT_COUNT || cellType == ROW_HINT) {
+	else if (cellType == ROW_PLACEMENT_COUNT || cellType == ROW_HINT || cellType == ROW_BACKTRACK_STACK) {
 		if (highlightIndexes.findRowIndex(rowIndex - columnHintLength)) {
 			ImGui::PushStyleColor(ImGuiCol_Button, highlightedRowHintColorVec4);
 		}
@@ -180,7 +211,7 @@ void TableRenderer::setupCellStyle(
 			ImGui::PushStyleColor(ImGuiCol_Button, rowHintColorVec4);
 		}
 	}
-	else if (cellType == COLUMN_PLACEMENT_COUNT || cellType == COLUMN_HINT) {
+	else if (cellType == COLUMN_PLACEMENT_COUNT || cellType == COLUMN_HINT || cellType == COLUMN_BACKTRACK_STACK) {
 		if (highlightIndexes.findColumnIndex(columnIndex - rowHintLength)) {
 			ImGui::PushStyleColor(ImGuiCol_Button, highlightedColumnHintColorVec4);
 		}
@@ -216,10 +247,18 @@ std::string TableRenderer::setLabel(
 	ColumnHintSetList columnHintSetList,
 	RowPlacementCountList rowPlacementCountList,
 	ColumnPlacementCountList columnPlacementCountList,
-	float cell_size
+	float cell_size,
+	BacktrackStack backtrackBoard
 ) const {
 	ImVec4 fontColorVec4 = ImVec4(0.2f, 0.2f, 0.2f, 1.0f);
-	if (cellType == ROW_PLACEMENT_COUNT || cellType == ROW_HINT || cellType == COLUMN_PLACEMENT_COUNT || cellType == COLUMN_HINT) {
+	if (
+		cellType == ROW_PLACEMENT_COUNT ||
+		cellType == ROW_HINT ||
+		cellType == ROW_BACKTRACK_STACK ||
+		cellType == COLUMN_PLACEMENT_COUNT ||
+		cellType == COLUMN_HINT ||
+		cellType == COLUMN_BACKTRACK_STACK
+	) {
 		ImGui::PushStyleColor(ImGuiCol_Text, fontColorVec4);
 		ImGui::PushFont(FontData::getFontByCellSize(cell_size));
 
@@ -255,6 +294,18 @@ std::string TableRenderer::setLabel(
 			ColumnIndex placementCountIndex = columnIndex - rowHintLength;
 			PlacementCount placementCount = columnPlacementCountList[placementCountIndex];
 			return std::to_string(placementCount.getCount());
+		}
+
+		if (cellType == ROW_BACKTRACK_STACK) {
+			RowIndex backtrackStackIndex = rowIndex - columnHintLength;
+			int backtrackDepth = backtrackBoard.getDepthAtRowIndex(backtrackStackIndex);
+			return std::to_string(backtrackDepth);
+		}
+
+		if (cellType == COLUMN_BACKTRACK_STACK) {
+			ColumnIndex backtrackStackIndex = columnIndex - rowHintLength;
+			int backtrackDepth = backtrackBoard.getDepthAtColumnIndex(backtrackStackIndex);
+			return std::to_string(backtrackDepth);
 		}
 	}
 

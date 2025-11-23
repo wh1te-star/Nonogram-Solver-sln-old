@@ -16,7 +16,9 @@
 #include "Placement/PlacementCountList/RowPlacementCountList.h"
 #include "Placement/PlacementCountList/ColumnPlacementCountList.h"
 #include "Rendering/HighlightIndexes/HighlightIndexes.h"
+#include "Algorithm/Backtrack/BacktrackStack/BacktrackStack.h"
 class SharedBacktrackBoard;
+class SharedBacktrackStack;
 class SharedHighlightIndexes;
 
 class TableRenderer {
@@ -25,8 +27,10 @@ private:
 		BOARD_CELL,
 		ROW_HINT,
 		ROW_PLACEMENT_COUNT,
+		ROW_BACKTRACK_STACK,
 		COLUMN_HINT,
 		COLUMN_PLACEMENT_COUNT,
+		COLUMN_BACKTRACK_STACK,
 		OUT_OF_BOARD
 	};
 
@@ -34,6 +38,7 @@ public:
 	TableRenderer();
 	void render(
 		const SharedBacktrackBoard& sharedBacktrackBoard,
+		const SharedBacktrackStack& sharedBacktrackStack,
 		const SharedHighlightIndexes& sharedHighlightIndexes
 	) const;
 
@@ -44,7 +49,9 @@ private:
 		RowLength columnHintLength,
 		ColumnLength rowHintLength,
 		RowLength boardRowLength,
-		ColumnLength boardColumnLength
+		ColumnLength boardColumnLength,
+		RowLength columnBacktrackStackLength,
+		ColumnLength rowBacktrackStackLength
 	) const;
 
 	void setupCellStyle(
@@ -67,7 +74,8 @@ private:
 		ColumnHintSetList columnHintSetList,
 		RowPlacementCountList rowPlacementCountList,
 		ColumnPlacementCountList columnPlacementCountList,
-		float cell_size
+		float cell_size,
+		BacktrackStack backtrackStack
 	) const;
 
 	void drawGridLine(

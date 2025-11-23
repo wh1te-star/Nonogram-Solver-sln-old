@@ -2,11 +2,7 @@
 
 #include <cassert>
 #include "Board/Line/Line.h"
-#include "Algorithm/OverlapDeterminationAlgorithm/OverlapDeterminationAlgorithm.h"
-#include "Algorithm/PlacementPatternCountAlgorithm/PlacementPatternCountAlgorithm.h"
-#include "Algorithm/ExhaustivePlacementPatternFindAlgorithm/ExhaustivePlacementPatternFindAlgorithm.h"
 #include "Shared/SharedBacktrackBoard/SharedBacktrackBoard.h"
-#include "Shared/SharedHighlightIndexes/SharedHighlightIndexes.h"
 
 
 BacktrackStack::BacktrackStack(
@@ -24,7 +20,7 @@ int BacktrackStack::getDepthAtRowIndex(RowIndex rowIndex) const {
 }
 
 int BacktrackStack::getDepthAtColumnIndex(ColumnIndex ColumnIndex) const {
-	return rowBacktrackStack[ColumnIndex.getIndex()];
+	return columnBacktrackStack[ColumnIndex.getIndex()];
 }
 
 void BacktrackStack::pushRowIndex(RowIndex rowIndex) {

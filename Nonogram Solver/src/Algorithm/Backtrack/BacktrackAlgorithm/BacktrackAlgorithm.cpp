@@ -32,6 +32,12 @@ void BacktrackAlgorithm::backtrackSolveRecursive() {
 
 void BacktrackAlgorithm::deterministicSolve() {
 	int waitMillis = 100;
+
+	for (int i = 0; i < 10; i++) {
+		sharedBacktrackStack.pushRowIndex((RowIndex(i)));
+        if (waitAndCheckTermination(waitMillis)) return;
+    }
+
 	RowLength rowLength = sharedBacktrackBoard.getRowLength();
 	ColumnLength columnLength = sharedBacktrackBoard.getColumnLength();
     while (true) {

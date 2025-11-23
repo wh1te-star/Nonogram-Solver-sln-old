@@ -6,6 +6,11 @@
 SharedBacktrackStack::SharedBacktrackStack(BacktrackStack backtrackStack)
 	: backtrackStack(backtrackStack) {}
 
+BacktrackStack SharedBacktrackStack::getBacktrackStack() const {
+	std::lock_guard<std::mutex> lock(mtx);
+	return backtrackStack;
+}
+
 int SharedBacktrackStack::getDepthAtRowIndex(RowIndex rowIndex) const {
 	std::lock_guard<std::mutex> lock(mtx);
 	return backtrackStack.getDepthAtRowIndex(rowIndex);

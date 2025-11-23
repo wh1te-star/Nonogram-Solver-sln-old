@@ -148,7 +148,11 @@ void RenderingSystem::renderingLoop() {
 		}
 		ImGui::End();
 
-		tableRenderer.render(sharedBacktrackBoard, sharedHighlightIndexes);
+		tableRenderer.render(
+			sharedBacktrackBoard,
+			sharedBacktrackStack,
+			sharedHighlightIndexes
+		);
 
 		ImGui::Render();
 		ImGui::EndFrame();

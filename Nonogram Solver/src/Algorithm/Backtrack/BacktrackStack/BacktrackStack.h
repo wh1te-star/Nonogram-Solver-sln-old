@@ -2,8 +2,6 @@
 #define BACKTRACKSTACK_H
 
 
-#include "Shared/SharedBacktrackBoard/SharedBacktrackBoard.h"
-#include "Shared/SharedHighlightIndexes/SharedHighlightIndexes.h"
 #include "Board/Line/Line.h"
 #include "Hint/HintSet/HintSet.h"
 
