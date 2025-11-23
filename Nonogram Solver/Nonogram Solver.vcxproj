@@ -230,6 +230,7 @@
     <ClCompile Include="src\Rendering\FontData\FontData.cpp" />
     <ClCompile Include="src\Rendering\RenderingSystem\RenderingSystem.cpp" />
     <ClCompile Include="src\Rendering\TableRenderer\TableRenderer.cpp" />
+    <ClCompile Include="src\Shared\SharedBacktrackStack\SharedBacktrackStack.cpp" />
     <ClCompile Include="src\Shared\SharedHighlightIndexes\SharedHighlightIndexes.cpp" />
     <ClCompile Include="src\TestData\TestData\TestDataEasy.cpp" />
     <ClCompile Include="src\TestData\TestData\TestDataLambda.cpp" />
@@ -286,6 +287,7 @@
     <ClInclude Include="src\Rendering\FontData\FontData.h" />
     <ClInclude Include="src\Rendering\RenderingSystem\RenderingSystem.h" />
     <ClInclude Include="src\Rendering\TableRenderer\TableRenderer.h" />
+    <ClInclude Include="src\Shared\SharedBacktrackStack\SharedBacktrackStack.h" />
     <ClInclude Include="src\Shared\SharedHighlightIndexes\SharedHighlightIndexes.h" />
     <ClInclude Include="src\TestData\Repository\TestDataRepository.h" />
   </ItemGroup>

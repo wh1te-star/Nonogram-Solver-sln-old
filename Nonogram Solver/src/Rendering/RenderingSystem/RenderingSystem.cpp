@@ -12,6 +12,7 @@
 #include "TestData/Repository/TestDataRepository.h"
 #include "Algorithm/Backtrack/BacktrackAlgorithm/BacktrackAlgorithm.h"
 #include "Shared/SharedBacktrackBoard/SharedBacktrackBoard.h"
+#include "Shared/SharedBacktrackStack/SharedBacktrackStack.h"
 #include "Shared/SharedHighlightIndexes/SharedHighlightIndexes.h"
 
 
@@ -71,10 +72,21 @@ void RenderingSystem::renderingLoop() {
 		ColumnPlacementCountList(std::vector<PlacementCount>(columnHintSetList.size(), PlacementCount(0)))
 	);
 	SharedBacktrackBoard sharedBacktrackBoard = SharedBacktrackBoard(backtrackBoard);
+	SharedBacktrackStack sharedBacktrackStack = SharedBacktrackStack(
+		BacktrackStack(
+			backtrackBoard.getRowLength(),
+			backtrackBoard.getColumnLength()
+		)
+	);
+
 	SharedHighlightIndexes sharedHighlightIndexes = SharedHighlightIndexes();
 	TableRenderer tableRenderer = TableRenderer();
 
-	BacktrackAlgorithm algorithm = BacktrackAlgorithm(sharedBacktrackBoard, sharedHighlightIndexes);
+	BacktrackAlgorithm algorithm = BacktrackAlgorithm(
+		sharedBacktrackBoard,
+		sharedBacktrackStack,
+		sharedHighlightIndexes
+	);
 	std::thread worker_thread(&BacktrackAlgorithm::run, &algorithm);
 
 	int count = 0;

@@ -10,9 +10,11 @@
 
 BacktrackAlgorithm::BacktrackAlgorithm(
     SharedBacktrackBoard& sharedBacktrackBoard,
+    SharedBacktrackStack& sharedBacktrackStack,
 	SharedHighlightIndexes& sharedHighlightIndexes
 ) :
     sharedBacktrackBoard(sharedBacktrackBoard),
+    sharedBacktrackStack(sharedBacktrackStack),
 	sharedHighlightIndexes(sharedHighlightIndexes) {}
 
 void BacktrackAlgorithm::run() {
@@ -21,11 +23,10 @@ void BacktrackAlgorithm::run() {
 
 void BacktrackAlgorithm::backtrackSolve() {
     deterministicSolve();
-    BacktrackState backtrackState = BacktrackState(RowIndex(0), Placement(""));
-    backtrackSolveRecursive(backtrackState);
+    backtrackSolveRecursive();
 }
 
-void BacktrackAlgorithm::backtrackSolveRecursive(BacktrackState backtrackState) {
+void BacktrackAlgorithm::backtrackSolveRecursive() {
     deterministicSolve();
 }
 
