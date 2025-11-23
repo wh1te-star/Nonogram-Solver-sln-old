@@ -45,20 +45,20 @@ bool BacktrackBoard::isSolved() const {
 	return nonogramBoard.isSolved();
 }
 
-void BacktrackBoard::applyCell(Coordinate coordinate, const Cell& cell) {
-	nonogramBoard.applyCell(coordinate, cell);
+void BacktrackBoard::applyCell(Coordinate coordinate, const Cell& cell, bool overwriteNone) {
+	nonogramBoard.applyCell(coordinate, cell, overwriteNone);
 }
 
-void BacktrackBoard::applyRow(RowIndex rowIndex, const Row& row) {
-	return nonogramBoard.applyRow(rowIndex, row);
+void BacktrackBoard::applyRow(RowIndex rowIndex, const Row& row, bool overwriteNone) {
+	return nonogramBoard.applyRow(rowIndex, row, overwriteNone);
 }
 
 void BacktrackBoard::applyRow(RowIndex rowIndex, const RowPlacement& rowPlacement) {
 	return nonogramBoard.applyRow(rowIndex, rowPlacement);
 }
 
-void BacktrackBoard::applyColumn(ColumnIndex columnIndex, const Column& column) {
-	return nonogramBoard.applyColumn(columnIndex, column);
+void BacktrackBoard::applyColumn(ColumnIndex columnIndex, const Column& column, bool overwriteNone) {
+	return nonogramBoard.applyColumn(columnIndex, column, overwriteNone);
 }
 
 void BacktrackBoard::applyColumn(ColumnIndex columnIndex, const ColumnPlacement& columnPlacement) {

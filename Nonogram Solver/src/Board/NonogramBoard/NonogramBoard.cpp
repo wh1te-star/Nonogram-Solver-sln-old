@@ -41,20 +41,20 @@ bool NonogramBoard::isSolved() const {
 	return board.isSolved();
 }
 
-void NonogramBoard::applyCell(Coordinate coordinate, const Cell& cell) {
-	board.applyCell(coordinate, cell);
+void NonogramBoard::applyCell(Coordinate coordinate, const Cell& cell, bool overwriteNone) {
+	board.applyCell(coordinate, cell, overwriteNone);
 }
 
-void NonogramBoard::applyRow(RowIndex rowIndex, const Row& row) {
-	return board.applyRow(rowIndex, row);
+void NonogramBoard::applyRow(RowIndex rowIndex, const Row& row, bool overwriteNone) {
+	return board.applyRow(rowIndex, row, overwriteNone);
 }
 
 void NonogramBoard::applyRow(RowIndex rowIndex, const RowPlacement& rowPlacement) {
 	return board.applyRow(rowIndex, rowPlacement);
 }
 
-void NonogramBoard::applyColumn(ColumnIndex columnIndex, const Column& column) {
-	return board.applyColumn(columnIndex, column);
+void NonogramBoard::applyColumn(ColumnIndex columnIndex, const Column& column, bool overwriteNone) {
+	return board.applyColumn(columnIndex, column, overwriteNone);
 }
 
 void NonogramBoard::applyColumn(ColumnIndex columnIndex, const ColumnPlacement& columnPlacement) {

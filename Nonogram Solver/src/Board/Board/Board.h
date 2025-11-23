@@ -39,10 +39,10 @@ public:
 	bool isSolved() const;
 
 public:
-	void applyCell(Coordinate coordinate, const Cell& cell);
-	void applyRow(RowIndex rowIndex, const Row& row);
+	void applyCell(Coordinate coordinate, const Cell& cell, bool overrideNone = false);
+	void applyRow(RowIndex rowIndex, const Row& row, bool overwriteNone);
 	void applyRow(RowIndex rowIndex, const RowPlacement& rowPlacement);
-	void applyColumn(ColumnIndex columnIndex, const Column& column);
+	void applyColumn(ColumnIndex columnIndex, const Column& column, bool overwriteNone);
 	void applyColumn(ColumnIndex columnIndex, const ColumnPlacement& columnPlacement);
 };
 

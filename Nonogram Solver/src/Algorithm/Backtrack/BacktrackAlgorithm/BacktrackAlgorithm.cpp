@@ -23,20 +23,28 @@ void BacktrackAlgorithm::run() {
 
 void BacktrackAlgorithm::backtrackSolve() {
     deterministicSolve();
+
     backtrackSolveRecursive();
 }
 
 void BacktrackAlgorithm::backtrackSolveRecursive() {
-    deterministicSolve();
+	if (terminate.load()) return;
+
+	std::vector<Placement> exhaustivePlacements = ExhaustivePlacementPatternFindAlgorithm::run(
+        sharedBacktrackBoard.getRowLine(RowIndex(0)),
+        sharedBacktrackBoard.getRowHintSetList()[RowIndex(0)]
+	);
+	Line previousLine = sharedBacktrackBoard.getRowLine(RowIndex(0));
+    for (Placement placement : exhaustivePlacements) {
+		sharedBacktrackBoard.applyRow(RowIndex(0), placement.toRowPlacement());
+		if (waitAndCheckTermination(1000)) return;
+		sharedBacktrackBoard.applyRow(RowIndex(0), previousLine.toRow(), true);
+		if (waitAndCheckTermination(1000)) return;
+    }
 }
 
 void BacktrackAlgorithm::deterministicSolve() {
 	int waitMillis = 100;
-
-	for (int i = 0; i < 10; i++) {
-		sharedBacktrackStack.pushRowIndex((RowIndex(i)));
-        if (waitAndCheckTermination(waitMillis)) return;
-    }
 
 	RowLength rowLength = sharedBacktrackBoard.getRowLength();
 	ColumnLength columnLength = sharedBacktrackBoard.getColumnLength();
@@ -53,7 +61,7 @@ void BacktrackAlgorithm::deterministicSolve() {
                 rowHintSet
             ).toRow();
 			Row currentRowLine = sharedBacktrackBoard.getRowLine(rowIndex);
-			sharedBacktrackBoard.applyRow(rowIndex, newRowLine);
+			sharedBacktrackBoard.applyRow(rowIndex, newRowLine, false);
             if (currentRowLine != sharedBacktrackBoard.getRowLine(rowIndex)) {
                 proceed = true;
             }
@@ -88,7 +96,7 @@ void BacktrackAlgorithm::deterministicSolve() {
                 columnHintSet
             ).toColumn();
 			Column currentColumnLine = sharedBacktrackBoard.getColumnLine(columnIndex);
-			sharedBacktrackBoard.applyColumn(columnIndex, newColumnLine);
+			sharedBacktrackBoard.applyColumn(columnIndex, newColumnLine, false);
             if (currentColumnLine != sharedBacktrackBoard.getColumnLine(columnIndex)) {
 				proceed = true;
             }

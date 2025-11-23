@@ -48,14 +48,14 @@ bool SharedBacktrackBoard::isSolved() const {
 	return backtrackBoard.isSolved();
 }
 
-void SharedBacktrackBoard::applyCell(Coordinate coordinate, const Cell& cell) {
+void SharedBacktrackBoard::applyCell(Coordinate coordinate, const Cell& cell, bool overwriteNone) {
 	std::lock_guard<std::mutex> lock(mtx);
-	backtrackBoard.applyCell(coordinate, cell);
+	backtrackBoard.applyCell(coordinate, cell, overwriteNone);
 }
 
-void SharedBacktrackBoard::applyRow(RowIndex rowIndex, const Row& row) {
+void SharedBacktrackBoard::applyRow(RowIndex rowIndex, const Row& row, bool overwriteNone) {
 	std::lock_guard<std::mutex> lock(mtx);
-	return backtrackBoard.applyRow(rowIndex, row);
+	return backtrackBoard.applyRow(rowIndex, row, overwriteNone);
 }
 
 void SharedBacktrackBoard::applyRow(RowIndex rowIndex, const RowPlacement& rowPlacement) {
@@ -63,9 +63,9 @@ void SharedBacktrackBoard::applyRow(RowIndex rowIndex, const RowPlacement& rowPl
 	return backtrackBoard.applyRow(rowIndex, rowPlacement);
 }
 
-void SharedBacktrackBoard::applyColumn(ColumnIndex columnIndex, const Column& column) {
+void SharedBacktrackBoard::applyColumn(ColumnIndex columnIndex, const Column& column, bool overwriteNone) {
 	std::lock_guard<std::mutex> lock(mtx);
-	return backtrackBoard.applyColumn(columnIndex, column);
+	return backtrackBoard.applyColumn(columnIndex, column, overwriteNone);
 }
 
 void SharedBacktrackBoard::applyColumn(ColumnIndex columnIndex, const ColumnPlacement& columnPlacement) {
