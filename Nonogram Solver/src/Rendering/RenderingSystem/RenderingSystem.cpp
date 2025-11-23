@@ -10,7 +10,7 @@
 #include "Rendering/FontData/FontData.h"
 #include "Rendering/TableRenderer/TableRenderer.h"
 #include "TestData/Repository/TestDataRepository.h"
-#include "Algorithm/BacktrackAlgorithm/BacktrackAlgorithm.h"
+#include "Algorithm/Backtrack/BacktrackAlgorithm/BacktrackAlgorithm.h"
 #include "Shared/SharedBacktrackBoard/SharedBacktrackBoard.h"
 #include "Shared/SharedHighlightIndexes/SharedHighlightIndexes.h"
 
@@ -56,14 +56,19 @@ int RenderingSystem::initialize() {
 void RenderingSystem::renderingLoop() {
 	bool first_time = true;
 
-	// Large: row 20, column 30
-	// Easy: row 15, column 15
-	RowHintSetList rowHintSetList = TestDataRepository::getRowHintSetList(TestDataRepository::EASY);
-	ColumnHintSetList columnHintSetList = TestDataRepository::getColumnHintSetList(TestDataRepository::EASY);
+	TestDataRepository::TestDataType dataType = TestDataRepository::LAMBDA;
+	RowHintSetList rowHintSetList = TestDataRepository::getRowHintSetList(dataType);
+	ColumnHintSetList columnHintSetList = TestDataRepository::getColumnHintSetList(dataType);
 	BacktrackBoard backtrackBoard = BacktrackBoard(
-		NonogramBoard(Board(RowLength(15), ColumnLength(15)), rowHintSetList, columnHintSetList),
-		RowPlacementCountList(std::vector<PlacementCount>(15, PlacementCount(0))),
-		ColumnPlacementCountList(std::vector<PlacementCount>(15, PlacementCount(0)))
+		NonogramBoard(
+			Board(
+				RowLength(rowHintSetList.size()),
+				ColumnLength(columnHintSetList.size())),
+			rowHintSetList,
+			columnHintSetList
+		),
+		RowPlacementCountList(std::vector<PlacementCount>(rowHintSetList.size(), PlacementCount(0))),
+		ColumnPlacementCountList(std::vector<PlacementCount>(columnHintSetList.size(), PlacementCount(0)))
 	);
 	SharedBacktrackBoard sharedBacktrackBoard = SharedBacktrackBoard(backtrackBoard);
 	SharedHighlightIndexes sharedHighlightIndexes = SharedHighlightIndexes();

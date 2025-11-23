@@ -25,6 +25,7 @@ public:
 	const HintSet& operator[](const CellIndex& index) const;
 
 public:
+    size_t size() const;
 	int getMaxItemCount() const;
 };
 

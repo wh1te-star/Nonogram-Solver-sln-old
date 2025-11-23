@@ -1,8 +1,10 @@
 #include "Placement/Placement/Placement.h"
 
+#include <cassert>
 #include "Cell/Cell/Cell.h"
 #include "Index/Coordinate/Coordinate.h"
-#include <cassert>
+#include "Placement/Placement/RowPlacement.h"
+#include "Placement/Placement/ColumnPlacement.h"
 
 
 Placement::Placement(std::vector<Cell> placement) :
@@ -99,6 +101,14 @@ const std::vector<CellIndex> Placement::getHintIndex() const {
         }
     }
     return hintIndexList;
+}
+
+RowPlacement Placement::toRowPlacement() const {
+	return RowPlacement(placement);
+}
+
+ColumnPlacement Placement::toColumnPlacement() const {
+	return ColumnPlacement(placement);
 }
 
 std::ostream& operator<<(std::ostream& os, const Placement& placement) {

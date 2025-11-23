@@ -6,6 +6,8 @@
 #include "Cell/Cell/Cell.h"
 #include "Cell/CellLocation/CellLocation.h"
 #include "Index/Coordinate/Coordinate.h"
+class RowPlacement;
+class ColumnPlacement;
 
 class Placement {
 private:
@@ -36,6 +38,8 @@ public:
 	const size_t size() const;
     const std::vector<CellLocation> getCellLocationList(const Coordinate& coordinate) const;
 	const std::vector<CellIndex> getHintIndex() const;
+	RowPlacement toRowPlacement() const;
+	ColumnPlacement toColumnPlacement() const;
 };
 std::ostream& operator<<(std::ostream& os, const Placement& placement);
 

@@ -23,6 +23,10 @@ const HintSet& HintSetList::operator[](const CellIndex& index) const {
     return hintSetList[index.getIndex()];
 }
 
+size_t HintSetList::size() const {
+    return hintSetList.size();
+}
+
 int HintSetList::getMaxItemCount() const {
     int maxSize = 0;
     for (const auto& HintSet : hintSetList) {

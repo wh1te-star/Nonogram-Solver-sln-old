@@ -38,15 +38,26 @@ Line OverlapDeterminationAlgorithm::determineByOverlap(
         determined[cellIndex] = Cell(White);
 	}
     for(int hintIndex = 0; hintIndex < HintSet.size(); hintIndex++) {
+		HintNumber hintNumber = HintSet[hintIndex];
         CellIndex leftStart = leftmostHintIndex[hintIndex];
-        CellIndex leftEnd = leftStart + HintSet[hintIndex] - 1;
+        CellIndex leftEnd = leftStart + hintNumber - 1;
         CellIndex rightStart = rightmostHintIndex[hintIndex];
-        CellIndex rightEnd = rightStart + HintSet[hintIndex] - 1;
+        CellIndex rightEnd = rightStart + hintNumber - 1;
         for(CellIndex cellIndex = leftStart; cellIndex <= leftEnd; cellIndex++) {
             if (rightStart <= cellIndex && cellIndex <= rightEnd) {
 				determined[cellIndex] = Cell(Black);
             }
         }
+		if (leftStart == rightStart) {
+			CellIndex leftAdjacent = leftStart - 1;
+			CellIndex rightAdjacent = leftStart + hintNumber;
+			if (leftAdjacent >= 0) {
+				determined[leftAdjacent] = Cell(White);
+			}
+			if (rightAdjacent < line.size()) {
+				determined[rightAdjacent] = Cell(White);
+			}
+		}
 	}
 
     return determined;

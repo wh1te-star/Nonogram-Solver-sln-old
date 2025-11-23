@@ -33,6 +33,12 @@ TEST(Algorithm_LeftMostPlacement, SomeHintsCase) {
 TEST(Algorithm_LeftMostPlacement, SomeHintsMiddleWhiteCase) {
 	leftMostPlacementTest("W  W      ", { 1, 2, 3 }, "WBWWBBWBBB");
 }
+TEST(Algorithm_LeftMostPlacement, ActualCase1) {
+	leftMostPlacementTest("     BBBBB     ", { 3, 5, 1 }, "BBBWWBBBBBWBWWW");
+}
+TEST(Algorithm_LeftMostPlacement, ActualCase2) {
+	leftMostPlacementTest("  B             B   ", { 2, 2, 2, 2 }, "WBBWBBWBBWWWWWWBBWWW");
+}
 TEST(Algorithm_LeftMostPlacement, ImpossibleCase) {
 	leftMostPlacementTest("WW   ", { 1, 2 }, "");
 }
@@ -64,6 +70,12 @@ TEST(Algorithm_RightMostPlacement, SomeHintsCase) {
 }
 TEST(Algorithm_RightMostPlacement, SomeHintsMiddleWhiteCase) {
 	rightMostPlacementTest("    W    W", { 1, 2, 3 }, "BWBBWWBBBW");
+}
+TEST(Algorithm_RightMostPlacement, ActualCase1) {
+	rightMostPlacementTest("     BBBBB     ", { 3, 5, 1 }, "WBBBWBBBBBWWWWB");
+}
+TEST(Algorithm_RightMostPlacement, ActualCase2) {
+	rightMostPlacementTest("  B             B   ", { 2, 2, 2, 2 }, "WWBBWWWWWWWWBBWBBWBB");
 }
 TEST(Algorithm_RightMostPlacement, ImpossibleCase) {
 	rightMostPlacementTest("   WW", { 1, 2 }, "");

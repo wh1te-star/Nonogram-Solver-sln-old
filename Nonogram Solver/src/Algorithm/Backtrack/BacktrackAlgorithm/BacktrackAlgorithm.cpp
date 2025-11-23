@@ -1,8 +1,9 @@
-#include "Algorithm/BacktrackAlgorithm/BacktrackAlgorithm.h"
+#include "Algorithm/Backtrack/BacktrackAlgorithm/BacktrackAlgorithm.h"
 
 #include "Board/Line/Line.h"
 #include "Algorithm/OverlapDeterminationAlgorithm/OverlapDeterminationAlgorithm.h"
 #include "Algorithm/PlacementPatternCountAlgorithm/PlacementPatternCountAlgorithm.h"
+#include "Algorithm/ExhaustivePlacementPatternFindAlgorithm/ExhaustivePlacementPatternFindAlgorithm.h"
 #include "Shared/SharedBacktrackBoard/SharedBacktrackBoard.h"
 #include "Shared/SharedHighlightIndexes/SharedHighlightIndexes.h"
 
@@ -15,6 +16,21 @@ BacktrackAlgorithm::BacktrackAlgorithm(
 	sharedHighlightIndexes(sharedHighlightIndexes) {}
 
 void BacktrackAlgorithm::run() {
+    backtrackSolve();
+}
+
+void BacktrackAlgorithm::backtrackSolve() {
+    deterministicSolve();
+    BacktrackState backtrackState = BacktrackState(RowIndex(0), Placement(""));
+    backtrackSolveRecursive(backtrackState);
+}
+
+void BacktrackAlgorithm::backtrackSolveRecursive(BacktrackState backtrackState) {
+    deterministicSolve();
+}
+
+void BacktrackAlgorithm::deterministicSolve() {
+	int waitMillis = 100;
 	RowLength rowLength = sharedBacktrackBoard.getRowLength();
 	ColumnLength columnLength = sharedBacktrackBoard.getColumnLength();
     while (true) {
@@ -39,9 +55,17 @@ void BacktrackAlgorithm::run() {
                 rowLine,
                 rowHintSet
             );
+            if (count == PlacementCount(0)) return;
+			if (count == PlacementCount(1)) {
+                RowPlacement finalPlacement = ExhaustivePlacementPatternFindAlgorithm::run(
+                    rowLine,
+                    rowHintSet
+                )[0].toRowPlacement();
+				sharedBacktrackBoard.applyRow(rowIndex, finalPlacement);
+            }
             sharedBacktrackBoard.setRowPlacementCount(rowIndex, count);
 
-            if (waitAndCheckTermination(1000)) return;
+            if (waitAndCheckTermination(waitMillis)) return;
 
 			sharedHighlightIndexes.deleteRowIndex(rowIndex);
         }
@@ -66,9 +90,17 @@ void BacktrackAlgorithm::run() {
                 columnLine,
                 columnHintSet
             );
+            if (count == PlacementCount(0)) return;
+			if (count == PlacementCount(1)) {
+                ColumnPlacement finalPlacement = ExhaustivePlacementPatternFindAlgorithm::run(
+                    columnLine,
+                    columnHintSet
+                )[0].toColumnPlacement();
+				sharedBacktrackBoard.applyColumn(columnIndex, finalPlacement);
+            }
             sharedBacktrackBoard.setColumnPlacementCount(columnIndex, count);
 
-            if (waitAndCheckTermination(1000)) return;
+            if (waitAndCheckTermination(waitMillis)) return;
 
 			sharedHighlightIndexes.deleteColumnIndex(columnIndex);
         }

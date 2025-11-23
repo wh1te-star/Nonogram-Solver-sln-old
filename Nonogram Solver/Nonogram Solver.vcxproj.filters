@@ -129,7 +129,7 @@
     <ClCompile Include="src\Rendering\TableRenderer\TableRenderer.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="src\Algorithm\BacktrackAlgorithm\BacktrackAlgorithm.cpp">
+    <ClCompile Include="src\Algorithm\Backtrack\BacktrackAlgorithm\BacktrackAlgorithm.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="src\Shared\SharedBacktrackBoard\SharedBacktrackBoard.cpp">
@@ -175,6 +175,9 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="src\Algorithm\FindRightMostPlacementAlgorithm\FindRightMostPlacementAlgorithm.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Algorithm\Backtrack\BacktrackStack\BacktrackStack.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -278,7 +281,7 @@
     <ClInclude Include="src\Rendering\TableRenderer\TableRenderer.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="src\Algorithm\BacktrackAlgorithm\BacktrackAlgorithm.h">
+    <ClInclude Include="src\Algorithm\Backtrack\BacktrackAlgorithm\BacktrackAlgorithm.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="src\Shared\SharedBacktrackBoard\SharedBacktrackBoard.h">
@@ -327,6 +330,9 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="src\Algorithm\FindRightMostPlacementAlgorithm\FindRightMostPlacementAlgorithm.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Algorithm\Backtrack\BacktrackStack\BacktrackStack.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

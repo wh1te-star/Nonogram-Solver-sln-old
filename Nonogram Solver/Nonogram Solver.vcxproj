@@ -181,7 +181,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\Algorithm\BacktrackAlgorithm\BacktrackAlgorithm.cpp" />
+    <ClCompile Include="src\Algorithm\Backtrack\BacktrackAlgorithm\BacktrackAlgorithm.cpp" />
+    <ClCompile Include="src\Algorithm\Backtrack\BacktrackStack\BacktrackStack.cpp" />
     <ClCompile Include="src\Algorithm\FindLeftMostPlacementAlgorithm\FindLeftMostPlacementAlgorithm.cpp" />
     <ClCompile Include="src\Algorithm\FindRightMostPlacementAlgorithm\FindRightMostPlacementAlgorithm.cpp" />
     <ClCompile Include="src\Algorithm\OverlapDeterminationAlgorithm\OverlapDeterminationAlgorithm.cpp" />
@@ -236,7 +237,8 @@
     <ClCompile Include="src\TestData\Repository\TestDataRepository.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Algorithm\BacktrackAlgorithm\BacktrackAlgorithm.h" />
+    <ClInclude Include="src\Algorithm\Backtrack\BacktrackAlgorithm\BacktrackAlgorithm.h" />
+    <ClInclude Include="src\Algorithm\Backtrack\BacktrackStack\BacktrackStack.h" />
     <ClInclude Include="src\Algorithm\ExhaustivePlacementPatternFindAlgorithm\ExhaustivePlacementPatternFindAlgorithm.h" />
     <ClInclude Include="src\Algorithm\FindLeftMostPlacementAlgorithm\FindLeftMostPlacementAlgorithm.h" />
     <ClInclude Include="src\Algorithm\FindRightMostPlacementAlgorithm\FindRightMostPlacementAlgorithm.h" />
