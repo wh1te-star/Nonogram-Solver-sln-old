@@ -141,3 +141,10 @@ void Board::applyColumn(ColumnIndex columnIndex, const ColumnPlacement& columnPl
 	}
 }
 
+void Board::applyBoard(const Board& board, bool overwriteNone) {
+	for (RowIndex rowIndex : RowIndex::range(0, rowLength.getLength()-1)) {
+		Row rowLine = board.getRowLine(rowIndex);
+		applyRow(rowIndex, rowLine, overwriteNone);
+	}
+}
+

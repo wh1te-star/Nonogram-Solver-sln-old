@@ -236,6 +236,7 @@
     <ClCompile Include="src\TestData\TestData\TestDataLambda.cpp" />
     <ClCompile Include="src\TestData\TestData\TestDataLarge.cpp" />
     <ClCompile Include="src\TestData\Repository\TestDataRepository.cpp" />
+    <ClCompile Include="src\TestData\TestData\TestDataDifficult.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Algorithm\Backtrack\BacktrackAlgorithm\BacktrackAlgorithm.h" />

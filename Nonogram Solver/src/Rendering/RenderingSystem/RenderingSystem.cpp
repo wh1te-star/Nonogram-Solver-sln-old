@@ -57,7 +57,7 @@ int RenderingSystem::initialize() {
 void RenderingSystem::renderingLoop() {
 	bool first_time = true;
 
-	TestDataRepository::TestDataType dataType = TestDataRepository::LAMBDA;
+	TestDataRepository::TestDataType dataType = TestDataRepository::Difficult;
 	RowHintSetList rowHintSetList = TestDataRepository::getRowHintSetList(dataType);
 	ColumnHintSetList columnHintSetList = TestDataRepository::getColumnHintSetList(dataType);
 	BacktrackBoard backtrackBoard = BacktrackBoard(

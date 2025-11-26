@@ -9,7 +9,7 @@
 
 class TestDataRepository {
 public:
-    enum TestDataType { EASY, LAMBDA, LARGE };
+    enum TestDataType { Easy, Lambda, Large, Difficult };
 
 private:
     TestDataRepository() = delete;
@@ -22,6 +22,8 @@ private:
     static std::string GetLambdaColumnHintString();
     static std::string GetLargeRowHintString();
     static std::string GetLargeColumnHintString();
+    static std::string GetDifficultRowHintString();
+    static std::string GetDifficultColumnHintString();
     
     static std::vector<std::vector<HintNumber>> parseHints(const std::string& hintString);
 

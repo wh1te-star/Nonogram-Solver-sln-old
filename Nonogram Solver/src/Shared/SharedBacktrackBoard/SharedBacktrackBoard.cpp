@@ -8,6 +8,10 @@
 SharedBacktrackBoard::SharedBacktrackBoard(BacktrackBoard backtrackBoard)
 	: backtrackBoard(backtrackBoard) {}
 
+BacktrackBoard SharedBacktrackBoard::getBacktrackBoard() const {
+	return backtrackBoard;
+}
+
 RowLength SharedBacktrackBoard::getRowLength() const {
 	std::lock_guard<std::mutex> lock(mtx);
 	return backtrackBoard.getRowLength();
@@ -71,6 +75,11 @@ void SharedBacktrackBoard::applyColumn(ColumnIndex columnIndex, const Column& co
 void SharedBacktrackBoard::applyColumn(ColumnIndex columnIndex, const ColumnPlacement& columnPlacement) {
 	std::lock_guard<std::mutex> lock(mtx);
 	return backtrackBoard.applyColumn(columnIndex, columnPlacement);
+}
+
+void SharedBacktrackBoard::applyBoard(const Board& board, bool overwriteNone) {
+	std::lock_guard<std::mutex> lock(mtx);
+	return backtrackBoard.applyBoard(board, overwriteNone);
 }
 
 RowHintSetList SharedBacktrackBoard::getRowHintSetList() const {

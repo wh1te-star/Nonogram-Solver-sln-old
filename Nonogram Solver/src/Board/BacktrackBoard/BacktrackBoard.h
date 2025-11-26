@@ -34,6 +34,7 @@ public:
 	void applyRow(RowIndex rowIndex, const RowPlacement& rowPlacement);
 	void applyColumn(ColumnIndex columnIndex, const Column& column, bool overwriteNone);
 	void applyColumn(ColumnIndex columnIndex, const ColumnPlacement& columnPlacement);
+	void applyBoard(const Board& board, bool overwriteNone);
 
 public:
 	RowHintSetList getRowHintSetList() const;

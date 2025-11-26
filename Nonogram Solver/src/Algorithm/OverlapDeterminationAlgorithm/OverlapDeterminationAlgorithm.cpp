@@ -22,7 +22,7 @@ Line OverlapDeterminationAlgorithm::determineByOverlap(
 	Placement leftmostPlacement = FindLeftMostPlacementAlgorithm::run(line, HintSet);
 	Placement rightmostPlacement = FindRightMostPlacementAlgorithm::run(line, HintSet);
     if (leftmostPlacement.size() == 0 || rightmostPlacement.size() == 0) {
-        return line;
+		return Line("");
     }
 
 	std::vector<CellIndex> leftmostHintIndex = leftmostPlacement.getHintIndex();

@@ -15,6 +15,7 @@ public:
 	SharedBacktrackBoard(BacktrackBoard backtrackBoard);
 
 public:
+	BacktrackBoard getBacktrackBoard() const;
 	RowLength getRowLength() const;
 	ColumnLength getColumnLength() const;
 	Board getBoard() const;
@@ -28,6 +29,7 @@ public:
 	void applyRow(RowIndex rowIndex, const RowPlacement& rowPlacement);
 	void applyColumn(ColumnIndex columnIndex, const Column& column, bool overwriteNone);
 	void applyColumn(ColumnIndex columnIndex, const ColumnPlacement& columnPlacement);
+	void applyBoard(const Board& board, bool overwriteNone);
 	RowHintSetList getRowHintSetList() const;
 	ColumnHintSetList getColumnHintSetList() const;
 	RowPlacementCountList getRowPlacementCountList() const;

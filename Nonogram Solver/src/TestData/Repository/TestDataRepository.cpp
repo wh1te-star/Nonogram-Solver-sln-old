@@ -76,36 +76,22 @@ ColumnHintSetList TestDataRepository::getColumnHintSetList(TestDataType type) {
 
 std::string TestDataRepository::GetRowHintString(TestDataType type) {
     switch (type) {
-    case EASY:
-        return GetEasyRowHintString();
-        break;
-    case LAMBDA:
-        return GetLambdaRowHintString();
-        break;
-    case LARGE:
-        return GetLargeRowHintString();
-        break;
-    default:
-        assert(false);
-        break;
+    case Easy: return GetEasyRowHintString();
+    case Lambda: return GetLambdaRowHintString();
+    case Large: return GetLargeRowHintString();
+	case Difficult: return GetDifficultRowHintString();
+    default: assert(false);
     }
     return "";
 }
 
 std::string TestDataRepository::GetColumnHintString(TestDataType type) {
     switch (type) {
-    case EASY:
-        return GetEasyColumnHintString();
-        break;
-    case LAMBDA:
-        return GetLambdaColumnHintString();
-        break;
-    case LARGE:
-        return GetLargeColumnHintString();
-        break;
-    default:
-        assert(false);
-        break;
+    case Easy: return GetEasyColumnHintString();
+    case Lambda: return GetLambdaColumnHintString();
+    case Large: return GetLargeColumnHintString();
+	case Difficult: return GetDifficultColumnHintString();
+    default: assert(false);
     }
     return "";
 }

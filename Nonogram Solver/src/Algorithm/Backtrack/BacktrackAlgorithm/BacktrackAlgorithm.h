@@ -16,6 +16,7 @@ private:
 	SharedBacktrackStack& sharedBacktrackStack;
 	SharedHighlightIndexes& sharedHighlightIndexes;
     std::atomic<bool> terminate{ false };
+	std::vector<Board> solutions;
 
 public:
     explicit BacktrackAlgorithm(
@@ -27,9 +28,9 @@ public:
 	void run();
 
 	void backtrackSolve();
-	void backtrackSolveRecursive();
+	void backtrackSolveRecursive(int depth);
 
-	void deterministicSolve();
+	bool deterministicSolve(int waitMillis);
 
     bool waitAndCheckTermination(const int waitMillis) const;
     void request_stop();

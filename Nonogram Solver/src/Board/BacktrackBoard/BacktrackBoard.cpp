@@ -65,6 +65,10 @@ void BacktrackBoard::applyColumn(ColumnIndex columnIndex, const ColumnPlacement&
 	return nonogramBoard.applyColumn(columnIndex, columnPlacement);
 }
 
+void BacktrackBoard::applyBoard(const Board& board, bool overwriteNone) {
+	return nonogramBoard.applyBoard(board, overwriteNone);
+}
+
 RowHintSetList BacktrackBoard::getRowHintSetList() const {
 	return nonogramBoard.getRowHintSetList();
 }

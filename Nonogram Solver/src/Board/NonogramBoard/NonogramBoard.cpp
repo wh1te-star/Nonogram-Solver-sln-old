@@ -61,6 +61,10 @@ void NonogramBoard::applyColumn(ColumnIndex columnIndex, const ColumnPlacement& 
 	return board.applyColumn(columnIndex, columnPlacement);
 }
 
+void NonogramBoard::applyBoard(const Board& board, bool overwriteNone) {
+	return this->board.applyBoard(board, overwriteNone);
+}
+
 RowHintSetList NonogramBoard::getRowHintSetList() const {
 	return rowHintSetList;
 }
