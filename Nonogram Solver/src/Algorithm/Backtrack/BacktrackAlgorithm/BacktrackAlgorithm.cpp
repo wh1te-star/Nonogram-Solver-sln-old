@@ -33,12 +33,13 @@ void BacktrackAlgorithm::backtrackSolveRecursive(int depth) {
 
 	RowIndex targetRowIndex = RowIndex(0);
     if(depth == 0) {
-		targetRowIndex = RowIndex(49);
+		targetRowIndex = RowIndex(34);
     } else if(depth == 1){
+		targetRowIndex = RowIndex(49);
+	}
+    else if (depth == 2) {
+        return;
 		targetRowIndex = RowIndex(64);
-    }
-    else if(depth == 2){
-		targetRowIndex = RowIndex(0);
     }
     else {
         return;
